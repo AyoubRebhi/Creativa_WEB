@@ -1,0 +1,30 @@
+<h1>Liste des commandes</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ID Utilisateur</th>
+        <th>ID Projet</th>
+        <th>Date</th>
+        <th>Montant Total</th>
+        <th>Date de Livraison Estimée</th>
+        <th>Code Promo</th>
+        <th>Status</th>
+        <th>Prix</th>
+        <th>Frais de Livraison</th>
+    </tr>
+    <tr>
+        {%for a in o %}
+        <td>{{ a.idCmd }}</td>
+        <td>{{ a.idUser }}</td>
+        <td>{{ a.idProjet }}</td>
+        <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+        <td>{{ a.mtTotal }}</td>
+        <td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
+        <td>{{ a.codePromo }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.prix }}</td>
+        <td>{{ a.fraisLiv }}</td>
+    </tr>
+{%endfor%}
+</table>

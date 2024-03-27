@@ -1,0 +1,24 @@
+<h1>Liste des livraisons</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ID Commande</th>
+        <th>ID Utilisateur</th>
+        <th>Status</th>
+        <th>Adresse</th>
+        <th>Frais de Livraison</th>
+        <th>Moyen de Livraison</th>
+    </tr>
+    {% for a in o %}
+    <tr>
+        <td>{{ a.idLiv }}</td>
+        <td>{{ a.idCmd }}</td>
+        <td>{{ a.idUser }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.adresse }}</td>
+        <td>{{ a.fraisLiv }}</td>
+        <td>{{ a.moyenLivraison }}</td>
+    </tr>
+    {% endfor %}
+</table>
