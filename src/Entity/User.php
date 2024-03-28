@@ -6,14 +6,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
 
 /**
- * User
- *
- * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"}), @ORM\UniqueConstraint(name="username", columns={"username"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var int
@@ -321,5 +323,25 @@ class User
         $this->idProjet->removeElement($idProjet);
 
         return $this;
+    }
+
+
+    public function getRoles()
+    {
+        // Retourner un tableau de rôles, par exemple ['ROLE_USER']
+        return ['ROLE_USER'];
+    }
+
+
+    public function getSalt()
+    {
+        // Vous n'avez pas besoin de sel car bcrypt gère cela pour vous
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
+        // Supprimer les données sensibles de l'utilisateur
+        // Cette méthode est nécessaire pour effacer les mots de passe en texte brut
     }
 }
