@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormError;
 
 
 class AuthController extends AbstractController
@@ -48,7 +49,7 @@ class AuthController extends AbstractController
             }
         }
 
-        return $this->render('auth/index.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -73,10 +74,52 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('registration_success');
         }
 
-        return $this->render('auth/register.html.twig', [
+        return $this->render('auth/auth.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+     /**
+     * @Route("/register1", name="user_register1")
+     */
+
+    public function register1(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = new User();
+        $form = $this->createForm(InscriptionFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier l'unicité du nom d'utilisateur
+            $existingUsername = $entityManager->getRepository(User::class)->findOneBy(['username' => $user->getUsername()]);
+            if ($existingUsername) {
+                $form->get('username')->addError(new FormError('Ce nom d\'utilisateur est déjà utilisé.'));
+            }
+
+            // Vérifier l'unicité de l'email
+            $existingEmail = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+            if ($existingEmail) {
+                $form->get('email')->addError(new FormError('Cet email est déjà utilisé.'));
+            }
+
+            if ($form->getErrors(true)->count() === 0) {
+                // Encodage du mot de passe avant de l'enregistrer
+                $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+
+                // Enregistrement de l'utilisateur
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Redirection vers une page de confirmation ou une autre page après l'enregistrement
+                return $this->redirectToRoute('registration_success');
+            }
+        }
+
+        // Affichage du formulaire avec les erreurs
+        return $this->render('auth/auth.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
     /**
      * @Route("/registration/success", name="registration_success")

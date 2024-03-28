@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 
 class InscriptionFormType extends AbstractType
@@ -18,7 +19,16 @@ class InscriptionFormType extends AbstractType
             ->add('lastName')
             ->add('firstName')
             ->add('username')
-            ->add('password')
+            ->add('password', PasswordType::class, [
+                'label' => 'Mot de passe', // Label du champ
+                
+            ])
+            // Champ de confirmation du mot de passe
+            ->add('passwordConfirmation', PasswordType::class, [
+                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
+                'label' => 'Confirmation du mot de passe', // Label du champ
+                
+            ])
             ->add('email')
             ->add('numtel')
             ->add('role', ChoiceType::class, [
@@ -27,7 +37,9 @@ class InscriptionFormType extends AbstractType
                     'Client' => 'CLIENT',
                 ],
                 'expanded' => true, // Afficher les radios boutons horizontalement
-                'multiple' => false, // Ne permettre qu'un seul choix
+                'multiple' => false, 
+                'data' => 'ARTIST', // Sélection par défaut
+                // Ne permettre qu'un seul choix
             ])
             ->add('submit', SubmitType::class, ['label' => 'inscrire']);
 

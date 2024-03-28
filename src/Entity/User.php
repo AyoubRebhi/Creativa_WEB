@@ -8,6 +8,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -17,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
+     /**
      * @var int
      *
      * @ORM\Column(name="id_user", type="integer", nullable=false)
@@ -30,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le nom de famille ne peut pas être vide.")
      */
     private $lastName;
 
@@ -37,6 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
      */
     private $firstName;
 
@@ -44,6 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le nom d'utilisateur ne peut pas être vide.")
      */
     private $username;
 
@@ -51,6 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le mot de passe ne peut pas être vide.")
+     * @Assert\Length(min=8, minMessage="Le mot de passe doit contenir au moins {{ limit }} caractères.")
      */
     private $password;
 
@@ -86,6 +94,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="L'email ne peut pas être vide.")
+     * @Assert\Email(message="L'email '{{ value }}' n'est pas valide.")
      */
     private $email;
 
@@ -100,6 +110,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var int
      *
      * @ORM\Column(name="numTel", type="integer", nullable=false)
+     * @Assert\NotBlank(message="Le numéro de téléphone ne peut pas être vide.")
+     * @Assert\Length(
+     *     min=8,
+     *     max=8,
+     *     exactMessage="Le numéro de téléphone doit contenir exactement {{ limit }} chiffres."
+     * )
      */
     private $numtel;
 
