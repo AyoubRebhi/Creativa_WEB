@@ -1,3 +1,91 @@
-<h1>AJOUTER COMMANDE</h1>
-{{ form(formulaireCommande) }}
+{% extends 'base.html.twig' %}
 
+{% block stylesheet %}
+    {{ parent() }}
+    <style>
+       /* CSS pour le formulaire */
+/* CSS pour le formulaire */
+.form-container {
+    width: 70%; /* Largeur du formulaire */
+    margin: 0 auto; /* Centrer le formulaire */
+    padding: 20px; /* Ajouter de l'espace à l'intérieur du cadre */
+    border: 1px solid #ccc; /* Bordure autour du cadre */
+    border-radius: 8px; /* Coins arrondis */
+    font-family: Arial, sans-serif;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    width: calc(50% - 20px); /* Ajustement de l'espace entre les champs */
+    padding: 0 10px;
+    margin-bottom: 30px; /* Augmentation de l'espace entre les groupes */
+    box-sizing: border-box;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+    </style>
+{% endblock %}
+
+{% block Category %}
+    <div class="form-container">
+        <h1>AJOUTER COMMANDE</h1>
+        <form>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.idUser) }}
+                {{ form_row(formulaireCommande.idProjet) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.date) }}
+                {{ form_row(formulaireCommande.mtTotal) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.dateLivraisonEstimee) }}
+                {{ form_row(formulaireCommande.codePromo) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.status) }}
+                {{ form_row(formulaireCommande.prix) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.fraisLiv) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.submit) }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

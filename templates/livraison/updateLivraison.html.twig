@@ -1,3 +1,5 @@
+{% extends 'base.html.twig' %}
+{% block Category %}
 {{ form_start(formulaireLivraison) }}
     {{ form_row(formulaireLivraison.idCmd) }}
     {{ form_row(formulaireLivraison.idUser) }}
@@ -7,3 +9,4 @@
     {{ form_row(formulaireLivraison.moyenLivraison) }}
     {{ form_row(formulaireLivraison.submit) }} {# Bouton de soumission #}
 {{ form_end(formulaireLivraison) }}
+{% endblock %}

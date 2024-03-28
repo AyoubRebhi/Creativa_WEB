@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Commande
@@ -47,6 +48,8 @@ class Commande
      * @var string|null
      *
      * @ORM\Column(name="mt_total", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le montant total est requis.")
+     * @Assert\Type(type="numeric", message="Le montant total doit être numérique.")
      */
     private $mtTotal;
 
@@ -75,6 +78,9 @@ class Commande
      * @var float|null
      *
      * @ORM\Column(name="prix", type="float", precision=10, scale=0, nullable=true)
+     * @Assert\NotBlank(message="Le prix est requis.")
+     * @Assert\Type(type="numeric", message="Le prix doit être numérique.")
+     * @Assert\GreaterThan(value=0, message="Le prix doit être supérieur à zéro.")
      */
     private $prix;
 
@@ -82,6 +88,9 @@ class Commande
      * @var float|null
      *
      * @ORM\Column(name="frais_liv", type="float", precision=10, scale=0, nullable=true)
+     * @Assert\NotBlank(message="Les frais de livraison sont requis.")
+     * @Assert\Type(type="numeric", message="Les frais de livraison doivent être numériques.")
+     * @Assert\GreaterThan(value=0, message="Les frais de livraison doivent être supérieurs à zéro.")
      */
     private $fraisLiv;
 
@@ -95,7 +104,7 @@ class Commande
         return $this->idUser;
     }
 
-    public function setIdUser(?int $idUser): static
+    public function setIdUser(?int $idUser): self
     {
         $this->idUser = $idUser;
 
@@ -107,7 +116,7 @@ class Commande
         return $this->idProjet;
     }
 
-    public function setIdProjet(?int $idProjet): static
+    public function setIdProjet(?int $idProjet): self
     {
         $this->idProjet = $idProjet;
 
@@ -119,7 +128,7 @@ class Commande
         return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $date): static
+    public function setDate(?\DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -131,7 +140,7 @@ class Commande
         return $this->mtTotal;
     }
 
-    public function setMtTotal(?string $mtTotal): static
+    public function setMtTotal(?string $mtTotal): self
     {
         $this->mtTotal = $mtTotal;
 
@@ -143,7 +152,7 @@ class Commande
         return $this->dateLivraisonEstimee;
     }
 
-    public function setDateLivraisonEstimee(?\DateTimeInterface $dateLivraisonEstimee): static
+    public function setDateLivraisonEstimee(?\DateTimeInterface $dateLivraisonEstimee): self
     {
         $this->dateLivraisonEstimee = $dateLivraisonEstimee;
 
@@ -155,7 +164,7 @@ class Commande
         return $this->codePromo;
     }
 
-    public function setCodePromo(?int $codePromo): static
+    public function setCodePromo(?int $codePromo): self
     {
         $this->codePromo = $codePromo;
 
@@ -167,7 +176,7 @@ class Commande
         return $this->status;
     }
 
-    public function setStatus(?string $status): static
+    public function setStatus(?string $status): self
     {
         $this->status = $status;
 
@@ -179,7 +188,7 @@ class Commande
         return $this->prix;
     }
 
-    public function setPrix(?float $prix): static
+    public function setPrix(?float $prix): self
     {
         $this->prix = $prix;
 
@@ -191,12 +200,11 @@ class Commande
         return $this->fraisLiv;
     }
 
-    public function setFraisLiv(?float $fraisLiv): static
+    public function setFraisLiv(?float $fraisLiv): self
     {
         $this->fraisLiv = $fraisLiv;
 
         return $this;
     }
-
 
 }
