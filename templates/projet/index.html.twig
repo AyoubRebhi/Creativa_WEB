@@ -1,20 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProjetController!{% endblock %}
+{% block title %}Projet index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Projet index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdProjet</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Media</th>
+                <th>Prix</th>
+                <th>Isvisible</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for projet in projets %}
+            <tr>
+                <td>{{ projet.idProjet }}</td>
+                <td>{{ projet.titre }}</td>
+                <td>{{ projet.description }}</td>
+                <td>{{ projet.media }}</td>
+                <td>{{ projet.prix }}</td>
+                <td>{{ projet.isvisible ? 'Yes' : 'No' }}</td>
+                <td>{{ projet.createdAt ? projet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ projet.updatedAt ? projet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_projet_show', {'idProjet': projet.idProjet}) }}">show</a>
+                    <a href="{{ path('app_projet_edit', {'idProjet': projet.idProjet}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/User/Downloads/PIProject/PIProject/src/Controller/ProjetController.php'|file_link(0) }}">src/Controller/ProjetController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/User/Downloads/PIProject/PIProject/templates/projet/index.html.twig'|file_link(0) }}">templates/projet/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_projet_new') }}">Create new</a>
 {% endblock %}

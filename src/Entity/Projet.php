@@ -7,8 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Categorie;
 use App\Entity\User;
-
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Projet
@@ -65,16 +64,16 @@ class Projet
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="createdAt", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
-    private $createdat = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="updatedAt", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=false)
      */
-    private $updatedat = 'CURRENT_TIMESTAMP';
+    private $updatedAt;
 
     /**
      * @var Categorie|null
@@ -94,22 +93,22 @@ class Projet
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
      * })
      */
-    private $idUser2;
+    #private $idUser2;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", mappedBy="idProjet")
      */
-    private $idUser = array();
+    #private $idUser = array();
 
     /**
      * Constructor
      */
-    public function __construct()
+    /*public function __construct()
     {
         $this->idUser = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    }*/
 
     public function getIdProjet(): ?int
     {
@@ -176,26 +175,45 @@ class Projet
         return $this;
     }
 
-    public function getCreatedat(): ?\DateTimeInterface
+    /**
+     * @ORM\PrePersist
+     */
+    public function setTimestampsOnCreate(): void
     {
-        return $this->createdat;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
-    public function setCreatedat(?\DateTimeInterface $createdat): static
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setTimestampsOnUpdate(): void
     {
-        $this->createdat = $createdat;
+        $this->updatedAt = new \DateTime();
+    }
+
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedat(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updatedat;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedat(?\DateTimeInterface $updatedat): static
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
-        $this->updatedat = $updatedat;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -212,7 +230,7 @@ class Projet
         return $this;
     }
 
-    public function getIdUser2(): ?User
+    /*public function getIdUser2(): ?User
     {
         return $this->idUser2;
     }
@@ -222,12 +240,12 @@ class Projet
         $this->idUser2 = $idUser2;
 
         return $this;
-    }
+    }*/
 
     /**
      * @return Collection<int, User>
      */
-    public function getIdUser(): Collection
+    /*public function getIdUser(): Collection
     {
         return $this->idUser;
     }
@@ -249,5 +267,5 @@ class Projet
         }
 
         return $this;
-    }
+    }*/
 }

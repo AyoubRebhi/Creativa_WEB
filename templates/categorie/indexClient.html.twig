@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorie index
+{% endblock %}
+{% block body %}
+	{% block CategoryList %}
+		<div class="container-xxl py-5">
+			<div class="container">
+				<div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+					<h1 class="mb-3">Categories</h1>
+					<p>Explore our categories</p>
+				</div>
+				<div class="row g-4">
+					{% for categorie in categories %}
+						<div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+							<a class="cat-item d-block bg-light text-center rounded p-3" href="">
+								<div class="rounded p-4">
+									<div class="">
+										{% if categorie.image %}
+											<img class="img-fluid" src="{{ asset(categorie.image) }}">
+										{% else %}
+											<img class="img-fluid" src="{{ asset('img/categorie.jpg') }}" alt="Image Description">
+										{% endif %}
+									</div>
+									<br>
+									<h6>{{ categorie.titre }}</h6>
+									<span>{{ categorie.description }}</span>
+								</div>
+							</a>
+						</div>
+					{% else %}
+						<div class="col-lg-12">
+							<p>No categories found</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+{% endblock %}
