@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Commande
 {
+
+    
     /**
      * @var int
      *
@@ -27,6 +29,7 @@ class Commande
      * @var int|null
      *
      * @ORM\Column(name="id_user", type="integer", nullable=true)
+     * @Assert\NotBlank(message="id_user ne peut pas être vide.")
      */
     private $idUser;
 
@@ -34,6 +37,8 @@ class Commande
      * @var int|null
      *
      * @ORM\Column(name="id_projet", type="integer", nullable=true)
+    * @Assert\NotBlank(message="id_projet ne peut pas être vide.")
+
      */
     private $idProjet;
 
@@ -41,6 +46,7 @@ class Commande
      * @var \DateTime|null
      *
      * @ORM\Column(name="date", type="date", nullable=true)
+     * @Assert\NotBlank(message="date ne peut pas être vide.")
      */
     private $date;
 
@@ -48,8 +54,7 @@ class Commande
      * @var string|null
      *
      * @ORM\Column(name="mt_total", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le montant total est requis.")
-     * @Assert\Type(type="numeric", message="Le montant total doit être numérique.")
+     * @Assert\NotBlank(message="Le montant total ne peut pas être vide.")
      */
     private $mtTotal;
 
@@ -57,6 +62,7 @@ class Commande
      * @var \DateTime|null
      *
      * @ORM\Column(name="date_livraison_estimee", type="date", nullable=true)
+     * @Assert\NotBlank(message="date ne peut pas être vide.")
      */
     private $dateLivraisonEstimee;
 
@@ -64,6 +70,12 @@ class Commande
      * @var int|null
      *
      * @ORM\Column(name="code_promo", type="integer", nullable=true)
+     * @Assert\NotBlank(message="Le code promo ne peut pas être vide.")
+     * @Assert\Length(
+     *      min=4,
+     *      max=4,
+     *      exactMessage="Le code promo doit contenir exactement {{ limit }} chiffres."
+     * )
      */
     private $codePromo;
 
@@ -71,6 +83,7 @@ class Commande
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le statut ne peut pas être vide.")
      */
     private $status;
 
@@ -78,9 +91,7 @@ class Commande
      * @var float|null
      *
      * @ORM\Column(name="prix", type="float", precision=10, scale=0, nullable=true)
-     * @Assert\NotBlank(message="Le prix est requis.")
-     * @Assert\Type(type="numeric", message="Le prix doit être numérique.")
-     * @Assert\GreaterThan(value=0, message="Le prix doit être supérieur à zéro.")
+     * @Assert\NotBlank(message="Le prix ne peut pas être vide.")
      */
     private $prix;
 
@@ -88,9 +99,7 @@ class Commande
      * @var float|null
      *
      * @ORM\Column(name="frais_liv", type="float", precision=10, scale=0, nullable=true)
-     * @Assert\NotBlank(message="Les frais de livraison sont requis.")
-     * @Assert\Type(type="numeric", message="Les frais de livraison doivent être numériques.")
-     * @Assert\GreaterThan(value=0, message="Les frais de livraison doivent être supérieurs à zéro.")
+     * @Assert\NotBlank(message="Les frais de livraison ne peuvent pas être vides.")
      */
     private $fraisLiv;
 
@@ -206,5 +215,4 @@ class Commande
 
         return $this;
     }
-
 }

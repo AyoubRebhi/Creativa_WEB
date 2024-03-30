@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block Category %}
+{{form_start(formulaireLivraison,{'attr': {'novalidate': 'novalidate'}})}}
+
 <h1>AJOUTER LIVRAISON</h1>
 {{ form(formulaireLivraison) }}
+
+{{ form_end(formulaireLivraison) }}
 
 {% endblock %}

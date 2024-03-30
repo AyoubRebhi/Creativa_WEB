@@ -68,13 +68,75 @@ class LivraisonController extends AbstractController
     return $this->render("livraison/updateLivraison.html.twig",["formulaireLivraison"=>$form->createView()]);
 }
 
-#[Route('/deleteLivraison/{id}',name:'delete_livraison')]
-    function delete(ManagerRegistry $manager , LivraisonRepository $repo , $id){
-        $obj = $repo -> find($id);
-        $em=$manager->getManager();
-        $em->remove($obj);
+#[Route('/deleteLivraison/{id}', name: 'delete_livraison')]
+function deleteLivraison(ManagerRegistry $manager, LivraisonRepository $repo, $id)
+{
+    $livraison = $repo->find($id);
+
+    // Vérification si le formulaire de confirmation a été soumis
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
+        $em = $manager->getManager();
+        $em->remove($livraison);
         $em->flush();
 
-        return $this->redirecttoRoute('afficher_livraison');
+        // Redirection vers la route d'affichage des livraisons
+        return $this->redirectToRoute('afficher_livraison');
     }
+
+    // Affichage de la page de confirmation
+    return new Response('
+        <html>
+            <head>
+                <style>
+                    .confirmation-container {
+                        width: 400px;
+                        margin: 20px auto;
+                        padding: 20px;
+                        border: 2px solid #007bff;
+                        border-radius: 5px;
+                        background-color: #f8f9fa;
+                        text-align: center;
+                    }
+
+                    .confirmation-container h2 {
+                        color: #007bff;
+                    }
+
+                    .confirmation-container p {
+                        margin-bottom: 20px;
+                    }
+
+                    .confirmation-container button {
+                        display: inline-block;
+                        padding: 10px 20px;
+                        margin-right: 10px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
+
+                    .confirm-button {
+                        background-color: #007bff;
+                        color: #fff;
+                    }
+
+                    .cancel-button {
+                        background-color: #dc3545;
+                        color: #fff;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="confirmation-container">
+                    <h2>Confirmation de suppression</h2>
+                    <p>Voulez-vous vraiment supprimer cette livraison ?</p>
+                    <form method="post">
+                        <button class="confirm-button" type="submit" name="confirm_delete">Confirmer</button>
+                        <a class="cancel-button" href="' . $this->generateUrl('afficher_livraison') . '">Annuler</a>
+                    </form>
+                </div>
+            </body>
+        </html>
+    ');
+}
 }

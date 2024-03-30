@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block Category %}
+{{ form_start(formulaireCodepromo) }}
+    {{ form_row(formulaireCodepromo.codePromo) }}
+    {{ form_row(formulaireCodepromo.pourcentage) }}
+    {{ form_row(formulaireCodepromo.dateExpiration) }}
+    {{ form_row(formulaireCodepromo.date) }}
+    {{ form_row(formulaireCodepromo.submit) }} {# Bouton de soumission #}
+{{ form_end(formulaireCodepromo) }}
+{% endblock %}
