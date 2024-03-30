@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class LivraisonType extends AbstractType
@@ -19,7 +20,13 @@ class LivraisonType extends AbstractType
             ->add('status')
             ->add('adresse')
             ->add('fraisLiv')
-            ->add('moyenLivraison')
+            ->add('moyenLivraison', ChoiceType::class, [
+                'choices' => [
+                    'Standards' => 'Standards',
+                    'Express' => 'Express',
+                ],
+                'expanded' => true,
+            ])
             ->add('submit',submitType::class);
 
         ;
