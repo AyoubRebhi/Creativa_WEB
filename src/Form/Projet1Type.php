@@ -6,6 +6,8 @@ use App\Entity\Projet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Categorie;
 
 class Projet1Type extends AbstractType
 {
@@ -16,11 +18,13 @@ class Projet1Type extends AbstractType
             ->add('description')
             ->add('media')
             ->add('prix')
-            ->add('isvisible')
+            /*->add('isvisible')
             ->add('createdAt')
-            ->add('updatedAt')
-            ->add('idCategorie')
-        ;
+            ->add('updatedAt')*/
+            ->add('idCategorie', EntityType::class, [
+                'class' => Categorie::class,
+                'choice_label' => 'titre',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
