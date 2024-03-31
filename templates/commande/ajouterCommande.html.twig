@@ -94,15 +94,18 @@
             cursor: pointer;
             margin-top: 20px;
         }
+    
     </style>
 {% endblock %}
 
 {% block Category %}
+<h1>AJOUTER COMMANDE</h1>
     {{form_start(formulaireCommande,{'attr': {'novalidate': 'novalidate'}})}}
-
     <div class="form-container">
+
         <div class="fieldset-container">
             <div class="fieldset-title">Informations de la commande</div>
+
             <div class="form-group">
                 {{ form_row(formulaireCommande.idUser) }}
                 {{ form_row(formulaireCommande.idProjet) }}
@@ -128,19 +131,17 @@
         <div class="fieldset-container">
             <div class="fieldset-title">Autres détails</div>
             <div class="form-group">
-                {{ form_row(formulaireCommande.mtTotal) }}
+                {{ form_row(formulaireCommande.prix) }}
                 {{ form_row(formulaireCommande.codePromo) }}
                 {{ form_row(formulaireCommande.status) }}
-                {{ form_row(formulaireCommande.prix) }}
                 {{ form_row(formulaireCommande.fraisLiv) }}
+                {{ form_row(formulaireCommande.mtTotal) }}
                 <div style="text-align: right;"> <!-- Alignez le bouton à droite -->
         {{ form_rest(formulaireCommande) }} <!-- Affichez le bouton de soumission -->
     </div>
             </div>
         </div>
     </div>
-
-    
 
     {{ form_end(formulaireCommande) }}
 {% endblock %}

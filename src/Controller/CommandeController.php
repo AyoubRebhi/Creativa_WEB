@@ -11,38 +11,51 @@ use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Entity\Projet;
+use App\Entity\CodePromo;
+
 
 class CommandeController extends AbstractController
 {
     #[Route('/ajouterCommande', name: 'ajouter_commande')]
     public function ajouterCommande(Request $request): Response
-    {
-        $commande = new Commande();
-        $user = $this->getUser();
+{
+    $commande = new Commande();
+    $user = $this->getUser();
 
-        if ($user) {
-            $commande->setUser($user);
-        }
+    if ($user) {
+        $commande->setUser($user);
+    }
+    $commande->setDate(new \DateTime());
+    // Pré-remplit le champ de date estimée avec la date actuelle + 5 jours
+    $dateEstimee = new \DateTime();
+    $dateEstimee->modify('+5 days');
+    $commande->setDateLivraisonEstimee($dateEstimee);
 
-        $form = $this->createForm(CommandeType::class, $commande); 
-        $form->handleRequest($request);
+    $form = $this->createForm(CommandeType::class, $commande); 
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($commande);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
 
-            $this->addFlash('success', 'Votre commande a été ajoutée avec succès.');
-        }
 
-        return $this->render('commande/ajouterCommande.html.twig', [
-            'formulaireCommande' => $form->createView(),
-        ]);
+        $entityManager->persist($commande);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('afficher_commande');
     }
 
-    #[Route('/afficherCommande',name:'afficher_commande')]
+    return $this->render('commande/ajouterCommande.html.twig', [
+        'formulaireCommande' => $form->createView(),
+    ]);
+}
+
+
+
+  #[Route('/afficherCommande',name:'afficher_commande')]
     function affiche(CommandeRepository $repo){
         $obj=$repo->findAll();
+
         return $this->render('commande/afficherCommande.html.twig',['o'=>$obj]);
     }
 

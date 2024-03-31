@@ -83,7 +83,6 @@ class Commande
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le statut ne peut pas être vide.")
      */
     private $status;
 

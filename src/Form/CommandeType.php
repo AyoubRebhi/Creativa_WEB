@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Form;
-
-use App\Entity\Commande;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Entity\Projet;
+
+use App\Entity\Commande;
+
 
 class CommandeType extends AbstractType
 {

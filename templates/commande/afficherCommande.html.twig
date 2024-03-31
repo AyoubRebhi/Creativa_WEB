@@ -27,11 +27,14 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ddd;
 }
-
+.left-align {
+    float: right;
+}
     </style>
 {% endblock %}
 {% block Category %}
 <h1>Liste des commandes</h1>
+<a href="{{ path('ajouter_livraison') }}" class="btn btn-primary left-align">Passer à la livraison</a>
 
 <table>
     <tr>
