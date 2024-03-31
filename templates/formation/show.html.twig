@@ -1,0 +1,41 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Formation{% endblock %}
+
+{% block body %}
+    <h1>Formation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formation.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ formation.titre }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ formation.description }}</td>
+            </tr>
+            <tr>
+                <th>Media</th>
+                <td>{{ formation.media }}</td>
+            </tr>
+            <tr>
+                <th>Nombre de places</th>
+                <td>{{ formation.nbPlaces }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ formation.prix }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_formation_index') }}" class="btn btn-primary mr-2">Retourner</a>
+    <a href="{{ path('app_formation_edit', {'id': formation.id}) }}" class="btn btn-secondary mr-2">Modifier</a>
+    {{ include('formation/_delete_form.html.twig') }}
+
+{% endblock %}

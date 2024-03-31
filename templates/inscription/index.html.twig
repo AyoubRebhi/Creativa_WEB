@@ -1,0 +1,112 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Inscription index{% endblock %}
+
+{% block body %}
+    <h1>Liste des inscriptions</h1>
+
+            <div class="container">
+                <div class="row g-2">
+                    <div class="col-md-10">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+<input type="text" id="searchInput" class="form-control border py-3" placeholder="Rechercher...">
+</div></div></div></div></div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Formation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inscription in inscriptions %}
+            <tr>
+                <td>{{ inscription.id }}</td>
+                <td>{{ inscription.nom }}</td>
+                <td>{{ inscription.prenom }}</td>
+                <td>{{ inscription.email }}</td>
+                <td>{{ inscription.dateNow ? inscription.dateNow|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ inscription.formation }}</td>
+                <td>
+                    <a href="{{ path('app_inscription_show', {'id': inscription.id}) }}">Afficher</a>
+                    <a href="{{ path('app_inscription_edit', {'id': inscription.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+            {{ knp_pagination_render(inscriptions) }}
+
+    <a href="{{ path('app_inscription_new') }}">Ajouter inscription</a>
+
+    <script>
+        // Function to perform search
+        function search() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.querySelector("table");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Change index to match the column you want to search (0-based)
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Add event listener to input for live search
+        document.getElementById("searchInput").addEventListener("input", function() {
+            search();
+        });
+    </script>
+        <style>
+    
+/* Custom styles for pagination */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    color: #333;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination li a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+    </style>
+{% endblock %}
