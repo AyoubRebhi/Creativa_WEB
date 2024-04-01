@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+<h1>Liste des posts</h1>
+
+<table>
+    <tr>
+        <th>editeur</th>
+        <th>Media</th>
+        <th>titre</th>
+        <th>description</th>
+        <td>Topic</td>
+    </tr>
+    <tr>
+        {%for a in o %}
+        <td>{{a.editeur}}</td>
+        <td>{{a.media}}</td>
+        <td>{{a.titre}}</td>
+        <td>{{a.description}}</td>
+        <td>{{a.topicId}}</td>
+    </tr>
+{%endfor%}
+</table>

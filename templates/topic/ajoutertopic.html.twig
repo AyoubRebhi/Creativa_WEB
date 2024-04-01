@@ -1,0 +1,91 @@
+ {% extends 'base.html.twig' %}
+ {% block stylesheet %}
+    {{ parent() }}
+    <style>
+            width: 70%; 
+            margin: 0 auto; 
+            padding: 40px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex; /* Aligner les cadres côte à côte */
+            flex-wrap: wrap; /* Pour passer à la ligne lorsque l'espace est insuffisant */
+        
+
+        .fieldset-container {
+            flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-right: 20px; /* Espacement entre les cadres */
+        }
+
+        .fieldset-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px; /* Espacement entre le titre et les champs */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Espacement entre les groupes de champs */
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: calc(100% - 10px); /* Prendre toute la largeur du champ avec une petite marge */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px; /* Espacement entre les champs */
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #764949;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px; /* Espacement entre le bouton et les champs */
+        }
+
+        .date-fields {
+            display: flex;
+            align-items: center; /* Pour aligner les champs de date verticalement au centre */
+        }
+
+        .date-fields > div {
+            flex: 1; /* Pour que les deux champs de date occupent la même largeur */
+            margin-right: 10px; /* Espacement entre les champs de date */
+        }
+    </style>
+{% endblock %}
+ <div class="form-container">
+        <h1>AJOUTER Topic</h1>
+        <form>
+            <div class="form-group">
+               {{ form_row(formulairetopic.Nom) }}
+            </div>
+            <div class="form-group">
+             {{ form_row(formulairetopic.Subject) }}
+            </div>
+            <div class="form-group">
+               {{ form_row(formulairetopic.Image) }}
+            </div>
+             <div class="form-group">
+               {{ form_row(formulairetopic.submit) }}
+            </div>
+        </form>
+    
+    </div>

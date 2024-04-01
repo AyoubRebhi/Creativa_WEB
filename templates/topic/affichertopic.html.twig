@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+<h1>Liste des topic</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Sujet</th>
+        <th>Image</th>
+        
+    </tr>
+    <tr>
+        {%for a in o %}
+        <td>{{a.Id}}</td>
+        <td>{{a.Nom}}</td>
+        <td>{{a.Subject}}</td>
+        <td><img src="{{a.Image}}" alt="Fayrouz Image"></td>
+    </tr>
+{%endfor%}
+</table>

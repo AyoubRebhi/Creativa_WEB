@@ -2,15 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\ToopicRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Topic
- *
- * @ORM\Table(name="topic")
- * @ORM\Entity
- */
-class Topic
+#[ORM\Entity(repositoryClass: ToopicRepository::class)]
+class Toopic
 {
     /**
      * @var int
@@ -26,68 +22,78 @@ class Topic
      *
      * @ORM\Column(name="Catego_ID", type="string", length=255, nullable=false)
      */
-   
+    private $categoId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Nom", type="string", length=255, nullable=false)
      */
-    private $Nom;
+    private $nom;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Subject", type="string", length=255, nullable=false)
      */
-    private $Subject;
+    private $subject;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Image", type="string", length=255, nullable=false)
      */
-    private $Image;
+    private $image;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    
+    public function getCategoId(): ?string
+    {
+        return $this->categoId;
+    }
+
+    public function setCategoId(string $categoId): static
+    {
+        $this->categoId = $categoId;
+
+        return $this;
+    }
 
     public function getNom(): ?string
     {
-        return $this->Nom;
+        return $this->nom;
     }
 
     public function setNom(string $nom): static
     {
-        $this->Nom = $nom;
+        $this->nom = $nom;
 
         return $this;
     }
 
     public function getSubject(): ?string
     {
-        return $this->Subject;
+        return $this->subject;
     }
 
     public function setSubject(string $subject): static
     {
-        $this->Subject = $subject;
+        $this->subject = $subject;
 
         return $this;
     }
 
     public function getImage(): ?string
     {
-        return $this->Image;
+        return $this->image;
     }
 
     public function setImage(string $image): static
     {
-        $this->Image = $image;
+        $this->image = $image;
 
         return $this;
     }
