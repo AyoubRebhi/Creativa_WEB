@@ -11,7 +11,9 @@ use App\Form\CodepromoType;
 use App\Repository\CodepromoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 class CodePromoController extends AbstractController
+
 {
     #[Route('/ajouterCodepromo', name: 'ajouter_codepromo')]
     public function ajouterCodepromo(Request $request): Response
@@ -77,4 +79,26 @@ class CodePromoController extends AbstractController
 
         return $this->redirecttoRoute('afficher_codepromo');
     }
+
+    #[Route('/verifierCodePromo', name: 'verifierCodePromo')]
+public function verifierCodePromo(Request $request)
+{
+    // Récupérer le code promo envoyé depuis la requête
+    $codePromo = $request->request->get('code_promo');
+
+    // Recherchez le code promo dans la base de données
+    $codePromoEntity = $this->getDoctrine()
+        ->getRepository(CodePromo::class)
+        ->findOneBy(['code' => $codePromo]);
+
+    // Vérifiez si le code promo existe dans la base de données
+    if ($codePromoEntity) {
+        // Si oui, renvoyer le pourcentage de réduction associé au code promo
+        return new JsonResponse(['pourcentage' => $codePromoEntity->getPourcentage()]);
+    } else {
+        // Si le code promo n'existe pas dans la base de données, renvoyez une réponse indiquant que le code promo est invalide
+        return new JsonResponse(['erreur' => 'Code promo invalide'], Response::HTTP_BAD_REQUEST);
+    }
+}
+
 }

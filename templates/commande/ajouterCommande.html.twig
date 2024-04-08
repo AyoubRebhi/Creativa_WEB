@@ -5,25 +5,24 @@
     <style>
         /* CSS pour le formulaire */
         .form-container {
-    width: 70%; /* Largeur du formulaire */
-    margin: 0 auto; /* Centrer le formulaire */
-    padding: 40px; /* Ajouter de l'espace à l'intérieur du cadre */
-    border: 1px solid #ccc; /* Bordure autour du cadre */
-    border-radius: 8px; /* Coins arrondis */
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    display: flex; /* Aligner les cadres côte à côte */
-}
+            width: 70%; /* Largeur du formulaire */
+            margin: 0 auto; /* Centrer le formulaire */
+            padding: 40px; /* Ajouter de l'espace à l'intérieur du cadre */
+            border: 1px solid #ccc; /* Bordure autour du cadre */
+            border-radius: 8px; /* Coins arrondis */
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex; /* Aligner les cadres côte à côte */
+        }
 
-.fieldset-container {
-    flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    margin-right: 20px; /* Espacement entre les cadres */
-}
-
+        .fieldset-container {
+            flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-right: 20px; /* Espacement entre les cadres */
+        }
 
         .fieldset-title {
             font-weight: bold;
@@ -63,8 +62,6 @@
             margin-top: 20px; /* Espacement entre le bouton et les champs */
         }
 
-        
-
         .date-fields {
             display: flex;
             align-items: center; /* Pour aligner les champs de date verticalement au centre */
@@ -74,17 +71,21 @@
             flex: 1; /* Pour que les deux champs de date occupent la même largeur */
             margin-right: 10px; /* Espacement entre les champs de date */
         }
-   .form-container {
+
+        .form-container {
             display: flex;
             flex-wrap: wrap;
         }
+
         .fieldset-container {
             flex: 1;
             margin-right: 20px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         input[type="submit"] {
             background-color: #4CAF50;
             color: white;
@@ -94,13 +95,12 @@
             cursor: pointer;
             margin-top: 20px;
         }
-    
     </style>
 {% endblock %}
 
 {% block Category %}
-<h1>AJOUTER COMMANDE</h1>
-    {{form_start(formulaireCommande,{'attr': {'novalidate': 'novalidate'}})}}
+    <h1>AJOUTER COMMANDE</h1>
+    {{ form_start(formulaireCommande,{'attr': {'novalidate': 'novalidate'}})}}
     <div class="form-container">
 
         <div class="fieldset-container">
@@ -132,16 +132,79 @@
             <div class="fieldset-title">Autres détails</div>
             <div class="form-group">
                 {{ form_row(formulaireCommande.prix) }}
-                {{ form_row(formulaireCommande.codePromo) }}
+                {{ form_row(formulaireCommande.codePromo, {'attr': {'id': 'commande_codePromo'}}) }}
+                <button type="button" class="btn btn-primary" id="verificationCodePromoBtn">Vérifier le code promo</button>
+
                 {{ form_row(formulaireCommande.status) }}
                 {{ form_row(formulaireCommande.fraisLiv) }}
-                {{ form_row(formulaireCommande.mtTotal) }}
-                <div style="text-align: right;"> <!-- Alignez le bouton à droite -->
-        {{ form_rest(formulaireCommande) }} <!-- Affichez le bouton de soumission -->
-    </div>
+                {# Champ pour afficher le résultat du calcul #}
+                {{ form_row(formulaireCommande.mtTotal, {'attr': {'readonly': 'readonly'}}) }}
+                <button type="button" id="calculerSommeBtn" class="btn btn-primary">Calculer Somme</button>
+                <div style="text-align: right;">
+                    {{ form_rest(formulaireCommande) }}
+                </div>
             </div>
         </div>
     </div>
-
     {{ form_end(formulaireCommande) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('calculerSommeBtn').addEventListener('click', function () {
+        // Récupérer les valeurs des champs prix et fraisLiv
+        var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
+        var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
+
+        // Calculer la somme
+        var somme = prix + fraisLiv;
+        // Mettre à jour le champ mtTotal
+        document.getElementById('commande_mtTotal').value = somme.toFixed(2);
+    });
+    
+    // Ajouter un événement de clic pour vérifier le code promo
+    document.getElementById('verificationCodePromoBtn').addEventListener('click', function () {
+        // Récupérer le code promo saisi par l'utilisateur
+        var codePromo = document.getElementById('commande_codePromo').value;
+
+        // Créer un objet FormData pour envoyer les données
+        var formData = new FormData();
+        formData.append('codePromo', codePromo);
+
+        // Effectuer une requête AJAX pour vérifier le code promo
+        fetch('/verifierCodePromo', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Erreur lors de la vérification du code promo : ' + response.statusText);
+            }
+        })
+        .then(function (data) {
+            if (data.valid) {
+                // Code promo valide, appliquer la remise de 10%
+                var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
+                var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
+
+                // Calculer la somme avec la remise
+                var somme = (prix + fraisLiv) * 0.9; // Appliquer une remise de 10%
+
+                // Mettre à jour le champ mtTotal
+                document.getElementById('commande_mtTotal').value = somme.toFixed(2);
+
+                alert('Code promo valide ! Remise de 10% appliquée.');
+            } else {
+                // Code promo invalide
+                alert('Code promo invalide !');
+            }
+        })
+        .catch(function (error) {
+            alert(error.message);
+        });
+    });
+});
+
+    </script>
 {% endblock %}

@@ -9,16 +9,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
+use App\Repository\CodepromoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Projet;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\CodePromo;
-
+use App\Controller\CodePromoController; // Importez le contrôleur CodePromoController
 
 class CommandeController extends AbstractController
 {
     #[Route('/ajouterCommande', name: 'ajouter_commande')]
-    public function ajouterCommande(Request $request): Response
+/*public function ajouterCommande(Request $request, CodepromoRepository $codpromoRepository): Response
 {
     $commande = new Commande();
     $user = $this->getUser();
@@ -26,19 +28,18 @@ class CommandeController extends AbstractController
     if ($user) {
         $commande->setUser($user);
     }
+
     $commande->setDate(new \DateTime());
     // Pré-remplit le champ de date estimée avec la date actuelle + 5 jours
     $dateEstimee = new \DateTime();
     $dateEstimee->modify('+5 days');
     $commande->setDateLivraisonEstimee($dateEstimee);
 
-    $form = $this->createForm(CommandeType::class, $commande); 
+    $form = $this->createForm(CommandeType::class, $commande);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager = $this->getDoctrine()->getManager();
-
-
         $entityManager->persist($commande);
         $entityManager->flush();
 
@@ -48,6 +49,93 @@ class CommandeController extends AbstractController
     return $this->render('commande/ajouterCommande.html.twig', [
         'formulaireCommande' => $form->createView(),
     ]);
+}*/
+
+public function ajouterCommande(Request $request, CodePromoRepository $codePromoRepository): Response
+    {
+        $commande = new Commande();
+        $form = $this->createForm(CommandeType::class, $commande);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer le code promo saisi par l'utilisateur
+            $codePromo = $commande->getCodePromo();
+            
+            // Rechercher le code promo dans la table "code_promo"
+            $codePromoEntity = $codePromoRepository->findOneBy(['codePromo' => $codePromo]);
+
+            if ($codePromoEntity) {
+                // Le code promo existe dans la table "code_promo", faites quelque chose ici
+                
+                // Par exemple, vous pouvez appliquer une remise à la commande
+                // $commande->setRemise($codePromoEntity->getRemise());
+            } else {
+                // Le code promo n'existe pas dans la table "code_promo", affichez un message d'erreur
+                $this->addFlash('error', 'Code promo invalide');
+                return $this->redirectToRoute('ajouter_commande');
+            }
+            
+            // Enregistrez la commande dans la base de données
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($commande);
+            $entityManager->flush();
+
+            // Redirigez l'utilisateur vers une autre page (par exemple, la page d'affichage des commandes)
+            return $this->redirectToRoute('afficher_commande');
+        }
+
+        return $this->render('commande/ajouterCommande.html.twig', [
+            'formulaireCommande' => $form->createView(),
+        ]);
+    }
+
+
+
+    #[Route('/verifierCodePromo', name: 'verifierCodePromo')]
+/*public function verifierCodePromo(Request $request)
+{
+    // Récupérer le code promo envoyé depuis la requête
+    $codePromo = $request->request->get('codePromo'); // Modifier 'code_promo' en 'codePromo'
+
+    // Recherchez le code promo dans la base de données
+    $codePromoEntity = $this->getDoctrine()
+        ->getRepository(CodePromo::class)
+        ->findOneBy(['codePromo' => $codePromo]);
+
+    // Vérifiez si le code promo existe dans la base de données
+    if ($codePromoEntity) {
+        // Si le code promo existe, il est considéré comme valide
+        $codePromoValide = true;
+    } else {
+        // Si le code promo n'existe pas, il est considéré comme invalide
+        $codePromoValide = false;
+    }
+
+    // Retourner une réponse JSON avec le résultat de la vérification
+    return new JsonResponse(['valid' => $codePromoValide]);
+}*/
+
+public function verifierCodePromo(Request $request): JsonResponse
+{
+    // Récupérer le code promo envoyé depuis la requête
+    $codePromo = $request->request->get('codePromo'); // Modifier 'code_promo' en 'codePromo'
+
+    // Recherchez le code promo dans la base de données
+    $codePromoEntity = $this->getDoctrine()
+        ->getRepository(CodePromo::class)
+        ->findOneBy(['codePromo' => $codePromo]); // Utiliser 'code_promo' au lieu de 'codePromo'
+
+    // Vérifiez si le code promo existe dans la base de données
+    if ($codePromoEntity) {
+        // Si le code promo existe, il est considéré comme valide
+        $codePromoValide = true;
+    } else {
+        // Si le code promo n'existe pas, il est considéré comme invalide
+        $codePromoValide = false;
+    }
+
+    // Retourner une réponse JSON avec le résultat de la vérification
+    return new JsonResponse(['valid' => $codePromoValide]);
 }
 
 

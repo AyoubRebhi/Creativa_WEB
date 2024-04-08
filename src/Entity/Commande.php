@@ -34,13 +34,12 @@ class Commande
     private $idUser;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_projet", type="integer", nullable=true)
-    * @Assert\NotBlank(message="id_projet ne peut pas être vide.")
+ * @var int|null
+ *
+ * @ORM\Column(name="id_projet", type="integer", nullable=true)
+ */
+private $idProjet;
 
-     */
-    private $idProjet;
 
     /**
      * @var \DateTime|null

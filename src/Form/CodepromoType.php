@@ -13,7 +13,7 @@ class CodepromoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('codePromo')
+        ->add('codePromo')
             ->add('pourcentage')
             ->add('dateExpiration')
             ->add('date')
