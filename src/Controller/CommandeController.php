@@ -34,7 +34,9 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
     $dateEstimee = new \DateTime();
     $dateEstimee->modify('+5 days');
     $commande->setDateLivraisonEstimee($dateEstimee);
-
+    $commande->setStatus('en cours');
+    $commande->setFraisLiv(8);
+    
     $form = $this->createForm(CommandeType::class, $commande);
     $form->handleRequest($request);
 

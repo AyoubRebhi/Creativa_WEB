@@ -17,28 +17,38 @@ class LivraisonController extends AbstractController
 {
     #[Route('/ajouterLivraison', name: 'ajouter_livraison')]
     public function ajouterLivraison(Request $request): Response
-    {
-        $livraison = new Livraison();
-        $user = $this->getUser();
+{
+    $livraison = new Livraison();
+    $user = $this->getUser();
 
-        if ($user) {
-            $livraison->setUser($user);
-        }
-
-        $form = $this->createForm(LivraisonType::class, $livraison);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($livraison);
-            $entityManager->flush();
-        }
-
-
-        return $this->render('livraison/ajouterLivraison.html.twig', [
-            'formulaireLivraison' => $form->createView(),
-        ]);
+    if ($user) {
+        $livraison->setUser($user);
     }
+
+    $livraison->setStatus('en cours');
+
+    $form = $this->createForm(LivraisonType::class, $livraison);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le frais de livraison à partir du formulaire
+        $fraisLiv = $form->get('fraisLiv')->getData();
+        $livraison->setFraisLiv($fraisLiv);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($livraison);
+        $entityManager->flush();
+    }
+
+    return $this->render('livraison/ajouterLivraison.html.twig', [
+        'formulaireLivraison' => $form->createView(),
+    ]);
+}
+
+
+
+    
+    
 
     #[Route('/afficherLivraison',name:'afficher_livraison')]
     function affiche(LivraisonRepository $repo){

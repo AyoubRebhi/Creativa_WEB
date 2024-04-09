@@ -17,9 +17,15 @@ class LivraisonType extends AbstractType
         $builder
             ->add('idCmd')
             ->add('idUser')
-            ->add('status')
+            ->add('status',null,[
+                'disabled' => true, //read only
+            ])            
             ->add('adresse')
-            ->add('fraisLiv')
+            ->add('fraisLiv', null, [
+                'label' => 'Frais de livraison',
+                'required' => false, 
+            ])
+            
             ->add('moyenLivraison', ChoiceType::class, [
                 'choices' => [
                     'Standards' => 'Standards',

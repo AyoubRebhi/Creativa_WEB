@@ -14,6 +14,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+
+
 class CommandeType extends AbstractType
 {
     private $projetRepository;
@@ -25,50 +27,37 @@ class CommandeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $projects = $this->projetRepository->findAll();
+        $projectChoices = [];
+
+        foreach ($projects as $project) {
+            $projectChoices[$project->getIdProjet()] = $project->getIdProjet();
+        }
+
         $builder
             ->add('idUser')
-            ->add('idProjet', EntityType::class, [
-                'class' => Projet::class,
-                'choice_label' => 'id_projet', 
+            ->add('idProjet', ChoiceType::class, [
+                'choices' => $projectChoices,
                 'placeholder' => 'Sélectionnez un projet',
-                'mapped' => false, // Nous ne voulons pas mapper ce champ à une propriété de l'entité Commande
             ])
             ->add('date', DateType::class)
             ->add('dateLivraisonEstimee', DateType::class)
             ->add('codePromo')
-            ->add('status')
+            ->add('status',null,[
+            'disabled' => true, //read only
+        ])
             ->add('prix')
-            ->add('fraisLiv')
+            ->add('fraisLiv', null, [
+                'disabled' => true, //read only
+            ])
             ->add('mtTotal')
             ->add('submit', SubmitType::class);
-
-        // Ajouter un écouteur d'événements pour mettre à jour le prix en fonction du projet sélectionné
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            // Récupérer l'ID du projet sélectionné dans les données du formulaire
-            $projetId = $data['idProjet'];
-
-            // Si un projet est sélectionné
-            if ($projetId) {
-                // Récupérer le projet correspondant depuis la base de données
-                $projet = $this->projetRepository->find($projetId);
-
-                // Mettre à jour le champ prix avec le prix du projet
-                $form->add('prix', null, [
-                    'data' => $projet->getPrix()
-                ]);
-            } 
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Commande::class,
-            // Ajouter cette option pour inclure idProjet dans les données du formulaire
-            'include_projet_id' => false,
         ]);
     }
 }

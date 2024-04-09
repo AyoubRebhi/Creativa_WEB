@@ -103,4 +103,19 @@
     </div>
 
     {{ form_end(formulaireLivraison) }}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.horizontal-radio input').change(function () {
+                var moyenLivraison = $(this).val();
+                var fraisLivraisonField = $('#livraison_fraisLiv');
+                if (moyenLivraison === 'Standards') {
+                    fraisLivraisonField.val('8');
+                } else if (moyenLivraison === 'Express') {
+                    fraisLivraisonField.val('12');
+                }
+            });
+        });
+    </script>
 {% endblock %}
