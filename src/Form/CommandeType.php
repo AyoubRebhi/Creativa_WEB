@@ -29,7 +29,7 @@ class CommandeType extends AbstractType
             ->add('idUser')
             ->add('idProjet', EntityType::class, [
                 'class' => Projet::class,
-                'choice_label' => 'id_projet', // Assurez-vous que 'nom' est le champ à afficher dans la liste des projets
+                'choice_label' => 'id_projet', 
                 'placeholder' => 'Sélectionnez un projet',
                 'mapped' => false, // Nous ne voulons pas mapper ce champ à une propriété de l'entité Commande
             ])

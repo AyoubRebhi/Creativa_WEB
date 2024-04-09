@@ -150,17 +150,28 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+    // Déclaration d'une variable pour stocker l'état du code promo
+    var codePromoValide = false;
+
+    // Ajouter un événement de clic pour calculer la somme
     document.getElementById('calculerSommeBtn').addEventListener('click', function () {
         // Récupérer les valeurs des champs prix et fraisLiv
         var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
         var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
 
+        // Vérifier si un code promo valide a été saisi
+        if (codePromoValide) {
+            // Appliquer une remise de 10% si un code promo valide a été saisi
+            prix *= 0.9;
+        }
+
         // Calculer la somme
         var somme = prix + fraisLiv;
+
         // Mettre à jour le champ mtTotal
         document.getElementById('commande_mtTotal').value = somme.toFixed(2);
     });
-    
+
     // Ajouter un événement de clic pour vérifier le code promo
     document.getElementById('verificationCodePromoBtn').addEventListener('click', function () {
         // Récupérer le code promo saisi par l'utilisateur
@@ -184,19 +195,12 @@
         })
         .then(function (data) {
             if (data.valid) {
-                // Code promo valide, appliquer la remise de 10%
-                var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
-                var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
-
-                // Calculer la somme avec la remise
-                var somme = (prix + fraisLiv) * 0.9; // Appliquer une remise de 10%
-
-                // Mettre à jour le champ mtTotal
-                document.getElementById('commande_mtTotal').value = somme.toFixed(2);
-
-                alert('Code promo valide ! Remise de 10% appliquée.');
+                // Marquer le code promo comme valide
+                codePromoValide = true;
+                alert('Code promo valide ! Vous avez une remise de 10%.');
             } else {
-                // Code promo invalide
+                // Marquer le code promo comme invalide
+                codePromoValide = false;
                 alert('Code promo invalide !');
             }
         })
