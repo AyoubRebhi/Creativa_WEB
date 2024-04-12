@@ -10,13 +10,12 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -352,7 +351,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getSalt()
     {
         // Vous n'avez pas besoin de sel car bcrypt gère cela pour vous
-        return null;
+        return null ;
     }
 
     public function eraseCredentials()

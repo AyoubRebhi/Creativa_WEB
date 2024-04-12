@@ -25,21 +25,26 @@ class UserRepository extends ServiceEntityRepository
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function findUserByEmailAndPassword(string $email, string $password)
-    {
-        $user = $this->createQueryBuilder('u')
-            ->where('u.email = :email')
-            ->setParameter('email', $email)
-            ->getQuery()
-            ->getOneOrNullResult();
+   public function findUserByEmailAndPassword(string $email, string $password)
+{
+    $user = $this->createQueryBuilder('u')
+        ->where('u.email = :email')
+        ->setParameter('email', $email)
+        ->getQuery()
+        ->getOneOrNullResult();
 
-        if (!$user) {
-            return false; // Utilisateur non trouvé
-        }
-
-        // Vérifiez si le mot de passe correspond
-        return $this->passwordEncoder->isPasswordValid($user, $password);
+    if (!$user) {
+        return false; // Utilisateur non trouvé
     }
+
+    // Vérifiez si le mot de passe correspond
+    if (!$this->passwordEncoder->isPasswordValid($user, $password)) {
+        return false; // Mot de passe incorrect
+    }
+
+    return $user;
+}
+
 }
 
 
