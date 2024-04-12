@@ -1,0 +1,279 @@
+{% extends 'backOffice.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* CSS pour le formulaire */
+        .form-container {
+            width: 70%; /* Largeur du formulaire */
+            margin: 0 auto; /* Centrer le formulaire */
+            padding: 40px; /* Ajouter de l'espace à l'intérieur du cadre */
+            border: 1px solid #ccc; /* Bordure autour du cadre */
+            border-radius: 8px; /* Coins arrondis */
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex; /* Aligner les cadres côte à côte */
+        }
+
+        .fieldset-container {
+            flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-right: 20px; /* Espacement entre les cadres */
+        }
+
+        .fieldset-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px; /* Espacement entre le titre et les champs */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Espacement entre les groupes de champs */
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: calc(100% - 10px); /* Prendre toute la largeur du champ avec une petite marge */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px; /* Espacement entre les champs */
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px; /* Espacement entre le bouton et les champs */
+        }
+
+        .date-fields {
+            display: flex;
+            align-items: center; /* Pour aligner les champs de date verticalement au centre */
+        }
+
+        .date-fields > div {
+            flex: 1; /* Pour que les deux champs de date occupent la même largeur */
+            margin-right: 10px; /* Espacement entre les champs de date */
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .fieldset-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+/* Style pour les messages d'erreur spécifiques */
+#error-id_user:empty::before {
+    content: "⚠ Le champ id_user ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-id_projet:empty::before {
+    content: "⚠ Le champ id_projet ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-date:empty::before {
+    content: "⚠ Le champ date ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-mt_total:empty::before {
+    content: "⚠ Le champ mt_total ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-date_livraison_estimee:empty::before {
+    content: "⚠ Le champ date_livraison_estimee ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-code_promo:empty::before {
+    content: "⚠ Le champ code_promo ne peut pas être vide et doit contenir exactement 4 chiffres."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-prix:empty::before {
+    content: "⚠ Le champ prix ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+#error-frais_liv:empty::before {
+    content: "⚠ Le champ frais_liv ne peut pas être vide."; /* Message d'erreur */
+    color: #e74c3c; /* couleur rouge */
+    font-size: 14px;
+    margin-top: 5px;
+    display: block; /* Afficher le message en tant que bloc */
+}
+
+
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>AJOUTER COMMANDE</h1>
+    {{ form_start(formulaireCommande,{'attr': {'novalidate': 'novalidate'}})}}
+    <div class="form-container">
+
+        <div class="fieldset-container">
+            <div class="fieldset-title">Informations de la commande</div>
+
+            <div class="form-group">
+                {{ form_row(formulaireCommande.idUser) }}
+                {{ form_row(formulaireCommande.idProjet) }}
+                <div class="date-fields">
+                    {{ form_row(formulaireCommande.date) }}
+                    {{ form_row(formulaireCommande.dateLivraisonEstimee) }}
+                </div>
+                {% if form_errors(formulaireCommande.idUser) %}
+                    <div class="error">{{ form_errors(formulaireCommande.idUser) }}</div>
+                {% endif %}
+                {% if form_errors(formulaireCommande.idProjet) %}
+                    <div class="error">{{ form_errors(formulaireCommande.idProjet) }}</div>
+                {% endif %}
+                {% if form_errors(formulaireCommande.date) %}
+                    <div class="error">{{ form_errors(formulaireCommande.date) }}</div>
+                {% endif %}
+                {% if form_errors(formulaireCommande.dateLivraisonEstimee) %}
+                    <div class="error">{{ form_errors(formulaireCommande.dateLivraisonEstimee) }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="fieldset-container">
+            <div class="fieldset-title">Autres détails</div>
+            <div class="form-group">
+                {{ form_row(formulaireCommande.prix) }}
+                {{ form_row(formulaireCommande.codePromo, {'attr': {'id': 'commande_codePromo'}}) }}
+                <button type="button" class="btn btn-primary" id="verificationCodePromoBtn">Vérifier le code promo</button>
+
+                {{ form_row(formulaireCommande.status) }}
+                {{ form_row(formulaireCommande.fraisLiv) }}
+                {# Champ pour afficher le résultat du calcul #}
+                {{ form_row(formulaireCommande.mtTotal, {'attr': {'readonly': 'readonly'}}) }}
+                <button type="button" id="calculerSommeBtn" class="btn btn-primary">Calculer Somme</button>
+                <div style="text-align: right;">
+                    {{ form_rest(formulaireCommande) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(formulaireCommande) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    // Déclaration d'une variable pour stocker l'état du code promo
+    var codePromoValide = false;
+
+    // Ajouter un événement de clic pour calculer la somme
+    document.getElementById('calculerSommeBtn').addEventListener('click', function () {
+        // Récupérer les valeurs des champs prix et fraisLiv
+        var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
+        var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
+
+        // Vérifier si un code promo valide a été saisi
+        if (codePromoValide) {
+            // Appliquer une remise de 10% si un code promo valide a été saisi
+            prix *= 0.9;
+        }
+
+        // Calculer la somme
+        var somme = prix + fraisLiv;
+
+        // Mettre à jour le champ mtTotal
+        document.getElementById('commande_mtTotal').value = somme.toFixed(2);
+    });
+
+    // Ajouter un événement de clic pour vérifier le code promo
+    document.getElementById('verificationCodePromoBtn').addEventListener('click', function () {
+        // Récupérer le code promo saisi par l'utilisateur
+        var codePromo = document.getElementById('commande_codePromo').value;
+
+        // Créer un objet FormData pour envoyer les données
+        var formData = new FormData();
+        formData.append('codePromo', codePromo);
+
+        // Effectuer une requête AJAX pour vérifier le code promo
+        fetch('/verifierCodePromo', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Erreur lors de la vérification du code promo : ' + response.statusText);
+            }
+        })
+        .then(function (data) {
+            if (data.valid) {
+                // Marquer le code promo comme valide
+                codePromoValide = true;
+                alert('Code promo valide ! Vous avez une remise de 10%.');
+            } else {
+                // Marquer le code promo comme invalide
+                codePromoValide = false;
+                alert('Code promo invalide !');
+            }
+        })
+        .catch(function (error) {
+            alert(error.message);
+        });
+    });
+});
+
+    </script>
+{% endblock %}

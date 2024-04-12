@@ -39,6 +39,7 @@ tr:hover {
         <th>Adresse</th>
         <th>Frais de Livraison</th>
         <th>Moyen de Livraison</th>
+        <th>Actions</th>
     </tr>
     {% for a in o %}
     <tr>
@@ -49,6 +50,12 @@ tr:hover {
         <td>{{ a.adresse }}</td>
         <td>{{ a.fraisLiv }}</td>
         <td>{{ a.moyenLivraison }}</td>
+        <td>
+    <form action="{{ path('delete_livraison', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+    <a href="{{ path('update_livraison', { 'id': a.idLiv }) }}" class="btn btn-primary">Modifier</a>
+</td>
     </tr>
     {% endfor %}
     

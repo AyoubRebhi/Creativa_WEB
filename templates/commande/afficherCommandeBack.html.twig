@@ -1,0 +1,74 @@
+{% extends 'backOffice.html.twig' %}
+{% block stylesheets %}
+  {{ parent() }}
+    <style>
+    table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+.left-align {
+    float: right;
+}
+    </style>
+{% endblock %}
+{% block body %}
+<h1>Liste des commandes</h1>
+<a href="{{ path('ajouter_livraison') }}" class="btn btn-primary left-align">Passer à la livraison</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ID Utilisateur</th>
+        <th>ID Projet</th>
+        <th>Date</th>
+        <th>Montant Total</th>
+        <th>Date de Livraison Estimée</th>
+        <th>Code Promo</th>
+        <th>Status</th>
+        <th>Prix</th>
+        <th>Frais de Livraison</th>
+        <th>Actions</th>
+    </tr>
+    <tr>
+        {%for a in o %}
+        <td>{{ a.idCmd }}</td>
+        <td>{{ a.idUser }}</td>
+        <td>{{ a.idProjet }}</td>
+        <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+        <td>{{ a.mtTotal }}</td>
+        <td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
+        <td>{{ a.codePromo }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.prix }}</td>
+        <td>{{ a.fraisLiv }}</td>
+        <td>
+    <form action="{{ path('delete_commande', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+    <a href="{{ path('update_Commande', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
+</td>
+    </tr>
+{%endfor%}
+</table>
+{% endblock %}

@@ -1,26 +1,62 @@
-{% extends 'base.html.twig' %}
-{% block Category %}
-<h1>Liste des code promo</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Code Promo</th>
-            <th>Pourcentage</th>
-            <th>Date d'Expiration</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for a in o %}
+{% extends 'backOffice.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #dddddd;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des code promo</h1>
+    <table>
+        <thead>
             <tr>
-                <td>{{ a.id }}</td>
-                <td>{{ a.codePromo }}</td>
-                <td>{{ a.pourcentage }}</td>
-                <td>{{ a.dateExpiration ? a.dateExpiration|date('Y-m-d') : '' }}</td>
-                <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+                <th>Id</th>
+                <th>Code Promo</th>
+                <th>Pourcentage</th>
+                <th>Date d'Expiration</th>
+                <th>Date</th>
+                <th>Action</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for a in o %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.codePromo }}</td>
+                    <td>{{ a.pourcentage }}</td>
+                    <td>{{ a.dateExpiration ? a.dateExpiration|date('Y-m-d') : '' }}</td>
+                    <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+                    <td>
+                        <form action="{{ path('delete_codepromo', { 'id': a.id }) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                        <a href="{{ path('update_Codepromo', { 'id': a.id }) }}" class="btn btn-primary">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

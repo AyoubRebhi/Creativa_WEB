@@ -1,6 +1,68 @@
-{% extends 'base.html.twig' %}
-{% block Category %}
-<h1>AJOUTER LIVRAISON</h1>
-{{ form(formulaireCodepromo) }}
+{% extends 'backOffice.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* CSS pour le formulaire d'ajout de livraison */
+
+        /* Style pour le conteneur du formulaire */
+        .form-container {
+            width: 70%; /* Largeur du formulaire */
+            margin: 0 auto; /* Centrer le formulaire */
+            padding: 40px; /* Ajouter de l'espace à l'intérieur du cadre */
+            border: 1px solid #ccc; /* Bordure autour du cadre */
+            border-radius: 8px; /* Coins arrondis */
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex; /* Aligner les cadres côte à côte */
+            flex-direction: column; /* Afficher les éléments en colonne */
+        }
+
+        /* Style pour les cadres à l'intérieur du formulaire */
+        .fieldset-container {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px; /* Espacement entre les cadres */
+        }
+
+        /* Style pour le titre des cadres */
+        .fieldset-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px; /* Espacement entre le titre et les champs */
+        }
+
+        /* Style pour les groupes de champs */
+        .form-group {
+            margin-bottom: 20px; /* Espacement entre les groupes de champs */
+        }
+
+        /* Style pour les étiquettes des champs */
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Style pour les champs de saisie */
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: calc(100% - 10px); /* Prendre toute la largeur du champ avec une petite marge */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px; /* Espacement entre les champs */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="form-container">
+        <h1>AJOUTER LIVRAISON</h1>
+        {{ form(formulaireCodepromo) }}
+    </div>
 {% endblock %}
