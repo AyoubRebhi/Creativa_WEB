@@ -34,8 +34,9 @@
         </div>
 
         <!-- Intégration du formulaire Symfony ici -->
-        <form   class="login-form" > 
+        <form   class="login-form" {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}> 
             <h3>bienvenue a creativa </h3>
+
 
             {{ form_row(form.email, {'attr': {'placeholder': 'Email', 'class': 'form-control'}}) }}
 
@@ -44,10 +45,12 @@
                 <a href="#">mot de passe oublié ?</a>
             </div>
             {{ form_row(form.submit, {'attr': {'class': 'button'}}) }}
-       
+
  <div class="signup">
     Pas encore membre ? <a href="{{ path('user_register') }}">Inscrivez-vous maintenant</a>
 </div>
+       {{ form_end(form) }}
+
 </form>
         <!-- Fin du formulaire Symfony -->
     </div>

@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 class AuthController extends AbstractController
@@ -22,7 +20,7 @@ class AuthController extends AbstractController
     #[Route('/auth', name: 'app_auth')]
     public function index(): Response
     {
-        return $this->render('auth/index.html.twig', [
+        return $this->render('base.html.twig', [
             'controller_name' => 'AuthController',
         ]);
     }
@@ -31,7 +29,7 @@ class AuthController extends AbstractController
      /**
      * @Route("/login", name="login")
      */
-    public function login(Request $request): Response
+    public function login(Request $request,SessionInterface $session): Response
     {
         $form = $this->createForm(AuthFormType::class);
         $form->handleRequest($request);
@@ -45,50 +43,58 @@ class AuthController extends AbstractController
             $isAuthenticated = $userRepository->findUserByEmailAndPassword($email, $password);
 
             if ($isAuthenticated) {
-                // L'utilisateur est authentifié, redirigez-le vers la page d'accueil ou une autre page sécurisée
-                return $this->render('auth/homepage.html.twig');
+                // If authenticated, retrieve the user object separately
+                $authenticatedUser = $userRepository->findOneByEmail($email);
+                $userId = $authenticatedUser->getIdUser();
+                $session->set('user_id', $userId);
+    
+    
+                // Check the role of the authenticated user
+                $role = $authenticatedUser->getRole();
+    
+                if ($role === 'ADMIN') {
+                    // Redirect admin user to userpage
+                    return $this->redirectToRoute('userpage');
+                } else {
+                    // Redirect other users to homepage or another appropriate page
+                    return $this->redirectToRoute('homepage');
+                }
             } else {
-                // L'authentification a échoué, affichez un message d'erreur à l'utilisateur
-                $this->addFlash('error', 'Invalid email or password.');
+                // Authentication failed, display an error message to the user
+                $form->get('email')->addError(new FormError('les informations sont incorrects.'));
             }
         }
 
-        return $this->render('auth/index.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
+// /**
+//      * @Route("/register", name="user_register")
+//      */
+//     public function register(Request $request, EntityManagerInterface $entityManager): Response
+//     {
+//         $user = new User();
+//         $form = $this->createForm(InscriptionFormType::class, $user);
+//         $form->handleRequest($request);
 
+//         if ($form->isSubmitted() && $form->isValid()) {
+//             // Encodez le mot de passe avant de l'enregistrer
 
- /**
-     * @Route("/register", name="user_register1")
-     */
+//             $entityManager->persist($user);
+//             $entityManager->flush();
 
-public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
-{
-    $user = new User();
-    $form = $this->createForm(InscriptionFormType::class, $user);
-    $form->handleRequest($request);
+//             // Rediriger vers une page de confirmation ou une autre page après l'enregistrement
+//             return $this->redirectToRoute('registration_success');
+//         }
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Encodez le mot de passe avant de l'enregistrer
-        $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
-        
-        $user->setPassword($hashedPassword);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        // Rediriger vers une page de confirmation ou une autre page après l'enregistrement
-        return $this->render('auth/homepage.html.twig'  ) ; }
-    return $this->render('auth/register.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
-
-
-      /**
-     * @Route("/register1", name="user_register1")
+//         return $this->render('auth/auth.html.twig', [
+//             'form' => $form->createView(),
+//         ]);
+//     }
+     /**
+     * @Route("/register", name="user_register")
      */
 
      public function register1(Request $request, EntityManagerInterface $entityManager): Response
@@ -129,7 +135,6 @@ public function register(Request $request, EntityManagerInterface $entityManager
          ]);
      }
 
-    
 
 
     /**
@@ -137,86 +142,41 @@ public function register(Request $request, EntityManagerInterface $entityManager
      */
     public function registrationSuccess(): Response
     {
-        return $this->render('auth/login.html.twig');
+        return $this->forward('App\Controller\AuthController::login');
     }
 
 
+    /**
+     * @Route("/userpage", name="userpage")
+     */
+    public function directto(): Response
+    {
+        return $this->forward('App\Controller\UserController::index');
+    }
+/**
+     * @Route("/homepage", name="homepage")
+     */
+    public function directto1(): Response
+    {
+        return $this->forward('App\Controller\AuthController::index');
+    }
+
+/**
+     * @Route("/app_login", name="app_login")
+     */
+    public function loginpage(): response
+    {
+        return $this->forward('App\Controller\AuthController::login');
+    }
 
 
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout(SessionInterface $session): Response
+    {        $session->clear();
+    }
     
-    /**
-     * @Route("/register2", name="user_register")
-     */
-    public function register2(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-    {
-        $user = new User();
-        $form = $this->createForm(InscriptionFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Générer un code de vérification unique
-            $verificationCode = random_int(100000, 999999);
-
-            // Envoyer le code de vérification par e-mail
-            $email = (new Email())
-                ->from('hhajer09@gmail.com')
-                ->to($user->getEmail())
-                ->subject('Code de vérification')
-                ->text('Votre code de vérification est : ' . $verificationCode);
-
-            $mailer->send($email);
-
-            // Stocker le code de vérification en session pour le vérifier plus tard
-            $request->getSession()->set('verification_code', $verificationCode);
-
-            // Stocker l'utilisateur en session pour l'ajouter à la base de données après vérification
-            $request->getSession()->set('user_to_register', $user);
-
-            // Rediriger vers la page où l'utilisateur saisira le code de vérification
-            return $this->redirectToRoute('verification_page');
-        }
-
-        // Affichage du formulaire avec les erreurs
-        return $this->render('auth/auth.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/verification", name="verification_page")
-     */
-    public function verificationPage(Request $request)
-    {
-        // Afficher la page où l'utilisateur saisira le code de vérification
-        return $this->render('auth/verification.html.twig');
-    }
-
-    /**
-     * @Route("/verify-code", name="verify_code", methods={"POST"})
-     */
-    public function verifyCode(Request $request, EntityManagerInterface $entityManager)
-    {
-        // Récupérer le code de vérification saisi par l'utilisateur
-        $verificationCode = $request->request->get('verification_code');
-        
-        // Récupérer le code de vérification stocké en session
-        $storedVerificationCode = $request->getSession()->get('verification_code');
-
-        // Vérifier si les codes de vérification correspondent
-        if ($verificationCode == $storedVerificationCode) {
-            // Récupérer l'utilisateur à ajouter à la base de données depuis la session
-            $user = $request->getSession()->get('user_to_register');
-
-            // Ajouter l'utilisateur à la base de données
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // Rediriger vers une page de confirmation après l'enregistrement
-            return $this->redirectToRoute('login');
-        }
-
-        // Rediriger vers la page de vérification avec un message d'erreur
-        return $this->redirectToRoute('verification_page', ['error' => 'Le code de vérification est incorrect']);
-    }
 
 }
+
