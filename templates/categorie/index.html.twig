@@ -1,9 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
 {% block title %}Categorie index
 {% endblock %}
 
 {% block body %}
+	{% block navbar %}{% endblock %}
 	<h1>Categorie index</h1>
 
 	<table class="table">
@@ -24,8 +25,8 @@
 					<td>{{ categorie.image }}</td>
 					<td>{{ categorie.description }}</td>
 					<td>
-						<a href="{{ path('app_categorie_show', {'idCategorie': categorie.idCategorie}) }}">show</a>
-						<a href="{{ path('app_categorie_edit', {'idCategorie': categorie.idCategorie}) }}">edit</a>
+						<a href="{{ path('app_categorie_show', {'idCategorie': categorie.idCategorie}) }}">Afficher</a>
+						<a href="{{ path('app_categorie_edit', {'idCategorie': categorie.idCategorie}) }}">Modifier</a>
 					</td>
 				</tr>
 			{% else %}
@@ -36,5 +37,6 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_categorie_new') }}">Create new</a>
+	<a href="{{ path('app_categorie_new') }}">Ajouter Projet</a>
+
 {% endblock %}

@@ -13,6 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/categorie')]
 class CategorieController extends AbstractController
 {
+    #[Route('/test', name: 'app', methods: ['GET'])]
+    public function test(): Response
+    {
+        return $this->render('backOffice.html.twig', []);
+    }
     #[Route('/admin', name: 'app_categorie_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
