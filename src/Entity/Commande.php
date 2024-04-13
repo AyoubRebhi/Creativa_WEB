@@ -69,7 +69,6 @@ private $idProjet;
      * @var int|null
      *
      * @ORM\Column(name="code_promo", type="integer", nullable=true)
-     * @Assert\NotBlank(message="Le code promo ne peut pas être vide.")
      * @Assert\Length(
      *      min=4,
      *      max=4,

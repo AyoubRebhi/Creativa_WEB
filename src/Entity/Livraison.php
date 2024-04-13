@@ -27,7 +27,6 @@ class Livraison
      * @var int|null
      *
      * @ORM\Column(name="id_cmd", type="integer", nullable=true)
-     *@Assert\NotBlank(message="Le champ id_cmd ne peut pas être vide") 
 
      */
     private $idCmd;
@@ -36,14 +35,13 @@ class Livraison
      * @var int|null
      *
      * @ORM\Column(name="id_user", type="integer", nullable=true)
-    *@Assert\NotBlank(message="Le champ id_user ne peut pas être vide")     */
+     */
     private $idUser;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ status ne peut pas être vide")
      */
     private $status;
 
@@ -59,7 +57,6 @@ class Livraison
      * @var string|null
      *
      * @ORM\Column(name="frais_liv", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ frais de livraison ne peut pas être vide")
      */
     private $fraisLiv;
 
@@ -67,7 +64,6 @@ class Livraison
      * @var string|null
      *
      * @ORM\Column(name="moyen_livraison", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ moyen de livraison ne peut pas être vide")
      */
     private $moyenLivraison;
 
