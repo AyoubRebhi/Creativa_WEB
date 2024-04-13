@@ -45,7 +45,6 @@ private $idProjet;
      * @var \DateTime|null
      *
      * @ORM\Column(name="date", type="date", nullable=true)
-     * @Assert\NotBlank(message="date ne peut pas être vide.")
      */
     private $date;
 
@@ -61,7 +60,6 @@ private $idProjet;
      * @var \DateTime|null
      *
      * @ORM\Column(name="date_livraison_estimee", type="date", nullable=true)
-     * @Assert\NotBlank(message="date ne peut pas être vide.")
      */
     private $dateLivraisonEstimee;
 
@@ -96,7 +94,6 @@ private $idProjet;
      * @var float|null
      *
      * @ORM\Column(name="frais_liv", type="float", precision=10, scale=0, nullable=true)
-     * @Assert\NotBlank(message="Les frais de livraison ne peuvent pas être vides.")
      */
     private $fraisLiv;
 
