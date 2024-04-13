@@ -1,11 +1,11 @@
-{% extends 'backOffice.html.twig' %}
+{% extends 'backOfficeAdmin.html.twig' %}
 
 {% block title %}User index{% endblock %}
 
 {% block body %}
     <h1>Liste des utilisateurs</h1>
 
-<table class="table table-striped custom-table-center">
+    <table class="table table-striped custom-table-center">
         <thead>
             <tr>
                 <th>Last Name</th>
@@ -23,17 +23,22 @@
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.role }}</td>
+                <td>{{ user.role | lower}}</td>
                 <td>{{ user.numtel }}</td>
-                <td>{{ user.blocked ? 'Yes' : 'No' }}</td>
+                <td>{{ user.blocked ? 'Oui' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'idUser': user.idUser}) }}" class="btn btn-primary">Show</a>
-                    <a href="{{ path('app_user_edit', {'idUser': user.idUser}) }}" class="btn btn-secondary">Edit</a>
+                    {% if user.role != 'ADMIN' %}
+                        {% if not user.blocked %}
+                            <a href="{{ path('saisir_duree', {'id': user.iduser}) }}" class="btn btn-danger">Bloquer</a>
+                        {% else %}
+                            <a href="{{ path('debloquer_utilisateur', {'id': user.iduser}) }}" class="btn btn-success">Débloquer</a>
+                        {% endif %}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="11">No records found</td>
+                <td colspan="7">No records found</td>
             </tr>
         {% endfor %}
         </tbody>

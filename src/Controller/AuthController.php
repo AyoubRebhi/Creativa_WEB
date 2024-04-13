@@ -42,12 +42,12 @@ class AuthController extends AbstractController
      /**
      * @Route("/login", name="login")
      */
-    public function login(Request $request, SessionInterface $session): Response
+    public function login(Request $request, SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AuthFormType::class);
         $form->handleRequest($request);
     
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted()) {
             $user = $form->getData(); // Récupérer l'objet User du formulaire
             $email = $user->getEmail(); // Accéder à l'email de l'utilisateur
             $password = $user->getPassword();
@@ -56,6 +56,23 @@ class AuthController extends AbstractController
             $authenticatedUser = $userRepository->findUserByEmailAndPassword($email, $password);
     
             if ($authenticatedUser) {
+                if ($authenticatedUser->isBlocked()) {
+                    // Vérifier si la date de fin de blocage est dépassée
+                    if ($authenticatedUser->getBlockEndDate() < new \DateTime()) {
+                        // Débloquer l'utilisateur et continuer l'authentification
+                        $authenticatedUser->setBlocked(false);
+                        $authenticatedUser->setBlockEndDate(null);
+                        $entityManager->flush();
+                    } else {
+                        // Si la date de fin de blocage n'est pas dépassée, afficher un message d'erreur et rester sur la page de connexion
+                        $form->get('email')->addError(new FormError('Le compte est bloqué.'));
+                        return $this->render('auth/login.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                }
+    
+                // Authentification réussie, continuer avec le processus d'authentification
                 $userId = $authenticatedUser->getIdUser();
                 $session->set('user_id', $userId);
     
@@ -77,7 +94,7 @@ class AuthController extends AbstractController
                 }
             } else {
                 // Authentification échouée, afficher un message d'erreur à l'utilisateur
-                $form->get('email')->addError(new FormError('les informations sont incorrectes.'));
+                $form->get('email')->addError(new FormError('Les informations sont incorrectes.'));
             }
         }
     
@@ -85,6 +102,7 @@ class AuthController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    
     
 
 // /**
