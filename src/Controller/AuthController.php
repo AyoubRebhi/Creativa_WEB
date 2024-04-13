@@ -13,10 +13,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 
 
 class AuthController extends AbstractController
 {
+
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+
+
+    
     #[Route('/auth', name: 'app_auth')]
     public function index(): Response
     {
@@ -29,46 +42,50 @@ class AuthController extends AbstractController
      /**
      * @Route("/login", name="login")
      */
-    public function login(Request $request,SessionInterface $session): Response
+    public function login(Request $request, SessionInterface $session): Response
     {
         $form = $this->createForm(AuthFormType::class);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
+    
+        if ($form->isSubmitted() ) {
             $user = $form->getData(); // Récupérer l'objet User du formulaire
             $email = $user->getEmail(); // Accéder à l'email de l'utilisateur
             $password = $user->getPassword();
-
+    
             $userRepository = $this->getDoctrine()->getRepository(User::class);
-            $isAuthenticated = $userRepository->findUserByEmailAndPassword($email, $password);
-
-            if ($isAuthenticated) {
-                // If authenticated, retrieve the user object separately
-                $authenticatedUser = $userRepository->findOneByEmail($email);
+            $authenticatedUser = $userRepository->findUserByEmailAndPassword($email, $password);
+    
+            if ($authenticatedUser) {
                 $userId = $authenticatedUser->getIdUser();
                 $session->set('user_id', $userId);
     
-    
-                // Check the role of the authenticated user
                 $role = $authenticatedUser->getRole();
     
-                if ($role === 'ADMIN') {
-                    // Redirect admin user to userpage
-                    return $this->redirectToRoute('userpage');
-                } else {
-                    // Redirect other users to homepage or another appropriate page
-                    return $this->redirectToRoute('homepage');
+                switch ($role) {
+                    case 'ARTIST':
+                        return $this->redirectToRoute('Artistpage');
+                        break;
+                    case 'CLIENT':
+                        return $this->redirectToRoute('userpage');
+                        break;
+                    case 'ADMIN':
+                        return $this->redirectToRoute('Adminpage');
+                        break;
+                    default:
+                        // Si le rôle n'est pas reconnu, rediriger vers la page d'accueil
+                        return $this->redirectToRoute('homepage');
                 }
             } else {
-                // Authentication failed, display an error message to the user
-                $form->get('email')->addError(new FormError('les informations sont incorrects.'));
+                // Authentification échouée, afficher un message d'erreur à l'utilisateur
+                $form->get('email')->addError(new FormError('les informations sont incorrectes.'));
             }
         }
-
+    
         return $this->render('auth/login.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    
 
 // /**
 //      * @Route("/register", name="user_register")
@@ -161,6 +178,30 @@ class AuthController extends AbstractController
         return $this->forward('App\Controller\AuthController::index');
     }
 
+
+     /**
+     * @Route("/userpage", name="userpage")
+     */
+    public function directtouser(): Response
+    {
+        return $this->render('base.html.twig'); 
+    }
+
+     /**
+     * @Route("/Adminpage", name="Adminpage")
+     */
+    public function directtoAdmin(): Response
+    {
+        return $this->render('backOfficeAdmin.html.twig'); 
+    }
+    /**
+     * @Route("/Artistpage", name="Artistpage")
+     */
+    public function directtoArtist(): Response
+    {
+        return $this->render('backOffice.html.twig');    }
+
+
 /**
      * @Route("/app_login", name="app_login")
      */
@@ -173,9 +214,11 @@ class AuthController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout(SessionInterface $session): Response
+    public function logout(SessionInterface $session): response
     {        $session->clear();
+        return $this->forward('App\Controller\AuthController::login');
     }
+
     
 
 }

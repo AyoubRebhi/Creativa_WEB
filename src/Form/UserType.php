@@ -15,17 +15,10 @@ class UserType extends AbstractType
             ->add('lastName')
             ->add('firstName')
             ->add('username')
-            ->add('password')
             // ->add('role')
-            // ->add('biography')
             ->add('address')
-            // ->add('profileImagePath')
             ->add('email')
-            // ->add('imgpath')
             ->add('numtel')
-            // ->add('blocked')
-            // ->add('blockEndDate')
-            // ->add('idProjet')
         ;
     }
 
