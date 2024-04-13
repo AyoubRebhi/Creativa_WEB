@@ -16,30 +16,40 @@ class CodePromoController extends AbstractController
 
 {
     #[Route('/ajouterCodepromo', name: 'ajouter_codepromo')]
-    public function ajouterCodepromo(Request $request): Response
-    {
-        $codepromo = new Codepromo();
-        $user = $this->getUser();
+public function ajouterCodepromo(Request $request): Response
+{
+    $codepromo = new Codepromo();
+    $user = $this->getUser();
 
-        if ($user) {
-            $codepromo->setUser($user);
-        }
-
-        $form = $this->createForm(CodepromoType::class, $codepromo); 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($codepromo);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Votre code promo a été ajoutée avec succès.');
-        }
-
-        return $this->render('code_promo/ajouterCodepromo.html.twig', [
-            'formulaireCodepromo' => $form->createView(),
-        ]);
+    if ($user) {
+        $codepromo->setUser($user);
     }
+
+    // Définir la date actuelle comme valeur par défaut pour le champ 'date'
+    $codepromo->setDate(new \DateTime());
+
+    // Ajouter deux jours à la date actuelle pour la date d'expiration
+    $dateExpiration = new \DateTime();
+    $dateExpiration->modify('+2 days');
+    $codepromo->setDateExpiration($dateExpiration);
+
+    $form = $this->createForm(CodepromoType::class, $codepromo);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($codepromo);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre code promo a été ajouté avec succès.');
+
+        return $this->redirectToRoute('afficher_codepromo');
+    }
+
+    return $this->render('code_promo/ajouterCodepromo.html.twig', [
+        'formulaireCodepromo' => $form->createView(),
+    ]);
+}
 
     #[Route('/afficherCodepromo',name:'afficher_codepromo')]
     function affiche(CodepromoRepository $repo){

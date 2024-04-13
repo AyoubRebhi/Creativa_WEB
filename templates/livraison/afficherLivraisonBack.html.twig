@@ -54,7 +54,7 @@ tr:hover {
     <form action="{{ path('delete_livraison_Back', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
         <button type="submit" class="btn btn-danger">Supprimer</button>
     </form>
-    <a href="{{ path('update_livraison-Back', { 'id': a.idLiv }) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('update_livraison_Back', { 'id': a.idLiv }) }}" class="btn btn-primary">Modifier</a>
 </td>
     </tr>
     {% endfor %}

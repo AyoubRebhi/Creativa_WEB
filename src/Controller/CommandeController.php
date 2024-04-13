@@ -101,7 +101,7 @@ public function ajouterCommandeBack(Request $request, CodePromoRepository $codeP
         $entityManager->flush();
 
         // Redirigez l'utilisateur vers une autre page (par exemple, la page d'affichage des commandes)
-        return $this->redirectToRoute('afficher_commande');
+        return $this->redirectToRoute('afficher_commande_back');
     }
 
     return $this->render('commande/ajouterCommandeBack.html.twig', [
@@ -355,8 +355,8 @@ return new Response('
         <div class="confirmation-container">
             <h2>Confirmation de suppression</h2>
             <p>Voulez-vous vraiment supprimer cette commande ?</p>
-            <a class="confirm-button" href="' . $this->generateUrl('delete_commande', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
-            <a class="cancel-button" href="' . $this->generateUrl('afficher_commande') . '">Annuler</a>
+            <a class="confirm-button" href="' . $this->generateUrl('delete_commande_back', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
+            <a class="cancel-button" href="' . $this->generateUrl('afficher_commande_back') . '">Annuler</a>
         </div>
     </body>
 </html>

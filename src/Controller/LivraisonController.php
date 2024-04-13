@@ -38,6 +38,8 @@ class LivraisonController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($livraison);
         $entityManager->flush();
+        return $this->redirectToRoute('afficher_livraison');
+
     }
 
     return $this->render('livraison/ajouterLivraison.html.twig', [
@@ -68,6 +70,8 @@ class LivraisonController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($livraison);
         $entityManager->flush();
+        return $this->redirectToRoute('afficher_livraison_Back');
+
     }
 
     return $this->render('livraison/ajouterLivraisonBack.html.twig', [

@@ -24,6 +24,7 @@ class LivraisonType extends AbstractType
             ->add('fraisLiv', null, [
                 'label' => 'Frais de livraison',
                 'required' => false, 
+                
             ])
             
             ->add('moyenLivraison', ChoiceType::class, [

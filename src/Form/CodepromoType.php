@@ -15,8 +15,8 @@ class CodepromoType extends AbstractType
         $builder
         ->add('codePromo')
             ->add('pourcentage')
-            ->add('dateExpiration')
             ->add('date')
+            ->add('dateExpiration')
             ->add('submit',submitType::class);
 
         ;
