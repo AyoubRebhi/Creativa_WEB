@@ -1,5 +1,39 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+{% block stylesheet %}
+    {{ parent() }}
+    <style>
+    table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+.left-align {
+    float: right;
+}
+    </style>
+{% endblock %}
+{% block  posts%}
 <h1>Liste des posts</h1>
 
 <table>
@@ -10,13 +44,20 @@
         <th>description</th>
         <td>Topic</td>
     </tr>
-    <tr>
-        {%for a in o %}
-        <td>{{a.editeur}}</td>
-        <td>{{a.media}}</td>
-        <td>{{a.titre}}</td>
-        <td>{{a.description}}</td>
-        <td>{{a.topicId}}</td>
+    {% for a in o %}
+    <tr >
+        <td>{{ a.Editeur }}</td>
+        <td>{{ a.Media }}</td>
+         <td>{{ a.Titre }}</td>
+          <td>{{ a.Description }}</td>
+          <td><a href="{{ path('delete_post', {'id': a.id}) }}">Supprimer un post</a>
+</td>
+   
     </tr>
-{%endfor%}
+    {% endfor %}
+
 </table>
+{% endblock %}
+<a href="{{ path('update_Topic', {'Topic_id': topicid}) }}">Modifier un topic</a>
+<a href="{{ path('ajouter_post') }}">Ajouter un post</a>
+{% endblock %}

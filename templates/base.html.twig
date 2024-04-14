@@ -52,49 +52,61 @@
 
 
 			<!-- Navbar Start -->
-			{% block Navbar %}
-				<div class="container-fluid nav-bar bg-transparent">
-					<nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-						<a href="index.html" class="navbar-brand d-flex align-items-center text-center">
-							<div class="icon p-2 me-2">
-								<img class="img-fluid" src="img/icon-deal.png" alt="Icon" style="width: 30px; height: 30px;">
-							</div>
-							<h1 class="m-0 text-primary">Makaan</h1>
-						</a>
-						<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-							<span class="navbar-toggler-icon"></span>
-						</button>
-						<div class="collapse navbar-collapse" id="navbarCollapse">
-							<div class="navbar-nav ms-auto">
-								<a href="index.html" class="nav-item nav-link active">Home</a>
-								<a href="{{ path('app_about') }}" class="nav-item nav-link">About</a>
-								<div class="nav-item dropdown">
-									<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Property</a>
-									<div class="dropdown-menu rounded-0 m-0">
-										<a href="property-list.html" class="dropdown-item">Property List</a>
-										<a href="property-type.html" class="dropdown-item">Property Type</a>
-										<a href="property-agent.html" class="dropdown-item">Property Agent</a>
-									</div>
-								</div>
-								<div class="nav-item dropdown">
-									<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-									<div class="dropdown-menu rounded-0 m-0">
-										<a href="testimonial.html" class="dropdown-item">Testimonial</a>
-										<a href="404.html" class="dropdown-item">404 Error</a>
-									</div>
-								</div>
-								<a href="contact.html" class="nav-item nav-link">Contact</a>
-							</div>
-							<a href="" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
-						</div>
-					</nav>
-				</div>
-			{% endblock %}
+{% block Navbar %}
+    <div class="container-fluid nav-bar bg-transparent">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+            <a href="index.html" class="navbar-brand d-flex align-items-center text-center">
+                <div class="icon p-2 me-2">
+                    <img class="img-fluid" src="img/creativa.png" alt="Icon" style="width: 50px; height: 50px;">
+                </div>
+                <h1 class="m-0 text-primary">Creativa</h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto">
+                    <a href="index.html" class="nav-item nav-link active">Home</a>
+                    <a href="{{ path('app_about') }}" class="nav-item nav-link">projets</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">formations</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="property-list.html" class="dropdown-item">Property List</a>
+                            <a href="property-type.html" class="dropdown-item">Property Type</a>
+                            <a href="property-agent.html" class="dropdown-item">Property Agent</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                        </div>
+                    </div>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+
+                    {% if app.session.get('user_id') %}
+                        <a href="{{ path('app_user_show', {'idUser': app.session.get('user_id') }) }}" class="nav-item nav-link">
+                            <i class="bi bi-person"></i> Profile
+                        </a>
+                        <a href="{{ path('app_logout') }}" class="nav-item nav-link">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    {% else %}
+                        {# Add your login or registration links here if needed #}
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+
+{% endblock %}
+
 			<!-- Navbar End -->
 
 
 			<!-- Header Start -->
-			{% block Header %}
+			{# {% block Header %}
 				<div class="container-fluid header bg-white p-0">
 					<div class="row g-0 align-items-center flex-column-reverse flex-md-row">
 						<div class="col-md-6 p-5 mt-lg-5">
@@ -118,11 +130,11 @@
 					</div>
 				</div>
 			{% endblock %}
-			<!-- Header End -->
+			<!-- Header End --> #}
 
 
 			<!-- Search Start -->
-			{% block Search %}
+			{# {% block Search %}
 				<div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
 					<div class="container">
 						<div class="row g-2">
@@ -155,12 +167,12 @@
 						</div>
 					</div>
 				</div>
-			{% endblock %}
+			{% endblock %} #}
 			<!-- Search End -->
 
 
 			<!-- Category Start -->
-			{% block Category %}
+			{# {% block Category %}
 				<div class="container-xxl py-5">
 					<div class="container">
 						<div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
@@ -259,40 +271,21 @@
 						</div>
 					</div>
 				</div>
-			{% endblock %}
+			{% endblock %} #}
 			<!-- Category End -->
 
 
 			<!-- About Start -->
-			{% block About %}
+			{% block body %}
 				<div class="container-xxl py-5">
-					<div class="container">
-						<div class="row g-5 align-items-center">
-							<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-								<div class="about-img position-relative overflow-hidden p-5 pe-0">
-									<img class="img-fluid w-100" src="img/about.jpg">
-								</div>
-							</div>
-							<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-								<h1 class="mb-4">#1 Place To Find The Perfect Property</h1>
-								<p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-								<p>
-									<i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
-								<p>
-									<i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
-								<p>
-									<i class="fa fa-check text-primary me-3"></i>Clita duo justo magna dolore erat amet</p>
-								<a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
-							</div>
-						</div>
-					</div>
+					
 				</div>
 			{% endblock %}
 			<!-- About End -->
 
 
 			<!-- Property List Start -->
-			{% block PropertyList %}
+			{# {% block PropertyList %}
 				<div class="container-xxl py-5">
 					<div class="container">
 						<div class="row g-0 gx-5 align-items-end">
@@ -352,12 +345,12 @@
 						</div>
 					</div>
 				</div>
-			{% endblock %}
+			{% endblock %} #}
 			<!-- Property List End -->
 
 
 			<!-- Call to Action Start -->
-			{% block CallToAction %}
+			{# {% block CallToAction %}
 				<div class="container-xxl py-5">
 					<div class="container">
 						<div class="bg-light rounded p-3">
@@ -382,11 +375,11 @@
 					</div>
 				</div>
 			{% endblock %}
-			<!-- Call to Action End -->
+			<!-- Call to Action End --> #}
 
 
 			<!-- Team Start -->
-			{% block Team %}
+			{# {% block Team %}
 				<div class="container-xxl py-5">
 					<div class="container">
 						<div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
@@ -421,11 +414,11 @@
 						</div>
 					</div>
 				</div>
-			{% endblock %}
+			{% endblock %} #}
 			<!-- Team End -->
 
 
-			<!-- Testimonial Start -->
+			{# <!-- Testimonial Start -->
 			{% block TestimonialList %}
 				<div class="container-xxl py-5">
 					<div class="container">
@@ -474,7 +467,7 @@
 					</div>
 				</div>
 			{% endblock %}
-			<!-- Testimonial End -->
+			<!-- Testimonial End --> #}
 
 
 			<!-- Footer Start -->

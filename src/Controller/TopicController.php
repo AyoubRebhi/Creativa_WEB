@@ -10,6 +10,7 @@ use App\Form\TopicType;
 use App\Entity\Topic;
 use App\Repository\TopicRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Form\SubmitType;
 
 class TopicController extends AbstractController
 {
@@ -38,17 +39,17 @@ class TopicController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($topic); 
             $entityManager->flush();
-            $this->addFlash('success', 'Votre commande a été ajoutée avec succès.');}
+            $this->addFlash('success', '');}
            
     
         return $this->render('topic/ajoutertopic.html.twig', [
             'formulairetopic' => $form->createView(),
         ]);
     }
-     #[Route('/UpdateTopic/{id}', name: 'update_Topic')]
-    public function UpdateTopic(Request $request, TopicRepository $repo, $id, ManagerRegistry $managerRegistry)
+     #[Route('/UpdateTopic/{Topic_id}', name: 'update_Topic')]
+    public function UpdateTopic(Request $request, TopicRepository $repo, $Topic_id, ManagerRegistry $managerRegistry)
     {
-    $topic = $repo->find($id);
+    $topic = $repo->find($Topic_id);
     $form = $this->createForm(TopicType::class, $topic);
     $form->handleRequest($request);
 
@@ -59,14 +60,13 @@ class TopicController extends AbstractController
     }
 
     // Ajoutez un bouton de soumission au formulaire
-    $form->add('submit', SubmitType::class, [
-        'label' => 'Modifier',
-        'attr' => ['class' => 'btn btn-primary']
+    return $this->render('topic/Updatetopic.html.twig', [
+        'formulairetopic' => $form->createView(),
     ]);
 
     
 }
-#[Route('/deletepost/{id}', name: 'delete_post')]
+#[Route('/deletetopic/{id}', name: 'delete_topic')]
 function delete(ManagerRegistry $manager, TopicRepository $repo, $id, Request $request)
 {
     $obj = $repo->find($id);

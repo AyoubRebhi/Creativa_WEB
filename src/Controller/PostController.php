@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\PostType;
 use App\Entity\Post;
+use App\Repository\TopicRepository;
 use App\Repository\PostRepository;
 use Doctrine\Persistence\ManagerRegistry;
 class PostController extends AbstractController
@@ -19,21 +21,35 @@ class PostController extends AbstractController
             'controller_name' => 'PostController',
         ]);
     }
-    #[Route('/afficherPost',name:'afficher_post')]
-    function affiche(TopicRepository $repo){
-        $obj=$repo->findAll();
-        return $this->render('post/afficherpost.html.twig',['o'=>$obj]);
+    #[Route('/afficherPost/{Topic_id}',name:'afficher_post')]
+    function affiche(PostRepository $repo,int $Topic_id){
+        $posts = $repo->findBy(['topicId' =>$Topic_id]);
+        return $this->render('post/afficherpost.html.twig',['o'=>$posts,'topicid'=>$Topic_id]);
+    }
+    #[Route('/lire',name:'lire')]
+    public function showMedia(): Response
+    {
+        $filePath = $this->getParameter('kernel.project_dir') . 'public\media\test1.mp4' ;
+
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('The media file does not exist.');
+        }
+
+        return new BinaryFileResponse($filePath);
+    ;
     }
     #[Route('/ajouterPost',name:'ajouter_post')]
     public function ajouterPost(Request $request): Response
     {
         $post = new Post(); 
 
-        $form = $this->createForm(TopicType::class, $topic); 
+        $form = $this->createForm(PostType::class); 
         
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+            dump($formData); 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post); 
             $entityManager->flush();
@@ -67,19 +83,9 @@ class PostController extends AbstractController
 function delete(ManagerRegistry $manager, PostRepository $repo, $id, Request $request)
 {
     $obj = $repo->find($id);
-
-    if (!$obj) {
-        throw $this->createNotFoundException('Le post avec l\'identifiant ' . $id . ' n\'existe pas.');
-    }
-
-    // Vérification si le formulaire de confirmation a été soumis
-    if ($request->query->get('confirm') === 'true') {
-        $em = $manager->getManager();
-        $em->remove($obj);
-        $em->flush();
-
-        // Redirection vers la route d'affichage des commandes
-        return $this->redirectToRoute('afficher_post');
-    }
+ $em = $manager->getManager();
+ $em->remove($obj);
+$em->flush();
+return new Response('Le formulaire de confirmation n\'a pas été soumis.');
 }
 }

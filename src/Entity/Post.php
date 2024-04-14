@@ -26,28 +26,28 @@ class Post
      *
      * @ORM\Column(name="Editeur", type="string", length=255, nullable=false)
      */
-    private $editeur;
+    private $Editeur;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Media", type="string", length=255, nullable=false)
      */
-    private $media;
+    private $Media;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Titre", type="string", length=255, nullable=false)
      */
-    private $titre;
+    private $Titre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Description", type="string", length=255, nullable=false)
      */
-    private $description;
+    private $Description;
 
     /**
      * @var int
@@ -63,48 +63,48 @@ class Post
 
     public function getEditeur(): ?string
     {
-        return $this->editeur;
+        return $this->Editeur;
     }
 
     public function setEditeur(string $editeur): static
     {
-        $this->editeur = $editeur;
+        $this->Editeur = $editeur;
 
         return $this;
     }
 
     public function getMedia(): ?string
     {
-        return $this->media;
+        return $this->Media;
     }
 
     public function setMedia(string $media): static
     {
-        $this->media = $media;
+        $this->Media = $media;
 
         return $this;
     }
 
     public function getTitre(): ?string
     {
-        return $this->titre;
+        return $this->Titre;
     }
 
     public function setTitre(string $titre): static
     {
-        $this->titre = $titre;
+        $this->Titre = $titre;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->description;
+        return $this->Description;
     }
 
     public function setDescription(string $description): static
     {
-        $this->description = $description;
+        $this->Description = $description;
 
         return $this;
     }
