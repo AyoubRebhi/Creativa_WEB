@@ -50,19 +50,19 @@
         input[type="text"],
         input[type="email"],
         textarea {
-            width: calc(100% - 20px); /* Prendre toute la largeur du champ avec une petite marge */
+            width: calc(100% - 20px); 
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
-            margin-bottom: 10px; /* Espacement entre les champs */
+            margin-bottom: 10px;
         }
     </style>
 {% endblock %}
 
 {% block body %}
     <div class="form-container">
-        <h1>AJOUTER LIVRAISON</h1>
+        <h1>AJOUTER CODE PROMO</h1>
         <a href="{{ path('afficher_codepromo') }}" class="btn btn-primary btn-livraison">liste des codes promo</a>
         {{ form(formulaireCodepromo) }}
     </div>

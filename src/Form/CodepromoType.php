@@ -17,8 +17,13 @@ class CodepromoType extends AbstractType
             ->add('pourcentage')
             ->add('date')
             ->add('dateExpiration')
-            ->add('submit',submitType::class);
-
+            ->add('submit', SubmitType::class, [
+                'label' => 'Valider',
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                    'style' => 'font-size: 20px; background-color: #E9967A; color: #ffffff; padding: 15px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;' // Ajoutez des styles CSS directement au bouton
+                ]
+            ]);
         ;
     }
 
