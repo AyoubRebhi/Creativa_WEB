@@ -117,13 +117,12 @@ public function ajouterCommandeBack(Request $request, CodePromoRepository $codeP
 public function verifierCodePromo(Request $request): JsonResponse
 {
     // Récupérer le code promo envoyé depuis la requête
-    $codePromo = $request->request->get('codePromo'); // Modifier 'code_promo' en 'codePromo'
+    $codePromo = $request->request->get('codePromo'); 
 
     // Recherchez le code promo dans la base de données
     $codePromoEntity = $this->getDoctrine()
         ->getRepository(CodePromo::class)
-        ->findOneBy(['codePromo' => $codePromo]); // Utiliser 'code_promo' au lieu de 'codePromo'
-
+        ->findOneBy(['codePromo' => $codePromo]);
     // Vérifiez si le code promo existe dans la base de données
     if ($codePromoEntity) {
         // Si le code promo existe, il est considéré comme valide
@@ -140,12 +139,12 @@ public function verifierCodePromo(Request $request): JsonResponse
 public function verifierCodePromoBack(Request $request): JsonResponse
 {
     // Récupérer le code promo envoyé depuis la requête
-    $codePromo = $request->request->get('codePromo'); // Modifier 'code_promo' en 'codePromo'
+    $codePromo = $request->request->get('codePromo'); 
 
     // Recherchez le code promo dans la base de données
     $codePromoEntity = $this->getDoctrine()
         ->getRepository(CodePromo::class)
-        ->findOneBy(['codePromo' => $codePromo]); // Utiliser 'code_promo' au lieu de 'codePromo'
+        ->findOneBy(['codePromo' => $codePromo]); 
 
     // Vérifiez si le code promo existe dans la base de données
     if ($codePromoEntity) {
