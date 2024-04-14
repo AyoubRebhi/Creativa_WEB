@@ -1,11 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}New Categorie{% endblock %}
+{% block title %}Ajouter Categorie
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Categorie</h1>
+	<h1>Ajouter Categorie</h1>
 
-    {{ include('categorie/_form.html.twig') }}
+	<div class="container">
+		{{ form_start(form) }}
+		<div class="mb-3">
+			{{ form_label(form.titre) }}
+			{{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.image, 'Choisir une image', {'attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.description) }}
+			{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<button type="submit" class="btn btn-primary">Ajouter</button>
+		{{ form_end(form) }}
+	</div>
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
+	<a href="{{ path('app_categorie_index') }}">back to list</a>
 {% endblock %}

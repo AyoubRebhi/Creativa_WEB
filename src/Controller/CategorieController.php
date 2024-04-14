@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/categorie')]
 class CategorieController extends AbstractController
@@ -49,15 +51,32 @@ class CategorieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $image */
+            $image = $form['image']->getData();
+
+            if ($image) {
+                $fileName = uniqid() . '.' . $image->guessExtension();
+
+                try {
+                    $image->move($this->getParameter('image_dir'), $fileName); // Move the uploaded file to the configured directory
+                } catch (FileException $e) {
+                    // Handle file exception
+                    // You might want to log the error or show an error message to the user
+                    return new Response('Failed to upload the image.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                $categorie->setImage($fileName);
+            }
+
             $entityManager->persist($categorie);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('categorie/new.html.twig', [
+        return $this->render('categorie/new.html.twig', [
             'categorie' => $categorie,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
