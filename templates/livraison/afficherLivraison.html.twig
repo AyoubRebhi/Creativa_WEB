@@ -24,12 +24,26 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #dddddd;
 }
+.total-livraisons {
+            display: inline-block;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #007bff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
 
+.btn-modifier {
+    background-color: #007bff;
+    color: white; 
+}
     </style>
 {% endblock %}
 {% block Category %}
 <h1>Liste des livraisons</h1>
-
+<br>
 <table>
     <tr>
         <th>ID</th>
@@ -41,6 +55,8 @@ tr:hover {
         <th>Moyen de Livraison</th>
         <th>Actions</th>
     </tr>
+    {% set totalLivraison = o|length %}
+    <p class="total-livraisons">Nombre total de livraisons :{{ totalLivraison }}</p>
     {% for a in o %}
     <tr>
         <td>{{ a.idLiv }}</td>
@@ -54,7 +70,7 @@ tr:hover {
     <form action="{{ path('delete_livraison', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
         <button type="submit" class="btn btn-danger">Supprimer</button>
     </form>
-    <a href="{{ path('update_livraison', { 'id': a.idLiv }) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('update_livraison', { 'id': a.idLiv }) }}" class="btn btn-primary btn-modifier">Modifier</a>
 </td>
     </tr>
     {% endfor %}

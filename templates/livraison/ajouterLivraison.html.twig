@@ -60,6 +60,12 @@
             width: 100%; /* largeur de la div est de 100% */
             text-align: right; /* Alignez le contenu à droite */
         }
+.invalid-feedback {
+    color: red; 
+    font-size: 0.9em;
+    margin-top: 5px; 
+    text-decoration:none;
+}
 
     </style>
 {% endblock %}
@@ -86,7 +92,7 @@
                 {{ form_widget(formulaireLivraison.adresse, {'attr': {'class': 'form-control' ~ (form_errors(formulaireLivraison.adresse)|default('') ? ' is-invalid' : '')}}) }}
                 {% if form_errors(formulaireLivraison.adresse) %}
                     <div class="invalid-feedback">
-                        {{ form_errors(formulaireLivraison.adresse)|first }}
+                        {{ form_errors(formulaireLivraison.adresse) }}
                     </div>
                 {% endif %}
     </div>

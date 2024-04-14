@@ -16,6 +16,10 @@ use App\Entity\Projet;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\CodePromo;
 use App\Controller\CodePromoController; // Importez le contrôleur CodePromoController
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use App\Form\LivraisonType;
+use App\Entity\Livraison;
+
 
 class CommandeController extends AbstractController
 {
@@ -363,4 +367,74 @@ return new Response('
 ');
 
 }
+
+/*#[Route('/passerLivraison/{id}', name: 'passer_livraison')]
+public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
+{
+    // Récupérer la commande
+    $commande = $commandeRepository->find($id);
+
+    // Créer le formulaire de livraison avec un champ caché pour l'ID de la commande
+    $form = $this->createFormBuilder()
+        ->add('idCmd', HiddenType::class, [
+            'data' => $id,
+        ])
+        ->add('submit', SubmitType::class, [
+            'label' => 'Passer à la livraison',
+            'attr' => ['class' => 'btn btn-primary'],
+        ])
+        ->getForm();
+
+    // Traiter la soumission du formulaire
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Rediriger vers le formulaire de livraison avec l'ID de la commande
+        return $this->redirectToRoute('livraison_nouvelle', ['id' => $id]);
+    }
+
+    // Afficher la vue du formulaire de livraison
+    return $this->render('livraison/ajouterLivraison.html.twig', [
+        'formulaireLivraison' => $form->createView(),
+        'commande' => $commande,
+    ]);
+}*/
+
+#[Route('/passerLivraison/{id}', name: 'passer_livraison')]
+public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
+{
+    // Récupérer la commande
+    $commande = $commandeRepository->find($id);
+
+    // Créer le formulaire de livraison en utilisant LivraisonType
+    $livraison = new Livraison();
+    $livraison->setStatus('en cours');
+    $livraison->setIdCmd($id); // Pré-remplir l'ID de la commande dans le formulaire
+    $form = $this->createForm(LivraisonType::class, $livraison);
+
+    // Ajouter un bouton de soumission au formulaire
+    $form->add('submit', SubmitType::class, [
+        'label' => 'submit',
+        'attr' => ['class' => 'btn btn-primary'],
+    ]);
+
+    // Traiter la soumission du formulaire
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Enregistrer la livraison dans la base de données
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($livraison);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('afficher_livraison');
+    }
+
+    // Afficher la vue du formulaire de livraison
+    return $this->render('livraison/ajouterLivraison.html.twig', [
+        'formulaireLivraison' => $form->createView(),
+        'commande' => $commande,
+    ]);
+}
+
 }

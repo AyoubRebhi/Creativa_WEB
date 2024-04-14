@@ -30,11 +30,20 @@ tr:hover {
 .left-align {
     float: right;
 }
+.total-commandes {
+            display: inline-block;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #007bff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
     </style>
 {% endblock %}
 {% block body %}
 <h1>Liste des commandes</h1>
-<a href="{{ path('ajouter_livraison_Back') }}" class="btn btn-primary left-align">Passer à la livraison</a>
 
 <table>
     <tr>
@@ -50,8 +59,12 @@ tr:hover {
         <th>Frais de Livraison</th>
         <th>Actions</th>
     </tr>
+    <br>
+    {% set totalCommande = o|length %}
+    <p class="total-commandes">Nombre total de commandes :{{ totalCommande }}</p>
+
     <tr>
-        {%for a in o %}
+        {% for a in o %}
         <td>{{ a.idCmd }}</td>
         <td>{{ a.idUser }}</td>
         <td>{{ a.idProjet }}</td>
@@ -63,12 +76,15 @@ tr:hover {
         <td>{{ a.prix }}</td>
         <td>{{ a.fraisLiv }}</td>
         <td>
-    <form action="{{ path('delete_commande_back', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
-    </form>
-    <a href="{{ path('update_Commande_back', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
-</td>
+            <form action="{{ path('delete_commande_back', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+            <a href="{{ path('update_Commande_back', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
+            <a href="{{ path('passer_livraison', {'id': a.idCmd}) }}" class="btn btn-primary btn-livraison">Passer à la livraison</a>
+
+        </td>
     </tr>
-{%endfor%}
+    {% endfor %}
 </table>
+
 {% endblock %}

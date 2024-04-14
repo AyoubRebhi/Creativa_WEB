@@ -95,72 +95,13 @@
             margin-top: 20px;
         }
 
-/* Style pour les messages d'erreur spécifiques */
-#error-id_user:empty::before {
-    content: "⚠ Le champ id_user ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
+
+.invalid-feedback {
+    color: red; 
+    font-size: 0.9em;
+    margin-top: 5px; 
+    text-decoration:none;
 }
-
-#error-id_projet:empty::before {
-    content: "⚠ Le champ id_projet ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-date:empty::before {
-    content: "⚠ Le champ date ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-mt_total:empty::before {
-    content: "⚠ Le champ mt_total ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-date_livraison_estimee:empty::before {
-    content: "⚠ Le champ date_livraison_estimee ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-code_promo:empty::before {
-    content: "⚠ Le champ code_promo ne peut pas être vide et doit contenir exactement 4 chiffres."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-prix:empty::before {
-    content: "⚠ Le champ prix ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-#error-frais_liv:empty::before {
-    content: "⚠ Le champ frais_liv ne peut pas être vide."; /* Message d'erreur */
-    color: #e74c3c; /* couleur rouge */
-    font-size: 14px;
-    margin-top: 5px;
-    display: block; /* Afficher le message en tant que bloc */
-}
-
-
     </style>
 {% endblock %}
 {% block body %}
@@ -172,38 +113,46 @@
             <div class="fieldset-title">Informations de la commande</div>
 
             <div class="form-group">
-                {{ form_row(formulaireCommande.idUser) }}
+                {{ form_label(formulaireCommande.idUser) }}
+                {{ form_widget(formulaireCommande.idUser, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.idUser)|default('') ? ' is-invalid' : '')}}) }}
+
+                {% if form_errors(formulaireCommande.idUser) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.idUser) }}
+                    </div>
+                {% endif %}
                 {{ form_row(formulaireCommande.idProjet) }}
                 <div class="date-fields">
                     {{ form_row(formulaireCommande.date) }}
                     {{ form_row(formulaireCommande.dateLivraisonEstimee) }}
                 </div>
-                {% if form_errors(formulaireCommande.idUser) %}
-                    <div class="error">{{ form_errors(formulaireCommande.idUser) }}</div>
-                {% endif %}
-                {% if form_errors(formulaireCommande.idProjet) %}
-                    <div class="error">{{ form_errors(formulaireCommande.idProjet) }}</div>
-                {% endif %}
-                {% if form_errors(formulaireCommande.date) %}
-                    <div class="error">{{ form_errors(formulaireCommande.date) }}</div>
-                {% endif %}
-                {% if form_errors(formulaireCommande.dateLivraisonEstimee) %}
-                    <div class="error">{{ form_errors(formulaireCommande.dateLivraisonEstimee) }}</div>
-                {% endif %}
+                
             </div>
         </div>
 
         <div class="fieldset-container">
             <div class="fieldset-title">Autres détails</div>
             <div class="form-group">
-                {{ form_row(formulaireCommande.prix) }}
+                {{ form_label(formulaireCommande.prix) }}
+                {{ form_widget(formulaireCommande.prix, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.prix)|default('') ? ' is-invalid' : '')}}) }}
+                {% if form_errors(formulaireCommande.prix) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.prix) }}
+                    </div>
+                {% endif %}
                 {{ form_row(formulaireCommande.codePromo, {'attr': {'id': 'commande_codePromo'}}) }}
                 <button type="button" class="btn btn-primary" id="verificationCodePromoBtn">Vérifier le code promo</button>
 
                 {{ form_row(formulaireCommande.status) }}
                 {{ form_row(formulaireCommande.fraisLiv) }}
                 {# Champ pour afficher le résultat du calcul #}
-                {{ form_row(formulaireCommande.mtTotal, {'attr': {'readonly': 'readonly'}}) }}
+                <div>{{ form_label(formulaireCommande.mtTotal) }}</div>
+                {{ form_widget(formulaireCommande.mtTotal, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.mtTotal)|default('') ? ' is-invalid' : '')}}) }}
+                {% if form_errors(formulaireCommande.mtTotal) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.mtTotal) }}
+                    </div>
+                {% endif %}
                 <button type="button" id="calculerSommeBtn" class="btn btn-primary">Calculer Somme</button>
                 <div style="text-align: right;">
                     {{ form_rest(formulaireCommande) }}

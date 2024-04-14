@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * Commande
  *
@@ -29,7 +30,7 @@ class Commande
      * @var int|null
      *
      * @ORM\Column(name="id_user", type="integer", nullable=true)
-     * @Assert\NotBlank(message="id_user ne peut pas être vide.")
+     * @Assert\NotBlank(message="id user ne peut pas être vide.")
      */
     private $idUser;
 
@@ -96,6 +97,30 @@ private $idProjet;
      * @ORM\Column(name="frais_liv", type="float", precision=10, scale=0, nullable=true)
      */
     private $fraisLiv;
+
+    /**
+ * @ORM\OneToOne(targetEntity="App\Entity\Livraison", mappedBy="commande", cascade={"persist", "remove"})
+ */
+private $livraison;
+
+
+    // Getter et setter pour la relation OneToOne avec Livraison
+    public function getLivraison(): ?Livraison
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(?Livraison $livraison): self
+    {
+        $this->livraison = $livraison;
+
+        // Définir la relation inverse si nécessaire
+        if ($livraison !== null && $livraison->getCommande() !== $this) {
+            $livraison->setCommande($this);
+        }
+
+        return $this;
+    }
 
     public function getIdCmd(): ?int
     {

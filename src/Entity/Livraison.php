@@ -49,7 +49,7 @@ class Livraison
      * @var string|null
      *
      * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le champ adresse ne peut pas être vide")
+     * @Assert\NotBlank(message="Le champs adresse ne peut pas être vide")
      */
     private $adresse;
 
@@ -66,6 +66,25 @@ class Livraison
      * @ORM\Column(name="moyen_livraison", type="string", length=255, nullable=true)
      */
     private $moyenLivraison;
+    /**
+ * @ORM\OneToOne(targetEntity="App\Entity\Commande", inversedBy="livraison")
+ * @ORM\JoinColumn(name="id_cmd", referencedColumnName="id_cmd", nullable=true)
+ */
+private $commande;
+
+
+    // Getter et setter pour la relation OneToOne avec Commande
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Commande $commande): self
+    {
+        $this->commande = $commande;
+
+        return $this;
+    }
 
     public function getIdLiv(): ?int
     {

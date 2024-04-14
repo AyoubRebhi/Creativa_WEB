@@ -15,9 +15,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LivraisonController extends AbstractController
 {
+
     #[Route('/ajouterLivraison', name: 'ajouter_livraison')]
     public function ajouterLivraison(Request $request): Response
-{
+    {
+
+    // Créer une nouvelle instance de Livraison
     $livraison = new Livraison();
     $user = $this->getUser();
 
@@ -34,18 +37,22 @@ class LivraisonController extends AbstractController
         // Récupérer le frais de livraison à partir du formulaire
         $fraisLiv = $form->get('fraisLiv')->getData();
         $livraison->setFraisLiv($fraisLiv);
+        
+        // Associer la commande à la livraison
+        $commande = $this->getDoctrine()->getRepository(Commande::class)->find($idCmd);
+        $livraison->setCommande($commande);
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($livraison);
         $entityManager->flush();
         return $this->redirectToRoute('afficher_livraison');
-
     }
 
     return $this->render('livraison/ajouterLivraison.html.twig', [
-        'formulaireLivraison' => $form->createView(),
+        'formulaireLivraison' => $form->createView()
     ]);
 }
+
 
 #[Route('/ajouterLivraisonBack', name: 'ajouter_livraison_Back')]
     public function ajouterLivraisonBack(Request $request): Response

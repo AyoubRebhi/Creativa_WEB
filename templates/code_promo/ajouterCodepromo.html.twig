@@ -63,6 +63,7 @@
 {% block body %}
     <div class="form-container">
         <h1>AJOUTER LIVRAISON</h1>
+        <a href="{{ path('afficher_codepromo') }}" class="btn btn-primary btn-livraison">liste des codes promo</a>
         {{ form(formulaireCodepromo) }}
     </div>
 {% endblock %}

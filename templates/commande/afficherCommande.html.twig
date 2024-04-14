@@ -30,47 +30,78 @@ tr:hover {
 .left-align {
     float: right;
 }
+.total-commands {
+            display: inline-block;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #007bff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+.btn-modifier {
+    background-color: #007bff;
+    color: white; 
+}
+
+.btn-livraison {
+    background-color: #28a745;
+    color: white; 
+  
+}
+
     </style>
 {% endblock %}
 {% block Category %}
-<h1>Liste des commandes</h1>
-<a href="{{ path('ajouter_livraison') }}" class="btn btn-primary left-align">Passer à la livraison</a>
+<br>
+    <h1>Liste des commandes</h1>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Utilisateur</th>
-        <th>ID Projet</th>
-        <th>Date</th>
-        <th>Montant Total</th>
-        <th>Date de Livraison Estimée</th>
-        <th>Code Promo</th>
-        <th>Status</th>
-        <th>Prix</th>
-        <th>Frais de Livraison</th>
-        <th>Actions</th>
-    </tr>
-    <tr>
-        {%for a in o %}
-        <td>{{ a.idCmd }}</td>
-        <td>{{ a.idUser }}</td>
-        <td>{{ a.idProjet }}</td>
-        <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
-        <td>{{ a.mtTotal }}</td>
-        <td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
-        <td>{{ a.codePromo }}</td>
-        <td>{{ a.status }}</td>
-        <td>{{ a.prix }}</td>
-        <td>{{ a.fraisLiv }}</td>
-        <td>
-    <form action="{{ path('delete_commande', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
-    </form>
-    <a href="{{ path('update_Commande', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
-</td>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>ID Utilisateur</th>
+            <th>ID Projet</th>
+            <th>Date</th>
+            <th>Montant Total</th>
+            <th>Date de Livraison Estimée</th>
+            <th>Code Promo</th>
+            <th>Status</th>
+            <th>Prix</th>
+            <th>Frais de Livraison</th>
+            <th>Actions</th>
+        </tr>
+        <br>
+        
+        {% set totalCommands = o|length %}
+        {# pour appliquer le style css #}
+    <p class="total-commands">Nombre total de commandes :{{ totalCommands }}</p>
+        {% for a in o %}
+        
+            <tr>
+                <td>{{ a.idCmd }}</td>
+                <td>{{ a.idUser }}</td>
+                <td>{{ a.idProjet }}</td>
+                <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+                <td>{{ a.mtTotal }}</td>
+                <td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
+                <td>{{ a.codePromo }}</td>
+                <td>{{ a.status }}</td>
+                <td>{{ a.prix }}</td>
+                <td>{{ a.fraisLiv }}</td>
+                
+                <td>
+                    <form action="{{ path('delete_commande', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                    <a href="{{ path('update_Commande', { 'id': a.idCmd }) }}" class="btn btn-primary btn-modifier">Modifier</a>
+                    <a href="{{ path('passer_livraison', {'id': a.idCmd}) }}" class="btn btn-primary btn-livraison">Passer à la livraison</a>
 
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 
-    </tr>
-{%endfor%}
-</table>
+    
 {% endblock %}

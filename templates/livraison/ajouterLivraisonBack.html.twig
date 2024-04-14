@@ -82,7 +82,13 @@
     </div>
 
     <div class="form-group left">
-        {{ form_row(formulaireLivraison.adresse) }}
+        <div>{{ form_label(formulaireLivraison.adresse) }}</div>
+                {{ form_widget(formulaireLivraison.adresse, {'attr': {'class': 'form-control' ~ (form_errors(formulaireLivraison.adresse)|default('') ? ' is-invalid' : '')}}) }}
+                {% if form_errors(formulaireLivraison.adresse) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireLivraison.adresse) }}
+                    </div>
+                {% endif %}
     </div>
 
     <div class="form-group left">

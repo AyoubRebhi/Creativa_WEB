@@ -80,6 +80,14 @@
         .form-group span {
             color: red;
         }
+        .invalid-feedback {
+    color: red; 
+    font-size: 0.9em;
+    margin-top: 5px; 
+    text-decoration:none;
+}
+
+
     </style>
 {% endblock %}
 
@@ -91,10 +99,11 @@
             <div class="fieldset-title">Informations de la commande</div>
             <div class="form-group">
                 {{ form_label(formulaireCommande.idUser) }}
-                {{ form_widget(formulaireCommande.idUser, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.idUser)|default('') ? ' is-invalid' : '')}}) }}
+{{ form_widget(formulaireCommande.idUser, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.idUser)|default('') ? ' is-invalid' : '')}}) }}
+
                 {% if form_errors(formulaireCommande.idUser) %}
                     <div class="invalid-feedback">
-                        {{ form_errors(formulaireCommande.idUser)|first }}
+                        {{ form_errors(formulaireCommande.idUser) }}
                     </div>
                 {% endif %}
                 <div>{{ form_row(formulaireCommande.idProjet) }}</div>
@@ -111,7 +120,7 @@
                 {{ form_widget(formulaireCommande.prix, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.prix)|default('') ? ' is-invalid' : '')}}) }}
                 {% if form_errors(formulaireCommande.prix) %}
                     <div class="invalid-feedback">
-                        {{ form_errors(formulaireCommande.prix)|first }}
+                        {{ form_errors(formulaireCommande.prix) }}
                     </div>
                 {% endif %}
                 <div>{{ form_row(formulaireCommande.codePromo, {'attr': {'id': 'commande_codePromo'}}) }}</div>
@@ -122,7 +131,7 @@
                 {{ form_widget(formulaireCommande.mtTotal, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.mtTotal)|default('') ? ' is-invalid' : '')}}) }}
                 {% if form_errors(formulaireCommande.mtTotal) %}
                     <div class="invalid-feedback">
-                        {{ form_errors(formulaireCommande.mtTotal)|first }}
+                        {{ form_errors(formulaireCommande.mtTotal) }}
                     </div>
                 {% endif %}
                 <button type="button" id="calculerSommeBtn" class="btn btn-primary">Calculer Somme</button>
