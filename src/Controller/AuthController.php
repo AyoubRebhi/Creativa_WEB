@@ -150,6 +150,11 @@ class AuthController extends AbstractController
              if ($existingEmail) {
                  $form->get('email')->addError(new FormError('Cet email est déjà utilisé.'));
              }
+             if ($user->getPassword() !== $form->get('passwordConfirmation')->getData()) {
+                $form->get('passwordConfirmation')->addError(new FormError('Les mots de passe ne correspondent pas.'));
+            }
+    
+
  
              if ($form->getErrors(true)->count() === 0) {
                  // Encodage du mot de passe avant de l'enregistrer
