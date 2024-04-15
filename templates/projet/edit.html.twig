@@ -1,13 +1,43 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}Edit Projet{% endblock %}
+{% block title %}Edit Projet
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Projet</h1>
+	<h1>Edit Projet</h1>
 
-    {{ include('projet/_form.html.twig', {'button_label': 'Update'}) }}
+	<div class="container">
+		{{ form_start(form) }}
+		<div class="mb-3">
+			{{ form_label(form.titre) }}
+			{{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.titre) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.media, 'Choisir un média', {'attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.media, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.media) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.description) }}
+			{{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+			{{ form_errors(form.description) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.prix) }}
+			{{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.prix) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.idCategorie) }}
+			{{ form_widget(form.idCategorie, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.idCategorie) }}
+		</div>
+		<button type="submit" class="btn btn-primary">Update</button>
+		{{ form_end(form) }}
+	</div>
 
-    <a href="{{ path('app_projet_index') }}">back to list</a>
+	<a href="{{ path('app_projet_index') }}">Back to list</a>
 
-    {{ include('projet/_delete_form.html.twig') }}
+	{{ include('projet/_delete_form.html.twig') }}
 {% endblock %}

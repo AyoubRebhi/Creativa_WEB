@@ -4,39 +4,48 @@
 {% endblock %}
 
 {% block body %}
-
-	<h1>Categorie index</h1>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>IdCategorie</th>
-				<th>Titre</th>
-				<th>Image</th>
-				<th>Description</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for categorie in categories %}
-				<tr>
-					<td>{{ categorie.idCategorie }}</td>
-					<td>{{ categorie.titre }}</td>
-					<td>{{ categorie.image }}</td>
-					<td>{{ categorie.description }}</td>
-					<td>
-						<a href="{{ path('app_categorie_show', {'idCategorie': categorie.idCategorie}) }}">Afficher</a>
-						<a href="{{ path('app_categorie_edit', {'idCategorie': categorie.idCategorie}) }}">Modifier</a>
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="5">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<a href="{{ path('app_categorie_new') }}">Ajouter Projet</a>
-
+	<div class="card">
+		<div class="card-header">
+			<h3>Liste des catégories</h3>
+		</div>
+		<div class="card-block table-border-style">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>IdCategorie</th>
+							<th>Titre</th>
+							<th>Image</th>
+							<th>Description</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for categorie in categories %}
+							<tr>
+								<td>{{ categorie.idCategorie }}</td>
+								<td>{{ categorie.titre }}</td>
+								<td>{{ categorie.image }}</td>
+								<td>{{ categorie.description }}</td>
+								<td>
+									<a href="{{ path('app_categorie_show', {'idCategorie': categorie.idCategorie}) }}" class="btn btn-info">Afficher</a>
+									<a href="{{ path('app_categorie_edit', {'idCategorie': categorie.idCategorie}) }}" class="btn btn-primary">Modifier</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5">Aucun enregistrement trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<a href="{{ path('app_categorie_new') }}" class="btn btn-primary mt-3 ajouter-categorie">Ajouter Categorie</a>
+	<style>
+		.ajouter-categorie {
+			background-color: #11C613;
+		}
+	</style>
 {% endblock %}

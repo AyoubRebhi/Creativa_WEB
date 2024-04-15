@@ -1,47 +1,60 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}Projet index{% endblock %}
+{% block title %}Projet index
+{% endblock %}
 
 {% block body %}
-    <h1>Projet index</h1>
+	<div class="card">
+		<div class="card-header">
+			<h3>Liste des projets</h3>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdProjet</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Media</th>
-                <th>Prix</th>
-                <th>Isvisible</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for projet in projets %}
-            <tr>
-                <td>{{ projet.idProjet }}</td>
-                <td>{{ projet.titre }}</td>
-                <td>{{ projet.description }}</td>
-                <td>{{ projet.media }}</td>
-                <td>{{ projet.prix }}</td>
-                <td>{{ projet.isvisible ? 'Yes' : 'No' }}</td>
-                <td>{{ projet.createdAt ? projet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ projet.updatedAt ? projet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_projet_show', {'idProjet': projet.idProjet}) }}">show</a>
-                    <a href="{{ path('app_projet_edit', {'idProjet': projet.idProjet}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_projet_new') }}">Create new</a>
+		</div>
+		<div class="card-block table-border-style">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>IdProjet</th>
+							<th>Titre</th>
+							<th>Description</th>
+							<th>Media</th>
+							<th>Prix</th>
+							<th>Isvisible</th>
+							<th>CreatedAt</th>
+							<th>UpdatedAt</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for projet in projets %}
+							<tr>
+								<td>{{ projet.idProjet }}</td>
+								<td>{{ projet.titre }}</td>
+								<td>{{ projet.description|length > 60 ? projet.description|slice(0, 50) ~ '...' : projet.description }}</td>
+								<td>{{ projet.media }}</td>
+								<td>{{ projet.prix }}</td>
+								<td>{{ projet.isvisible ? 'Yes' : 'No' }}</td>
+								<td>{{ projet.createdAt ? projet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+								<td>{{ projet.updatedAt ? projet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+								<td>
+									<a href="{{ path('app_projet_show', {'idProjet': projet.idProjet}) }}" class="btn btn-info">Afficher</a>
+									<a href="{{ path('app_projet_edit', {'idProjet': projet.idProjet}) }}" class="btn btn-primary">Modifier</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="9">No records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<a href="{{ path('app_projet_new') }}" class="btn btn-primary mt-3 ajouter-categorie">Ajouter Projet</a>
+	<style>
+		.ajouter-categorie {
+			background-color: #11C613;
+		}
+	</style>
 {% endblock %}

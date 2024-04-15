@@ -1,11 +1,67 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}New Projet{% endblock %}
+{% block title %}New Projet
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Projet</h1>
+	<h1>Create new Projet</h1>
 
-    {{ include('projet/_form.html.twig') }}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				{{ form_start(form) }}
+				<div class="form-group row">
+					{{ form_label(form.titre, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+					<div class="col-sm-8">
+						{{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.titre) }}
+					</div>
+				</div>
+				<div class="form-group row">
+					{{ form_label(form.media, 'Choisir un média', {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+					<div class="col-sm-8">
+						{{ form_widget(form.media, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.media) }}
+					</div>
+				</div>
+				<div class="form-group row">
+					{{ form_label(form.description, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+					<div class="col-sm-8">
+						{{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+						{{ form_errors(form.description) }}
+					</div>
+				</div>
+				<div class="form-group row">
+					{{ form_label(form.prix, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+					<div class="col-sm-8">
+						{{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.prix) }}
+					</div>
+				</div>
+				<div class="form-group row">
+					{{ form_label(form.idCategorie, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+					<div class="col-sm-8">
+						{{ form_widget(form.idCategorie, {'attr': {'class': 'form-control'}}) }}
+						{{ form_errors(form.idCategorie) }}
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12 text-right">
+						<button type="submit" class="btn btn-primary">Ajouter</button>
+					</div>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
 
-    <a href="{{ path('app_projet_index') }}">back to list</a>
+	<div class="container mt-3">
+		<div class="row">
+			<div class="col-md-6 offset-md-6">
+				<a href="{{ path('app_projet_index') }}" class="btn btn-secondary">
+					<i class="ti-arrow-left"></i>
+					Back to list</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

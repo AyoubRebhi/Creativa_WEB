@@ -18,7 +18,7 @@ class CategorieController extends AbstractController
     #[Route('/test', name: 'app', methods: ['GET'])]
     public function test(): Response
     {
-        return $this->render('backOffice.html.twig', []);
+        return $this->render('base.html.twig', []);
     }
     #[Route('/admin', name: 'app_categorie_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
@@ -95,6 +95,20 @@ class CategorieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $image */
+            $image = $form['image']->getData();
+            if ($image) {
+                $imageName = uniqid() . '.' . $image->guessExtension();
+
+                try {
+                    $image->move($this->getParameter('image_dir'), $imageName);
+                    $categorie->setImage($imageName);
+                } catch (FileException $e) {
+                    // Handle file exception
+                    return new Response('Failed to upload image.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
@@ -105,6 +119,7 @@ class CategorieController extends AbstractController
             'form' => $form,
         ]);
     }
+
 
     #[Route('/{idCategorie}', name: 'app_categorie_delete', methods: ['POST'])]
     public function delete(Request $request, Categorie $categorie, EntityManagerInterface $entityManager): Response

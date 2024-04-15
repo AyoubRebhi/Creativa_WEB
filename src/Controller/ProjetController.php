@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/projet')]
 class ProjetController extends AbstractController
@@ -24,6 +25,17 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
+    #[Route('/client', name: 'app_projet_index', methods: ['GET'])]
+    public function indexClient(EntityManagerInterface $entityManager): Response
+    {
+        $projets = $entityManager
+            ->getRepository(Projet::class)
+            ->findAll();
+
+        return $this->render('projet/indexClient.html.twig', [
+            'projets' => $projets,
+        ]);
+    }
 
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -33,6 +45,20 @@ class ProjetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $media */
+            $media = $form['media']->getData();
+            if ($media) {
+                $fileName = uniqid() . '.' . $media->guessExtension();
+
+                try {
+                    $media->move($this->getParameter('media_dir'), $fileName);
+                } catch (FileException $e) {
+                    return new Response('Failed to upload the media.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                $projet->setMedia($fileName);
+            }
+
             $entityManager->persist($projet);
             $entityManager->flush();
 
@@ -60,6 +86,20 @@ class ProjetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $media */
+            $media = $form['media']->getData();
+            if ($media) {
+                $fileName = uniqid() . '.' . $media->guessExtension();
+
+                try {
+                    $media->move($this->getParameter('media_dir'), $fileName);
+                    $projet->setMedia($fileName);
+                } catch (FileException $e) {
+                    // Handle file exception
+                    return new Response('Échec du téléchargement du média.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
@@ -71,10 +111,11 @@ class ProjetController extends AbstractController
         ]);
     }
 
+
     #[Route('/{idProjet}', name: 'app_projet_delete', methods: ['POST'])]
     public function delete(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$projet->getIdProjet(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $projet->getIdProjet(), $request->request->get('_token'))) {
             $entityManager->remove($projet);
             $entityManager->flush();
         }

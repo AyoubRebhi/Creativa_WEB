@@ -2,69 +2,52 @@
 
 {% block title %}Categorie index
 {% endblock %}
+
 {% block body %}
-	{% block Navbar %}
-		<div class="container-fluid nav-bar bg-transparent">
-			<nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-				<a href="index.html" class="navbar-brand d-flex align-items-center text-center">
-					<div class="icon p-2 me-2">
-						<img class="img-fluid" src="{{asset('img/icon-deal.png')}}" alt="Icon" style="width: 30px; height: 30px;">
-					</div>
-					<h1 class="m-0 text-primary">Creativa</h1>
-				</a>
-				<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-					<div class="navbar-nav ms-auto">
-						<a href="index.html" class="nav-item nav-link active">Acceuil</a>
-						<a href="" class="nav-item nav-link">A propos</a>
-						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Actualitées</a>
-							<div class="dropdown-menu rounded-0 m-0">
-								<a href="property-list.html" class="dropdown-item">Liste des projets</a>
-								<a href="property-type.html" class="dropdown-item">Liste des postes</a>
-								<a href="property-agent.html" class="dropdown-item">Liste des formations</a>
-							</div>
-						</div>
-						<a href="contact.html" class="nav-item nav-link">Contact</a>
-					</div>
-				</div>
-			</nav>
+	<div class="container-xxl bg-white p-0">
+		<div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+			<h1 class="mb-3">Categories</h1>
+			<p>Explore our categories</p>
 		</div>
-	{% endblock %}
-	{% block CategoryList %}
-		<div class="container-xxl py-5">
-			<div class="container">
-				<div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-					<h1 class="mb-3">Categories</h1>
-					<p>Explore our categories</p>
-				</div>
-				<div class="row g-4">
-					{% for categorie in categories %}
-						<div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-							<a class="cat-item d-block bg-light text-center rounded p-3" href="">
-								<div class="rounded p-4">
-									<div class="">
-										{% if categorie.image %}
-											<img class="img-fluid" src="{{ asset(categorie.image) }}">
-										{% else %}
-											<img class="img-fluid" src="{{ asset('img/categorie.jpg') }}" alt="Image Description">
-										{% endif %}
-									</div>
-									<br>
-									<h6>{{ categorie.titre }}</h6>
-									<span>{{ categorie.description }}</span>
+		<div class="container">
+			<div class="row g-4">
+				{% for categorie in categories %}
+					<div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+						<a class="cat-item d-block bg-light text-center rounded p-3" href="">
+							<div class="rounded p-4">
+								<div class="">
+									{% if categorie.image %}
+										<img class="img-fluid" src="{{ asset('uploads/images/categorie/' ~ categorie.image)}}">
+									{% else %}
+										<img class="img-fluid" src="{{ asset('img/categorie.jpg') }}" alt="Image Description">
+									{% endif %}
 								</div>
-							</a>
-						</div>
-					{% else %}
-						<div class="col-lg-12">
-							<p>No categories found</p>
-						</div>
-					{% endfor %}
-				</div>
+								<br>
+								<h6>{{ categorie.titre }}</h6>
+								<span>{{ categorie.description }}</span>
+							</div>
+						</a>
+					</div>
+				{% else %}
+					<div class="col-lg-12">
+						<p>No categories found</p>
+					</div>
+				{% endfor %}
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+
+	<style>
+		/* Custom styles */
+		.cat-item {
+			text-decoration: none;
+			color: #333;
+			transition: all 0.3s;
+		}
+
+		.cat-item:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+		}
+	</style>
 {% endblock %}

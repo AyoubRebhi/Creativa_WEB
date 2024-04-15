@@ -8,13 +8,21 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class Categorie1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
+            ->add('titre', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a title',
+                    ]),
+                ],
+            ])
             ->add('image', FileType::class, [
                 'required' => false, // Allow the field to be empty
                 'mapped' => false, // Tell Symfony not to map this field to any property on your entity
@@ -24,6 +32,7 @@ class Categorie1Type extends AbstractType
                         'mimeTypes' => [ // Allowed MIME types
                             'image/jpeg',
                             'image/png',
+                            'image/jpg',
                             // Add more if needed
                         ],
                     ]),
