@@ -30,7 +30,9 @@ class AuthController extends AbstractController
 
 
     
-    #[Route('/auth', name: 'app_auth')]
+     /**
+     * @Route("/auth", name="app_auth")
+     */
     public function index(): Response
     {
         return $this->render('base.html.twig', [
@@ -125,7 +127,7 @@ class AuthController extends AbstractController
 //         }
 
 //         return $this->render('auth/auth.html.twig', [
-//             'form' => $form->createView(),
+//             'form' => $form->createView(), 
 //         ]);
 //     }
      /**
@@ -203,7 +205,7 @@ class AuthController extends AbstractController
 
 
      /**
-     * @Route("/userpage", name="userpage")
+     * @Route("/userpage1", name="userpage1")
      */
     public function directtouser(): Response
     {

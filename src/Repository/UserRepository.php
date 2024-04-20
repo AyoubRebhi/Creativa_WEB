@@ -6,7 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<User>
  *
@@ -15,14 +15,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
-{
+class UserRepository extends ServiceEntityRepository  {
     private $passwordEncoder;
 
     public function __construct(ManagerRegistry $registry, UserPasswordEncoderInterface $passwordEncoder)
     {
         parent::__construct($registry, User::class);
-        $this->passwordEncoder = $passwordEncoder;
+        // $this->passwordEncoder = $passwordEncoder;
     }
 
    public function findUserByEmailAndPassword(string $email, string $password)
@@ -44,6 +43,17 @@ class UserRepository extends ServiceEntityRepository
 
     return $user;
 }
+// //new
+// public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+// {
+//     if (!$user instanceof User) {
+//         throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+//     }
+
+//     $user->setPassword($newHashedPassword);
+
+//     $this->add($user, true);
+// }
 
 }
 

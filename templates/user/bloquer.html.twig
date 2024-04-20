@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                {{ form_start(form, {'attr': {'class': 'my-4'}}) }}
+                {{ form_start(form,{'attr': {'novalidate': 'novalidate'}}, {'attr': {'class': 'my-4'}}) }}
                     <div class="form-group">
                         {{ form_label(form.duree, 'Durée en minutes') }}
                         {{ form_widget(form.duree, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la durée en minutes'}}) }}

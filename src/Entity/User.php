@@ -255,6 +255,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
 
     public function getEmail(): ?string
     {
@@ -344,7 +353,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles()
     {
         // Retourner un tableau de rôles, par exemple ['ROLE_USER']
-        return ['ROLE_USER'];
+        return $this->role ? [$this->role] : [];
     }
 
 
