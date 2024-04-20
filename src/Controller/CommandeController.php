@@ -161,19 +161,42 @@ public function verifierCodePromoBack(Request $request): JsonResponse
 
 
 
-  #[Route('/afficherCommande',name:'afficher_commande')]
-    function affiche(CommandeRepository $repo){
-        $obj=$repo->findAll();
+#[Route('/afficherCommande', name: 'afficher_commande')]
+function afficheCommande(Request $request, CommandeRepository $repo){
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Number of items per page
+    $offset = ($currentPage - 1) * $limit;
+    
+    $obj = $repo->findBy([], [], $limit, $offset); // Fetch paginated data
+    
+    $totalItems = $repo->count([]); // Total number of items
+    $totalPages = ceil($totalItems / $limit); // Calculate total pages
 
-        return $this->render('commande/afficherCommande.html.twig',['o'=>$obj]);
-    }
+    return $this->render('commande/afficherCommande.html.twig', [
+        'o' => $obj,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages
+    ]);
+}
 
-    #[Route('/afficherCommandeBack',name:'afficher_commande_back')]
-    function afficheBack(CommandeRepository $repo){
-        $obj=$repo->findAll();
+#[Route('/afficherCommandeBack', name: 'afficher_commande_back')]
+function afficheCommandeBack(Request $request, CommandeRepository $repo){
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Number of items per page
+    $offset = ($currentPage - 1) * $limit;
+    
+    $obj = $repo->findBy([], [], $limit, $offset); // Fetch paginated data
+    
+    $totalItems = $repo->count([]); // Total number of items
+    $totalPages = ceil($totalItems / $limit); // Calculate total pages
 
-        return $this->render('commande/afficherCommandeBack.html.twig',['o'=>$obj]);
-    }
+    return $this->render('commande/afficherCommandeBack.html.twig', [
+        'o' => $obj,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages
+    ]);
+}
+
 
 
     #[Route('/UpdateCommande/{id}', name: 'update_Commande')]
@@ -221,19 +244,22 @@ public function verifierCodePromoBack(Request $request): JsonResponse
 }
 
 
-#[Route('/deleteCommande/{id}', name: 'delete_commande')]
-function delete(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
+#[Route('/cancelCommande/{id}', name: 'cancel_commande')]
+function cancel(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
 {
-    $obj = $repo->find($id);
+    $commande = $repo->find($id);
 
-    if (!$obj) {
+    if (!$commande) {
         throw $this->createNotFoundException('La commande avec l\'identifiant ' . $id . ' n\'existe pas.');
     }
 
     // Vérification si le formulaire de confirmation a été soumis
     if ($request->query->get('confirm') === 'true') {
+        // Mettre à jour le statut de la commande
+        $commande->setStatus(Commande::STATUS_ANNULE);
+
         $em = $manager->getManager();
-        $em->remove($obj);
+        $em->persist($commande);
         $em->flush();
 
         // Redirection vers la route d'affichage des commandes
@@ -241,72 +267,74 @@ function delete(ManagerRegistry $manager, CommandeRepository $repo, $id, Request
     }
 
     // Affichage de la page de confirmation
-return new Response('
-<html>
-    <head>
-        <style>
-            .confirmation-container {
-                width: 400px;
-                margin: 20px auto;
-                padding: 20px;
-                border: 2px solid #007bff;
-                border-radius: 5px;
-                background-color: #f8f9fa;
-                text-align: center;
-            }
+    return new Response('
+    <html>
+        <head>
+            <style>
+                .confirmation-container {
+                    width: 400px;
+                    margin: 20px auto;
+                    padding: 20px;
+                    border: 2px solid #007bff;
+                    border-radius: 5px;
+                    background-color: #f8f9fa;
+                    text-align: center;
+                }
 
-            .confirmation-container h2 {
-                color: #007bff;
-            }
+                .confirmation-container h2 {
+                    color: #007bff;
+                }
 
-            .confirmation-container p {
-                margin-bottom: 20px;
-            }
+                .confirmation-container p {
+                    margin-bottom: 20px;
+                }
 
-            .confirmation-container a {
-                display: inline-block;
-                text-decoration: none;
-                padding: 10px 20px;
-                margin-right: 10px;
-                border-radius: 5px;
-                color: #fff;
-            }
+                .confirmation-container a {
+                    display: inline-block;
+                    text-decoration: none;
+                    padding: 10px 20px;
+                    margin-right: 10px;
+                    border-radius: 5px;
+                    color: #fff;
+                }
 
-            .confirm-button {
-                background-color: #007bff;
-            }
+                .confirm-button {
+                    background-color: #007bff;
+                }
 
-            .cancel-button {
-                background-color: #dc3545;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="confirmation-container">
-            <h2>Confirmation de suppression</h2>
-            <p>Voulez-vous vraiment supprimer cette commande ?</p>
-            <a class="confirm-button" href="' . $this->generateUrl('delete_commande', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
-            <a class="cancel-button" href="' . $this->generateUrl('afficher_commande') . '">Annuler</a>
-        </div>
-    </body>
-</html>
-');
-
+                .cancel-button {
+                    background-color: #dc3545;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="confirmation-container">
+                <h2>Confirmation d\'annulation</h2>
+                <p>Voulez-vous vraiment annuler cette commande ?</p>
+                <a class="confirm-button" href="' . $this->generateUrl('cancel_commande', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
+                <a class="cancel-button" href="' . $this->generateUrl('afficher_commande') . '">Annuler</a>
+            </div>
+        </body>
+    </html>
+    ');
 }
 
-#[Route('/deleteCommandeBack/{id}', name: 'delete_commande_back')]
-function deleteBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
+#[Route('/cancelCommandeBack/{id}', name: 'cancel_commande_back')]
+function cancelBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
 {
-    $obj = $repo->find($id);
+    $commande = $repo->find($id);
 
-    if (!$obj) {
+    if (!$commande) {
         throw $this->createNotFoundException('La commande avec l\'identifiant ' . $id . ' n\'existe pas.');
     }
 
     // Vérification si le formulaire de confirmation a été soumis
     if ($request->query->get('confirm') === 'true') {
+        // Mettre à jour le statut de la commande
+        $commande->setStatus(Commande::STATUS_ANNULE);
+
         $em = $manager->getManager();
-        $em->remove($obj);
+        $em->persist($commande);
         $em->flush();
 
         // Redirection vers la route d'affichage des commandes
@@ -314,58 +342,60 @@ function deleteBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Req
     }
 
     // Affichage de la page de confirmation
-return new Response('
-<html>
-    <head>
-        <style>
-            .confirmation-container {
-                width: 400px;
-                margin: 20px auto;
-                padding: 20px;
-                border: 2px solid #007bff;
-                border-radius: 5px;
-                background-color: #f8f9fa;
-                text-align: center;
-            }
+    return new Response('
+    <html>
+        <head>
+            <style>
+                .confirmation-container {
+                    width: 400px;
+                    margin: 20px auto;
+                    padding: 20px;
+                    border: 2px solid #007bff;
+                    border-radius: 5px;
+                    background-color: #f8f9fa;
+                    text-align: center;
+                }
 
-            .confirmation-container h2 {
-                color: #007bff;
-            }
+                .confirmation-container h2 {
+                    color: #007bff;
+                }
 
-            .confirmation-container p {
-                margin-bottom: 20px;
-            }
+                .confirmation-container p {
+                    margin-bottom: 20px;
+                }
 
-            .confirmation-container a {
-                display: inline-block;
-                text-decoration: none;
-                padding: 10px 20px;
-                margin-right: 10px;
-                border-radius: 5px;
-                color: #fff;
-            }
+                .confirmation-container a {
+                    display: inline-block;
+                    text-decoration: none;
+                    padding: 10px 20px;
+                    margin-right: 10px;
+                    border-radius: 5px;
+                    color: #fff;
+                }
 
-            .confirm-button {
-                background-color: #007bff;
-            }
+                .confirm-button {
+                    background-color: #007bff;
+                }
 
-            .cancel-button {
-                background-color: #dc3545;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="confirmation-container">
-            <h2>Confirmation de suppression</h2>
-            <p>Voulez-vous vraiment supprimer cette commande ?</p>
-            <a class="confirm-button" href="' . $this->generateUrl('delete_commande_back', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
-            <a class="cancel-button" href="' . $this->generateUrl('afficher_commande_back') . '">Annuler</a>
-        </div>
-    </body>
-</html>
-');
-
+                .cancel-button {
+                    background-color: #dc3545;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="confirmation-container">
+                <h2>Confirmation d\'annulation</h2>
+                <p>Voulez-vous vraiment annuler cette commande ?</p>
+                <a class="confirm-button" href="' . $this->generateUrl('cancel_commande_back', ['id' => $id, 'confirm' => 'true']) . '">Confirmer</a>
+                <a class="cancel-button" href="' . $this->generateUrl('afficher_commande_back') . '">Annuler</a>
+            </div>
+        </body>
+    </html>
+    ');
 }
+
+
+
 
 
 #[Route('/passerLivraison/{id}', name: 'passer_livraison')]
@@ -403,6 +433,44 @@ public function passerLivraison(Request $request, CommandeRepository $commandeRe
         'formulaireLivraison' => $form->createView(),
         'commande' => $commande,
     ]);
+}
+
+
+#[Route('/commande/search', name: 'app_commande_search')]
+public function CommandeSearch(CommandeRepository $repository, Request $request)
+{
+    $date = $request->query->get('date');
+    $mtTotal = $request->query->get('mtTotal');
+    $dateLivraisonEstimee = $request->query->get('dateLivraisonEstimee');
+    $codePromo = $request->query->get('codePromo');
+    $prix = $request->query->get('prix');
+    $fraisLiv = $request->query->get('fraisLiv');
+    $status = $request->query->get('status');
+
+    $queryBuilder = $repository->createQueryBuilder('c'); // Utilisation de 'c' comme alias pour la table de Commande
+    
+    // Appliquer les filtres
+    if ($date !== null) {
+        $queryBuilder->andWhere('c.date = :date')
+                    ->setParameter('date', $date);
+    }
+
+    if ($status !== null && $status !== "") {
+        $queryBuilder->andWhere('c.status = :status')
+                    ->setParameter('status', $status);
+    }
+    // Ajoutez des conditions pour les autres filtres de recherche de la même manière...
+
+    // Exécutez la requête et récupérez les résultats
+    $commandes = $queryBuilder->getQuery()->getResult(); 
+
+    // Construisez le tableau de résultats
+    $objects = [];
+    foreach ($commandes as $commande) {
+        $objects[] = $commande->getObject();
+    }
+    
+    return new JsonResponse($objects);
 }
 
 }

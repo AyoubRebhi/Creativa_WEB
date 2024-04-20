@@ -5,28 +5,26 @@
     table {
     width: 100%;
     border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
+    border-spacing: 0;
 }
 
 th, td {
-    padding: 8px;
-    text-align: left;
+    padding: 10px; /* Augmentation de l'espacement du contenu */
+    text-align: center; /* Centrage du texte */
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #e0e0e0; /* Fond gris clair pour les en-têtes */
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0; /* Fond légèrement plus foncé pour les lignes paires */
 }
 
 tr:hover {
-    background-color: #ddd;
+    background-color: #dcdcdc; /* Fond légèrement plus foncé au survol */
 }
+
 .left-align {
     float: right;
 }
@@ -52,13 +50,93 @@ tr:hover {
   
 }
 
+td .btn {
+    margin-right: 5px; /* Marge à droite entre chaque bouton */
+}
+.button-cell {
+    white-space: nowrap; /* Empêche le saut de ligne */
+}
+
+.button-cell .btn {
+    margin-right: 5px; /* Marge à droite entre chaque bouton */
+}
+
+/* Pagination Box */
+        .pagination-box {
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+            display: inline-block;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Pagination Styles */
+        .pagination {
+            display: inline-block;
+        }
+        
+        .pagination a {
+            color:black;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+        
+        .pagination a:hover {
+            background-color: #f2f2f2; /* Light background color on hover */
+        }
+        
+        .pagination .active {
+            background-color: #CD853F; /* Light background color for active page */
+        }
     </style>
 {% endblock %}
 {% block Category %}
 <br>
     <h1>Liste des commandes</h1>
+      
+  
+      <div class="row justify-content-center">
+        <div class="form-group col-md-3">
+    <label for="date">Date:</label>
+    <input type="text" class="form-control" id="date" placeholder="Entrez la date">
+</div>
+<div class="form-group col-md-3">
+    <label for="mtTotal">Montant total:</label>
+    <input type="text" class="form-control" id="mtTotal" placeholder="Entrez le montant total">
+</div>
+<div class="form-group col-md-3">
+    <label for="dateLivraisonEstimee">Date de livraison estimée:</label>
+    <input type="text" class="form-control" id="dateLivraisonEstimee" placeholder="Entrez la date de livraison estimée">
+</div>
+<div class="form-group col-md-3">
+    <label for="codePromo">Code Promo:</label>
+    <input type="text" class="form-control" id="codePromo" placeholder="Entrez le code promo">
+</div>
+<div class="form-group col-md-3">
+    <label for="prix">Prix:</label>
+    <input type="text" class="form-control" id="prix" placeholder="Entrez le prix">
+</div>
+<div class="form-group col-md-3">
+    <label for="fraisLiv">Frais de livraison:</label>
+    <input type="text" class="form-control" id="fraisLiv" placeholder="Entrez les frais de livraison">
+</div>
+<div class="form-group col-md-3">
+    <label for="status">Statut:</label>
+    <select class="form-control" id="status">
+        <option value="">Sélectionnez le statut</option>
+        <option value="en_cours">En cours</option>
+        <option value="annulee">Annulée</option>
+    </select>
+</div>
 
-    <table>
+    </div>
+
+    
+
+    <table id="commande-table">
+
         <tr>
             <th>ID</th>
             <th>ID Utilisateur</th>
@@ -91,17 +169,108 @@ tr:hover {
                 <td>{{ a.prix }}</td>
                 <td>{{ a.fraisLiv }}</td>
                 
-                <td>
-                    <form action="{{ path('delete_commande', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form>
-                    <a href="{{ path('update_Commande', { 'id': a.idCmd }) }}" class="btn btn-primary btn-modifier">Modifier</a>
-                    <a href="{{ path('passer_livraison', {'id': a.idCmd}) }}" class="btn btn-primary btn-livraison">Passer à la livraison</a>
+                <td class="button-cell">
+    <form action="{{ path('cancel_commande', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Annuler</button>
+    </form>
+    <a href="{{ path('update_Commande', { 'id': a.idCmd }) }}" class="btn btn-primary btn-modifier">Modifier</a>
+    <a href="{{ path('passer_livraison', {'id': a.idCmd}) }}" class="btn btn-primary btn-livraison">Passer à la livraison</a>
+</td>
 
-                </td>
+
             </tr>
         {% endfor %}
     </table>
 
-    
+
+<div style="text-align: center;">
+    <div class="pagination-box">
+        <div class="pagination">
+            {% if currentPage > 1 %}
+                <a href="{{ path('afficher_commande', {'page': currentPage - 1}) }}">Previous</a>
+            {% endif %}
+            
+            {% for page in 1..totalPages %}
+                <a href="{{ path('afficher_commande', {'page': page}) }}" {% if page == currentPage %}class="active"{% endif %}>{{ page }}</a>
+            {% endfor %}
+            
+            {% if currentPage < totalPages %}
+                <a href="{{ path('afficher_commande', {'page': currentPage + 1}) }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('date');
+        const mtTotalInput = document.getElementById('mtTotal');
+        const dateLivraisonEstimeeInput = document.getElementById('dateLivraisonEstimee');
+        const codePromoInput = document.getElementById('codePromo');
+        const prixInput = document.getElementById('prix');
+        const fraisLivInput = document.getElementById('fraisLiv');
+        const statusInput = document.getElementById('status');
+
+        dateInput.addEventListener('input', makeRequest);
+        mtTotalInput.addEventListener('input', makeRequest);
+        dateLivraisonEstimeeInput.addEventListener('input', makeRequest);
+        codePromoInput.addEventListener('input', makeRequest);
+        prixInput.addEventListener('input', makeRequest);
+        fraisLivInput.addEventListener('input', makeRequest);
+        statusInput.addEventListener('change', makeRequest);
+
+        makeRequest(); // Initial call to populate the table
+    });
+
+    async function makeRequest() {
+        const dateValue = document.getElementById('date').value;
+        const mtTotalValue = document.getElementById('mtTotal').value;
+        const dateLivraisonEstimeeValue = document.getElementById('dateLivraisonEstimee').value;
+        const codePromoValue = document.getElementById('codePromo').value;
+        const prixValue = document.getElementById('prix').value;
+        const fraisLivValue = document.getElementById('fraisLiv').value;
+        const statusValue = document.getElementById('status').value;
+
+        const params = new URLSearchParams({
+            date: dateValue,
+            mtTotal: mtTotalValue,
+            dateLivraisonEstimee: dateLivraisonEstimeeValue,
+            codePromo: codePromoValue,
+            prix: prixValue,
+            fraisLiv: fraisLivValue,
+            status: statusValue
+        });
+
+        try {
+            const response = await fetch("/commande/search?" + params.toString());
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const tableData = await response.json();
+            updateTable(Object.entries(tableData));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    function updateTable(jsonArray) {
+        const content = document.getElementById("tabContent");
+        content.innerHTML = "";
+        
+        for (const [id, data] of jsonArray) {
+            content.innerHTML += `
+                <tr>
+                    <td>${data.date}</td>
+                    <td>${data.mtTotal}</td>
+                    <td>${data.dateLivraisonEstimee}</td>
+                    <td>${data.codePromo}</td>
+                    <td>${data.prix}</td>
+                    <td>${data.fraisLiv}</td>
+                    <td>${data.status}</td>
+                </tr>
+            `;
+        } 
+    }
+</script>
+
 {% endblock %}

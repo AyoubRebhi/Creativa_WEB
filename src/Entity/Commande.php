@@ -76,6 +76,8 @@ private $idProjet;
      */
     private $codePromo;
 
+    const STATUS_EN_COURS = 'En cours';
+    const STATUS_ANNULE = 'Annulée';
     /**
      * @var string|null
      *

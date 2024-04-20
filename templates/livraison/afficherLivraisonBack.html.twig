@@ -36,6 +36,35 @@ tr:hover {
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
 
+/* Pagination Box */
+        .pagination-box {
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+            display: inline-block;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Pagination Styles */
+        .pagination {
+            display: inline-block;
+        }
+        
+        .pagination a {
+            color:black;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+        
+        .pagination a:hover {
+            background-color: #f2f2f2; /* Light background color on hover */
+        }
+        
+        .pagination .active {
+            background-color: #CD853F; /* Light background color for active page */
+        }
     </style>
 {% endblock %}
 {% block body %}
@@ -64,8 +93,8 @@ tr:hover {
         <td>{{ a.fraisLiv }}</td>
         <td>{{ a.moyenLivraison }}</td>
         <td>
-    <form action="{{ path('delete_livraison_Back', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
+    <form action="{{ path('cancel_livraison_back', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Annuler</button>
     </form>
     <a href="{{ path('update_livraison-Back', { 'id': a.idLiv }) }}" class="btn btn-primary">Modifier</a>
 </td>
@@ -73,4 +102,20 @@ tr:hover {
     {% endfor %}
     
 </table>
+<div style="text-align: center;">
+<div class="pagination-box">
+        <div class="pagination">
+            {% if currentPage > 1 %}
+                <a href="{{ path('afficher_livraison_Back', {'page': currentPage - 1}) }}">Previous</a>
+            {% endif %}
+            
+            {% for page in 1..totalPages %}
+                <a href="{{ path('afficher_livraison_Back', {'page': page}) }}" {% if page == currentPage %}class="active"{% endif %}>{{ page }}</a>
+            {% endfor %}
+            
+            {% if currentPage < totalPages %}
+                <a href="{{ path('afficher_livraison_Back', {'page': currentPage + 1}) }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

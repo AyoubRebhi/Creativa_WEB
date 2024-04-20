@@ -38,6 +38,8 @@ class Livraison
      */
     private $idUser;
 
+    const STATUS_EN_COURS = 'En cours';
+    const STATUS_ANNULE = 'Annulée';
     /**
      * @var string|null
      *
