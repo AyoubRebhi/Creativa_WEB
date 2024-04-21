@@ -57,9 +57,12 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
 
         // Récupérer l'ID de l'utilisateur
         $userId = $user->getIdUser();
+        $userUsername= $user->getUsername();
 
         // Stocker l'ID de l'utilisateur dans la session
         $this->session->set('user_id', $userId);
+        $this->session->set('username', $userUsername);
+
 // Vérifiez le rôle de l'utilisateur
 if ( $user->getRole()=='ARTIST') {
     // Redirection pour l'utilisateur ayant le rôle admin

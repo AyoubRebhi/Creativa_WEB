@@ -5,6 +5,17 @@
 {% block body %}
     <h1>Liste des utilisateurs</h1>
 
+    <form action="{{ path('app_user_index') }}" method="GET" class="mb-4">
+        <div class="form-row">
+            <div class="form-group col-md-9">
+                <input type="text" class="form-control" id="searchQuery" name="query" placeholder="Rechercher par Nom, Prénom, Rôle ou Numéro de téléphone">
+            </div>
+            <div class="form-group col-md-3">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+    </form>
+
     <table class="table table-striped custom-table-center">
         <thead>
             <tr>
@@ -23,7 +34,7 @@
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.role | lower}}</td>
+                <td>{{ user.role | lower }}</td>
                 <td>{{ user.numtel }}</td>
                 <td>{{ user.blocked ? 'Oui' : 'No' }}</td>
                 <td>
@@ -38,11 +49,14 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">No records found</td>
+                <td colspan="7">Aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {# <a href="{{ path('app_user_new') }}" class="btn btn-success">Create New</a> #}
+    <div class="text-right">
+        <a href="{{ path('app_user_export_pdf') }}" class="btn btn-primary">Exporter en PDF</a>
+        <a href="{{ path('app_user_export_excel') }}" class="btn btn-primary">Exporter en Excel</a>
+    </div>
 {% endblock %}

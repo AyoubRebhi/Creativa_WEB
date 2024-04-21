@@ -17,31 +17,120 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\PositiveOrZero;
 use Symfony\Component\Validator\Constraints\Regex;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+{
+    $searchQuery = $request->query->get('query');
+
+    if ($searchQuery) {
+        // Si une requête de recherche est soumise
+        $users = $userRepository->findBySearchQuery($searchQuery);
+    } else {
+        // Si aucune requête de recherche n'est soumise, afficher tous les utilisateurs
+        $users = $userRepository->findAll();
+    }
+
+    // Vérifier si la durée de blocage est dépassée pour chaque utilisateur et le débloquer si nécessaire
+    foreach ($users as $user) {
+        if ($user->isBlocked() && $user->getBlockEndDate() < new \DateTime()) {
+            $user->setBlocked(false);
+            $user->setBlockEndDate(null);
+            $entityManager->flush();
+        }
+    }
+
+    // Rendre la vue avec la liste des utilisateurs mise à jour
+    return $this->render('user/index.html.twig', [
+        'users' => $users,
+    ]);
+}
+
+    #[Route('/export-pdf', name: 'app_user_export_pdf', methods: ['GET'])]
+    public function exportPdf(UserRepository $userRepository): Response
     {
-       
         // Récupérer tous les utilisateurs
         $users = $userRepository->findAll();
 
-        // Vérifier si la durée de blocage est dépassée pour chaque utilisateur et le débloquer si nécessaire
-        foreach ($users as $user) {
-            if ($user->isBlocked() && $user->getBlockEndDate() < new \DateTime()) {
-                $user->setBlocked(false);
-                $user->setBlockEndDate(null);
-                $entityManager->flush();
-            }
-        }
-
-        // Rendre la vue avec la liste des utilisateurs mise à jour
-        return $this->render('user/index.html.twig', [
+        // Rendre la vue avec la liste des utilisateurs en HTML
+        $html = $this->renderView('user/print.html.twig', [
             'users' => $users,
         ]);
 
+        // Configuration de Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+
+        // Instanciation de Dompdf
+        $dompdf = new Dompdf($options);
+
+        // Chargement du HTML dans Dompdf
+        $dompdf->loadHtml($html);
+
+        // Rendu du PDF
+        $dompdf->render();
+
+        // Renvoyer le PDF en tant que réponse
+        return new Response($dompdf->output(), Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+
+    #[Route('/export-excel', name: 'app_user_export_excel', methods: ['GET'])]
+    public function exportExcel(UserRepository $userRepository): Response
+    {
+        // Récupérer tous les utilisateurs
+        $users = $userRepository->findAll();
+
+        // Initialiser une instance de Spreadsheet (fichier Excel)
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Entêtes de colonne
+        $sheet->setCellValue('A1', 'Last Name');
+        $sheet->setCellValue('B1', 'First Name');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellValue('D1', 'Role');
+        $sheet->setCellValue('E1', 'Phone Number');
+        $sheet->setCellValue('F1', 'Blocked');
+
+        // Ajouter les données des utilisateurs au fichier Excel
+        $row = 2; // Commencer à la deuxième ligne
+        foreach ($users as $user) {
+            $sheet->setCellValue('A' . $row, $user->getLastName());
+            $sheet->setCellValue('B' . $row, $user->getFirstName());
+            $sheet->setCellValue('C' . $row, $user->getUsername());
+            $sheet->setCellValue('D' . $row, $user->getRole());
+            $sheet->setCellValue('E' . $row, $user->getNumtel());
+            $sheet->setCellValue('F' . $row, $user->isBlocked() ? 'Oui' : 'Non');
+            $row++;
+        }
+
+        // Créer un objet Writer pour écrire le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+
+        // Nom du fichier Excel à télécharger
+        $excelFileName = 'users.xlsx';
+
+        // Configurer la réponse HTTP pour le téléchargement du fichier Excel
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $excelFileName . '"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]

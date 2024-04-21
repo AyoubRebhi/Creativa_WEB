@@ -43,6 +43,48 @@ class UserRepository extends ServiceEntityRepository  {
 
     return $user;
 }
+
+
+
+
+public function findByCriteria($criteria): array
+{
+    $queryBuilder = $this->createQueryBuilder('u');
+
+    if (!empty($criteria['lastName'])) {
+        $queryBuilder->andWhere('u.last_name LIKE :lastName')
+            ->setParameter('lastName', '%' . $criteria['lastName'] . '%');
+    }
+
+    if (!empty($criteria['firstName'])) {
+        $queryBuilder->andWhere('u.first_name LIKE :firstName')
+            ->setParameter('firstName', '%' . $criteria['firstName'] . '%');
+    }
+
+    if (!empty($criteria['role'])) {
+        $queryBuilder->andWhere('u.role = :role')
+            ->setParameter('role', $criteria['role']);
+    }
+
+    if (!empty($criteria['numtel'])) {
+        $queryBuilder->andWhere('u.numTel = :numtel')
+            ->setParameter('numtel', $criteria['numtel']);
+    }
+
+    // Ajoutez d'autres critères de recherche si nécessaire
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
+
+public function findBySearchQuery($searchQuery)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.lastName LIKE :query OR u.firstName LIKE :query OR u.role LIKE :query OR u.numtel LIKE :query')
+            ->setParameter('query', '%' . $searchQuery . '%')
+            ->getQuery()
+            ->getResult();
+    }
 // //new
 // public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
 // {

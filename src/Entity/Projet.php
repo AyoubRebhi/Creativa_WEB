@@ -91,7 +91,7 @@ class Projet
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
+     *   @ORM\JoinColumn(name="id_user2", referencedColumnName="id_user")
      * })
      */
     private $idUser2;
