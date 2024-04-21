@@ -12,30 +12,13 @@ use App\Form\LivraisonType;
 use App\Repository\LivraisonRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Twilio\Rest\Client as TwilioClient;
-use Twilio\Rest\Api\V2010\Account\MessageInstance;
-use Twilio\Rest\Client;
+
 
 class LivraisonController extends AbstractController
 {
 
     
-/*private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAuthToken, $twilioPhoneNumber)
-{
-    $sid = $twilioAccountSid;
-    $token = $twilioAuthToken;
-    $twilioPhoneNumber = $twilioPhoneNumber;
 
-    $cleanedPhoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-    $cleanedPhoneNumber = '+216' . $cleanedPhoneNumber;
-
-    $twilio = new Client($sid, $token);
-    $twilio->messages->create(
-        $cleanedPhoneNumber,
-        ['from' => $twilioPhoneNumber, 'body' => $message]
-    );
-}
-*/
     #[Route('/ajouterLivraison', name: 'ajouter_livraison')]
     public function ajouterLivraison(Request $request): Response
     {
@@ -67,15 +50,7 @@ class LivraisonController extends AbstractController
             $entityManager->persist($livraison);
             $entityManager->flush();
     
-            /*$twilioAccountSid = $_ENV['twilio_account_sid'];
-            $twilioAuthToken = $_ENV['twilio_auth_token'];
-            $twilioPhoneNumber = $_ENV['twilio_phone_number'];
-            $myPhoneNumber = "53125536";
             
-            
-            // Envoyer un SMS à votre numéro personnel
-            $this->envoyerSms($myPhoneNumber,"Nous sommes heureux de vous informer que votre commande est actuellement en cours de traitement. Notre équipe s'affaire à préparer vos articles avec le plus grand soin afin de vous garantir une satisfaction totale.",$twilioAccountSid,$twilioAuthToken,$twilioPhoneNumber);
-    */
 
             
             return $this->redirectToRoute('afficher_livraison');
