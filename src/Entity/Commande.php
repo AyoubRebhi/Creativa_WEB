@@ -6,7 +6,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * Commande
  *
@@ -100,6 +99,8 @@ private $idProjet;
      */
     private $fraisLiv;
 
+
+
     /**
  * @ORM\OneToOne(targetEntity="App\Entity\Livraison", mappedBy="commande", cascade={"persist", "remove"})
  */
@@ -124,6 +125,36 @@ private $livraison;
         return $this;
     }
 
+
+    
+
+   /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="commandes")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=false)
+     */
+    private $user;
+
+    // Getter et setter pour la relation ManyToOne avec User
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // Définir la relation inverse si nécessaire
+        if ($user !== null && !$user->getCommandes()->contains($this)) {
+            $user->addCommande($this);
+        }
+
+        return $this;
+    }
+
+
+
+    
     public function getIdCmd(): ?int
     {
         return $this->idCmd;
@@ -236,4 +267,18 @@ private $livraison;
 
         return $this;
     }
+
+    public function getObject()
+{
+    return [
+        "date" => $this->getDate()->format('Y-m-d'), // Formatage de la date
+        "mtTotal" => $this->getMtTotal(),
+        "dateLivraisonEstimee" => $this->getDateLivraisonEstimee()->format('Y-m-d'), // Formatage de la date de livraison estimée
+        "codePromo" => $this->getCodePromo(),
+        "status" => $this->getStatus(),
+        "prix" => $this->getPrix(),
+        "fraisLiv" => $this->getFraisLiv(),
+    ];
+}
+
 }

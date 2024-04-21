@@ -19,6 +19,7 @@ use App\Controller\CodePromoController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use App\Form\LivraisonType;
 use App\Entity\Livraison;
+use Symfony\Component\Security\Core\Security;
 
 
 class CommandeController extends AbstractController
@@ -398,6 +399,7 @@ function cancelBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Req
 
 
 
+
 #[Route('/passerLivraison/{id}', name: 'passer_livraison')]
 public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
 {
@@ -425,6 +427,8 @@ public function passerLivraison(Request $request, CommandeRepository $commandeRe
         $entityManager->persist($livraison);
         $entityManager->flush();
 
+
+       
         return $this->redirectToRoute('afficher_livraison');
     }
 
@@ -433,44 +437,6 @@ public function passerLivraison(Request $request, CommandeRepository $commandeRe
         'formulaireLivraison' => $form->createView(),
         'commande' => $commande,
     ]);
-}
-
-
-#[Route('/commande/search', name: 'app_commande_search')]
-public function CommandeSearch(CommandeRepository $repository, Request $request)
-{
-    $date = $request->query->get('date');
-    $mtTotal = $request->query->get('mtTotal');
-    $dateLivraisonEstimee = $request->query->get('dateLivraisonEstimee');
-    $codePromo = $request->query->get('codePromo');
-    $prix = $request->query->get('prix');
-    $fraisLiv = $request->query->get('fraisLiv');
-    $status = $request->query->get('status');
-
-    $queryBuilder = $repository->createQueryBuilder('c'); // Utilisation de 'c' comme alias pour la table de Commande
-    
-    // Appliquer les filtres
-    if ($date !== null) {
-        $queryBuilder->andWhere('c.date = :date')
-                    ->setParameter('date', $date);
-    }
-
-    if ($status !== null && $status !== "") {
-        $queryBuilder->andWhere('c.status = :status')
-                    ->setParameter('status', $status);
-    }
-    // Ajoutez des conditions pour les autres filtres de recherche de la même manière...
-
-    // Exécutez la requête et récupérez les résultats
-    $commandes = $queryBuilder->getQuery()->getResult(); 
-
-    // Construisez le tableau de résultats
-    $objects = [];
-    foreach ($commandes as $commande) {
-        $objects[] = $commande->getObject();
-    }
-    
-    return new JsonResponse($objects);
 }
 
 }
