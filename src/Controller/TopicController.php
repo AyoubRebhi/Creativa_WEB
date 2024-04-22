@@ -70,19 +70,11 @@ class TopicController extends AbstractController
 function delete(ManagerRegistry $manager, TopicRepository $repo, $id, Request $request)
 {
     $obj = $repo->find($id);
-
-    if (!$obj) {
-        throw $this->createNotFoundException('Le topic avec l\'identifiant ' . $id . ' n\'existe pas.');
-    }
-
-    // Vérification si le formulaire de confirmation a été soumis
-    if ($request->query->get('confirm') === 'true') {
-        $em = $manager->getManager();
-        $em->remove($obj);
-        $em->flush();
-
-        // Redirection vers la route d'affichage des commandes
-        return $this->redirectToRoute('afficher_topic');
-    }
+    // Vérifier si l'entité a été trouvée
+    $em = $manager->getManager();
+ $em->remove($obj);
+$em->flush();
+        // Si l'entité n'a pas été trouvée, gérer ce cas (par exemple, afficher un message d'erreur)
+    
 }
 }

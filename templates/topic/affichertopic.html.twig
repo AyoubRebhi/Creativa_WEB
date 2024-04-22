@@ -9,16 +9,19 @@
 }
 
 table, th, td {
-    border: 1px solid black;
+    
+    border-radius:20px;
 }
 
 th, td {
     padding: 8px;
-    text-align: left;
+    text-align: center;
+    
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #764949;
+    color: white;
 }
 
 tr:nth-child(even) {
@@ -26,7 +29,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #ddd;
+    background-color: #f4a460;
 }
 .left-align {
     float: right;
@@ -36,18 +39,19 @@ tr:hover {
 {% block  topic %}
 <h1>Liste des topic</h1>
 <table>
-    <tr>
-        <th>ID</th>
+    <tr> 
         <th>Nom</th>
         <th>Sujet</th>
         <th>Image</th>
+        <th>supprimer</th>
     </tr>
     {% for a in o %}
     <tr class="clickable-row" data-href="{{ path('afficher_post', {'Topic_id': a.Id}) }}">
-        <td>{{ a.Id }}</td>
         <td>{{ a.Nom }}</td>
         <td>{{ a.Subject }}</td>
-        <td><img src="{{ a.Image }}" alt="Fayrouz Image"></td>
+        <td><img src="fayrouz.jpg"></td>
+        <td><a href="{{ path('delete_topic', {'id': a.id}) }}">Supprimer un topic</a>
+</td>
     </tr>
     {% endfor %}
 </table>

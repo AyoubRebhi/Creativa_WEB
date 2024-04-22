@@ -9,16 +9,19 @@
 }
 
 table, th, td {
-    border: 1px solid black;
+    
+    border-radius:20px;
 }
 
 th, td {
     padding: 8px;
-    text-align: left;
+    text-align: center;
+    
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #764949;
+    color: white;
 }
 
 tr:nth-child(even) {
@@ -26,7 +29,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #ddd;
+    background-color: #f4a460;
 }
 .left-align {
     float: right;
@@ -39,24 +42,33 @@ tr:hover {
 <table>
     <tr>
         <th>editeur</th>
-        <th>Media</th>
         <th>titre</th>
         <th>description</th>
-        <td>Topic</td>
+        <th>Supprimer</th>
     </tr>
     {% for a in o %}
-    <tr >
+    <tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
         <td>{{ a.Editeur }}</td>
-        <td>{{ a.Media }}</td>
          <td>{{ a.Titre }}</td>
           <td>{{ a.Description }}</td>
-          <td><a href="{{ path('delete_post', {'id': a.id}) }}">Supprimer un post</a>
+          <td><a href="{{ path('delete_post', {'id': a.Id}) }}">Supprimer un post</a>
 </td>
    
     </tr>
     {% endfor %}
 
 </table>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var rows = document.querySelectorAll(".clickable-row");
+
+        rows.forEach(function(row) {
+            row.addEventListener("click", function() {
+                window.location.href = this.dataset.href;
+            });
+        });
+    });
+</script>
 {% endblock %}
 <a href="{{ path('update_Topic', {'Topic_id': topicid}) }}">Modifier un topic</a>
 <a href="{{ path('ajouter_post') }}">Ajouter un post</a>

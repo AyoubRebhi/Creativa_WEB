@@ -74,10 +74,10 @@ class PostController extends AbstractController
     }
 
  
-    $form->add('submit', SubmitType::class, [
-        'label' => 'Modifier',
-        'attr' => ['class' => 'btn btn-primary']
-    ]); 
+    return $this->render('post/updatepost.html.twig', [
+        'formulairepost' => $form->createView(),
+    ]);
+
 }
 #[Route('/deletepost/{id}', name: 'delete_post')]
 function delete(ManagerRegistry $manager, PostRepository $repo, $id, Request $request)
@@ -87,5 +87,11 @@ function delete(ManagerRegistry $manager, PostRepository $repo, $id, Request $re
  $em->remove($obj);
 $em->flush();
 return new Response('Le formulaire de confirmation n\'a pas été soumis.');
+}
+#[Route('/affpost/{post_id}', name: 'lire_post')]
+function lire(PostRepository $repo,$post_id)
+{
+    $post = $repo->find($post_id);
+    return $this->render('post/afficher.html.twig',['o'=>$post]);
 }
 }
