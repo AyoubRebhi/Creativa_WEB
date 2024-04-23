@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+  {{ parent() }}
+  <style>
+    .map-container {
+      width: 800px; /* Largeur du conteneur de la carte */
+      height: 600px; /* Hauteur du conteneur de la carte */
+      margin: 0; /* Supprimer les marges */
+      padding: 0; /* Supprimer les espacements internes */
+      border: 1px solid #ccc; /* Ajouter une bordure autour du conteneur */
+      border-radius: 10px; /* Ajouter des coins arrondis à la bordure */
+      overflow: hidden; /* Masquer tout contenu dépassant du conteneur */
+    }
+
+    #map {
+      width: 100%; /* La carte occupe toute la largeur du conteneur */
+      height: 100%; /* La carte occupe toute la hauteur du conteneur */
+    }
+  </style>
+{% endblock %}
+
+{% block Category %}
+  <div class="map-container"> <!-- Créez un conteneur pour la carte -->
+    <h1>Carte des Marqueurs</h1>
+    <div id="map"></div>
+  </div>
+
+<script>
+    // Fonction pour rediriger vers la page d'ajout de livraison avec le lieu sélectionné et remplir le champ d'adresse
+    function redirectToAjouterLivraison(lieu) {
+      // Rediriger vers la page d'ajout de livraison avec le lieu sélectionné
+      window.location.href = '/ajouterLivraison?lieu=' + encodeURIComponent(lieu);
+    }
+</script>
+
+
+ <script>
+    // Fonction d'initialisation de la carte
+    function initMap() {
+      // Créer une carte Google Maps centrée sur la Tunisie
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 34.0, lng: 9.0}, // Coordonnées du centre de la Tunisie
+        zoom: 6 // Niveau de zoom par défaut
+      });
+
+      // Créer des marqueurs pour chaque emplacement
+      var cities = {
+        "Tunis": { "lat": 36.8065, "lng": 10.1815 },
+        "Sfax": { "lat": 34.7416, "lng": 10.7606 },
+        "Sousse": { "lat": 35.8288, "lng": 10.6407 },
+        "Hammamet": { "lat": 36.4056, "lng": 10.6229 }
+      };
+
+      // Boucler à travers chaque emplacement et ajouter un marqueur à la carte
+      for (var city in cities) {
+        var marker = new google.maps.Marker({
+          position: cities[city],
+          map: map,
+          title: city // Nom de la ville comme titre du marqueur
+        });
+
+        // Ajouter un écouteur d'événements de clic au marqueur
+        marker.addListener('click', function() {
+          // Appeler la fonction pour rediriger vers la page d'ajout de livraison avec le lieu sélectionné
+          redirectToAjouterLivraison(this.getTitle());
+        });
+      }
+    }
+</script>
+  <!-- Inclure le script JavaScript de l'API Google Maps avec votre clé API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADdkFwBut98yuG23zJIsv8UR3_GTHESkc&callback=initMap" async defer></script>
+{% endblock %}

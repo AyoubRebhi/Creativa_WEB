@@ -13,14 +13,15 @@ use App\Repository\LivraisonRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-
 class LivraisonController extends AbstractController
 {
 
     
 
-    #[Route('/ajouterLivraison', name: 'ajouter_livraison')]
-    public function ajouterLivraison(Request $request): Response
+/**
+     * @Route("/ajouterLivraison", name="ajouter_livraison")
+     */
+        public function ajouterLivraison(Request $request): Response
     {
         // Créer une nouvelle instance de Livraison
         $livraison = new Livraison();
@@ -66,7 +67,9 @@ class LivraisonController extends AbstractController
 
 
 
-#[Route('/ajouterLivraisonBack', name: 'ajouter_livraison_Back')]
+ /**
+     * @Route("/ajouterLivraisonBack", name="ajouter_livraison_Back")
+     */
     public function ajouterLivraisonBack(Request $request): Response
 {
     $livraison = new Livraison();
@@ -101,8 +104,10 @@ class LivraisonController extends AbstractController
     
     
 
-#[Route('/afficherLivraison', name: 'afficher_livraison')]
-function affiche(Request $request, LivraisonRepository $repo){
+/**
+     * @Route("/afficherLivraison", name="afficher_livraison")
+     */
+    function affiche(Request $request, LivraisonRepository $repo){
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Number of items per page
     $offset = ($currentPage - 1) * $limit;
@@ -119,8 +124,10 @@ function affiche(Request $request, LivraisonRepository $repo){
     ]);
 }
 
-#[Route('/afficherLivraisonBack', name: 'afficher_livraison_Back')]
-function afficheLivraisonBack(Request $request, LivraisonRepository $repo){
+ /**
+     * @Route("/afficherLivraisonBack", name="afficher_livraison_Back")
+     */
+    function afficheLivraisonBack(Request $request, LivraisonRepository $repo){
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Number of items per page
     $offset = ($currentPage - 1) * $limit;
@@ -139,8 +146,10 @@ function afficheLivraisonBack(Request $request, LivraisonRepository $repo){
 
 
 
-    #[Route('/UpdateLivraison/{id}', name: 'update_livraison')]
-    public function UpdateLivraison(Request $request, LivraisonRepository $repo, $id, ManagerRegistry $managerRegistry)
+/**
+     * @Route("/UpdateLivraison/{id}", name="update_livraison")
+     */
+        public function UpdateLivraison(Request $request, LivraisonRepository $repo, $id, ManagerRegistry $managerRegistry)
     {
     $livraison = $repo->find($id);
     $form = $this->createForm(LivraisonType::class, $livraison);
@@ -161,8 +170,11 @@ function afficheLivraisonBack(Request $request, LivraisonRepository $repo){
     return $this->render("livraison/updateLivraison.html.twig",["formulaireLivraison"=>$form->createView()]);
 }
 
-#[Route('/UpdateLivraisonBack/{id}', name: 'update_livraison-Back')]
+/**
+     * @Route("/UpdateLivraisonBack/{id}", name="update_livraison_Back")
+     */    
     public function UpdateLivraisonBack(Request $request, LivraisonRepository $repo, $id, ManagerRegistry $managerRegistry)
+
     {
     $livraison = $repo->find($id);
     $form = $this->createForm(LivraisonType::class, $livraison);
@@ -185,8 +197,10 @@ function afficheLivraisonBack(Request $request, LivraisonRepository $repo){
 
 
 
-#[Route('/cancelLivraison/{id}', name: 'cancel_livraison')]
-function cancel(ManagerRegistry $manager, LivraisonRepository $repo, $id, Request $request)
+/**
+     * @Route("/cancelLivraison/{id}", name="cancel_livraison")
+     */
+    function cancel(ManagerRegistry $manager, LivraisonRepository $repo, $id, Request $request)
 {
     $livraison = $repo->find($id);
 
@@ -263,8 +277,10 @@ function cancel(ManagerRegistry $manager, LivraisonRepository $repo, $id, Reques
 }
 
 
-#[Route('/cancelLivraisonBack/{id}', name: 'cancel_livraison_back')]
-function cancelBack(ManagerRegistry $manager, LivraisonRepository $repo, $id, Request $request)
+/**
+     * @Route("/cancelLivraisonBack/{id}", name="cancel_livraison_back")
+     */
+    function cancelBack(ManagerRegistry $manager, LivraisonRepository $repo, $id, Request $request)
 {
     $livraison = $repo->find($id);
 
@@ -339,4 +355,12 @@ function cancelBack(ManagerRegistry $manager, LivraisonRepository $repo, $id, Re
         </html>
     ');
 }
+
+/**
+     * @Route("/afficher-carte", name="afficher_carte_livraison")
+     */
+    public function afficherCarte(): Response
+    {
+        return $this->render('livraison/map.html.twig');
+    }
 }

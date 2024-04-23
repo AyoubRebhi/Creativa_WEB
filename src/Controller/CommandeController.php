@@ -26,7 +26,9 @@ use Twilio\Rest\Client;
 
 class CommandeController extends AbstractController
 {
-    #[Route('/ajouterCommande', name: 'ajouter_commande')]
+    /**
+     * @Route("/ajouterCommande", name="ajouter_commande")
+     */
 public function ajouterCommande(Request $request, CodePromoRepository $codePromoRepository): Response
 {
     $commande = new Commande();
@@ -71,8 +73,10 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
     ]);
 }
 
-#[Route('/ajouterCommandeBack', name: 'ajouter_commande_back')]
-public function ajouterCommandeBack(Request $request, CodePromoRepository $codePromoRepository): Response
+/**
+     * @Route("/ajouterCommandeBack", name="ajouter_commande_back")
+     */
+    public function ajouterCommandeBack(Request $request, CodePromoRepository $codePromoRepository): Response
 {
     $commande = new Commande();
     $user = $this->getUser();
@@ -116,8 +120,10 @@ public function ajouterCommandeBack(Request $request, CodePromoRepository $codeP
     ]);
 }
 
-    #[Route('/verifierCodePromo', name: 'verifierCodePromo')]
-public function verifierCodePromo(Request $request): JsonResponse
+/**
+     * @Route("/verifierCodePromo", name="verifierCodePromo")
+     */
+    public function verifierCodePromo(Request $request): JsonResponse
 {
     // Récupérer le code promo envoyé depuis la requête
     $codePromo = $request->request->get('codePromo'); 
@@ -138,8 +144,10 @@ public function verifierCodePromo(Request $request): JsonResponse
     // Retourner une réponse JSON avec le résultat de la vérification
     return new JsonResponse(['valid' => $codePromoValide]);
 }
-#[Route('/verifierCodePromoBack', name: 'verifierCodePromo_back')]
-public function verifierCodePromoBack(Request $request): JsonResponse
+/**
+     * @Route("/verifierCodePromoBack", name="verifierCodePromo_back")
+     */
+    public function verifierCodePromoBack(Request $request): JsonResponse
 {
     // Récupérer le code promo envoyé depuis la requête
     $codePromo = $request->request->get('codePromo'); 
@@ -164,8 +172,10 @@ public function verifierCodePromoBack(Request $request): JsonResponse
 
 
 
-#[Route('/afficherCommande', name: 'afficher_commande')]
-function afficheCommande(Request $request, CommandeRepository $repo){
+ /**
+     * @Route("/afficherCommande", name="afficher_commande")
+     */
+    function afficheCommande(Request $request, CommandeRepository $repo){
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Number of items per page
     $offset = ($currentPage - 1) * $limit;
@@ -182,8 +192,10 @@ function afficheCommande(Request $request, CommandeRepository $repo){
     ]);
 }
 
-#[Route('/afficherCommandeBack', name: 'afficher_commande_back')]
-function afficheCommandeBack(Request $request, CommandeRepository $repo){
+ /**
+     * @Route("/afficherCommandeBack", name="afficher_commande_back")
+     */
+    function afficheCommandeBack(Request $request, CommandeRepository $repo){
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Number of items per page
     $offset = ($currentPage - 1) * $limit;
@@ -202,8 +214,10 @@ function afficheCommandeBack(Request $request, CommandeRepository $repo){
 
 
 
-    #[Route('/UpdateCommande/{id}', name: 'update_Commande')]
-    public function UpdateCommande(Request $request, CommandeRepository $repo, $id, ManagerRegistry $managerRegistry)
+/**
+     * @Route("/UpdateCommande/{id}", name="update_Commande")
+     */
+        public function UpdateCommande(Request $request, CommandeRepository $repo, $id, ManagerRegistry $managerRegistry)
     {
     $commande = $repo->find($id);
     $form = $this->createForm(CommandeType::class, $commande);
@@ -224,7 +238,9 @@ function afficheCommandeBack(Request $request, CommandeRepository $repo){
     return $this->render("commande/updateCommande.html.twig",["formulaireCommande"=>$form->createView()]);
 }
 
-#[Route('/UpdateCommandeBack/{id}', name: 'update_Commande_back')]
+/**
+     * @Route("/UpdateCommandeBack/{id}", name="update_Commande_back")
+     */
     public function UpdateCommandeBack(Request $request, CommandeRepository $repo, $id, ManagerRegistry $managerRegistry)
     {
     $commande = $repo->find($id);
@@ -247,8 +263,10 @@ function afficheCommandeBack(Request $request, CommandeRepository $repo){
 }
 
 
-#[Route('/cancelCommande/{id}', name: 'cancel_commande')]
-function cancel(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
+/**
+     * @Route("/cancelCommande/{id}", name="cancel_commande")
+     */
+    function cancel(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
 {
     $commande = $repo->find($id);
 
@@ -322,8 +340,10 @@ function cancel(ManagerRegistry $manager, CommandeRepository $repo, $id, Request
     ');
 }
 
-#[Route('/cancelCommandeBack/{id}', name: 'cancel_commande_back')]
-function cancelBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
+/**
+     * @Route("/cancelCommandeBack/{id}", name="cancel_commande_back")
+     */
+    function cancelBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Request $request)
 {
     $commande = $repo->find($id);
 
@@ -417,8 +437,10 @@ function cancelBack(ManagerRegistry $manager, CommandeRepository $repo, $id, Req
 
 
 
-#[Route('/passerLivraison/{id}', name: 'passer_livraison')]
-public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
+/**
+     * @Route("/passerLivraison/{id}", name="passer_livraison")
+     */
+    public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
 {
     // Récupérer la commande
     $commande = $commandeRepository->find($id);
