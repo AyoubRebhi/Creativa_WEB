@@ -66,6 +66,23 @@
     margin-top: 5px; 
     text-decoration:none;
 }
+.bouton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #F4A460; /* Couleur de fond du bouton */
+    color: #fff; /* Couleur du texte */
+    text-decoration: none; /* Supprimer la soulignement du texte */
+    border: none; /* Supprimer la bordure */
+    border-radius: 5px; /* Arrondir les coins */
+    cursor: pointer; /* Afficher le curseur de la main au survol */
+    float: right; /* Aligner le bouton à droite */
+}
+
+
+.bouton:hover {
+    background-color: #B8814B; /* Couleur de fond du bouton au survol */
+    color: #fff;
+}
 
     </style>
 {% endblock %}
@@ -88,9 +105,8 @@
     </div>
 
     <div class="form-group left">
-<!-- Bouton pour afficher la carte avec une icône -->
-<a href="{{ path('afficher_carte_livraison') }}" id="afficherCarteBtn" class="btn btn-primary">
-    <i class="fa-duotone fa-map-pin"></i> Afficher la carte</a>
+
+
 
 
 
@@ -101,6 +117,9 @@
             {{ form_errors(formulaireLivraison.adresse) }}
         </div>
     {% endif %}
+<a href="{{ path('afficher_carte_livraison') }}" id="afficherCarteBtn" class="bouton">
+    <i class="fas fa-map-marker-alt"></i></a>
+
 </div>
 
 

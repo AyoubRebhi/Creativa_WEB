@@ -486,5 +486,4 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
         'commande' => $commande,
     ]);
 }
-
 }

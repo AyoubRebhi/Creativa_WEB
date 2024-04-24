@@ -361,6 +361,9 @@ class LivraisonController extends AbstractController
      */
     public function afficherCarte(): Response
     {
+        // Redirection vers la route d'affichage des livraisons
         return $this->render('livraison/map.html.twig');
+
     }
+   
 }
