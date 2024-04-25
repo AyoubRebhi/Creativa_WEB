@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -58,91 +57,11 @@ class Inscritption
     private $datenow = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \Formation
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Formation")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="formation_id", type="integer", nullable=false)
      */
-    private $formation;
-
-    public function getIdInscrit(): ?int
-    {
-        return $this->idInscrit;
-    }
-
-    public function getIdUser(): ?int
-    {
-        return $this->idUser;
-    }
-
-    public function setIdUser(?int $idUser): static
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getDatenow(): ?\DateTimeInterface
-    {
-        return $this->datenow;
-    }
-
-    public function setDatenow(\DateTimeInterface $datenow): static
-    {
-        $this->datenow = $datenow;
-
-        return $this;
-    }
-
-    public function getFormation(): ?Formation
-    {
-        return $this->formation;
-    }
-
-    public function setFormation(?Formation $formation): static
-    {
-        $this->formation = $formation;
-
-        return $this;
-    }
+    private $formationId;
 
 
 }

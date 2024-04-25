@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 #[Route('/projet')]
 class ProjetController extends AbstractController
 {
-    #[Route('/', name: 'app_projet_index', methods: ['GET'])]
+    #[Route('/admin', name: 'app_projet_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $projets = $entityManager
@@ -25,17 +25,7 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
-    #[Route('/client', name: 'app_projet_index', methods: ['GET'])]
-    public function indexClient(EntityManagerInterface $entityManager): Response
-    {
-        $projets = $entityManager
-            ->getRepository(Projet::class)
-            ->findAll();
 
-        return $this->render('projet/indexClient.html.twig', [
-            'projets' => $projets,
-        ]);
-    }
 
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
