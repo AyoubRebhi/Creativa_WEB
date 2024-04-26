@@ -69,10 +69,24 @@ tr:hover {
         .pagination .active {
             background-color: #F0A561; /* Light background color for active page */
         }
+        .liste{
+            display: block; /* Afficher en tant que bloc */
+            padding: 10px; /* Espacement intérieur */
+            border: none; /* Pas de bordure */
+            border-radius: 4px; /* Coins arrondis */
+            background-color: #007bff; /* Couleur de fond */
+            color: #fff; /* Couleur du texte */
+            font-size: 1em; /* Taille de la police */
+            cursor: pointer; /* Curseur pointer */
+            transition: background-color 0.3s; /* Transition fluide */
+            text-align: center; /* Aligner à droite */
+            float: right ;
+        }
     </style>
 {% endblock %}
 {% block body %}
 <h1>Liste des commandes</h1>
+    <a href="{{ path('afficher_livraison_Back') }}" class="liste">Liste des livraisons</a>
 
 <table>
     <tr>
@@ -109,7 +123,6 @@ tr:hover {
                 <button type="submit" class="btn btn-danger">Annuler</button>
             </form>
             <a href="{{ path('update_Commande_back', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
-            <a href="{{ path('passer_livraison', {'id': a.idCmd}) }}" class="btn btn-primary btn-livraison">Passer à la livraison</a>
 
         </td>
     </tr>

@@ -3,67 +3,106 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        /* CSS pour le formulaire d'ajout de livraison */
-
         /* Style pour le conteneur du formulaire */
         .form-container {
-            width: 70%; /* Largeur du formulaire */
+            width: 50%; /* Largeur du formulaire */
             margin: 0 auto; /* Centrer le formulaire */
-            padding: 40px; /* Ajouter de l'espace à l'intérieur du cadre */
-            border: 1px solid #ccc; /* Bordure autour du cadre */
+            padding: 20px; /* Espacement intérieur */
+            border: 1px solid #ccc; /* Bordure */
             border-radius: 8px; /* Coins arrondis */
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            display: flex; /* Aligner les cadres côte à côte */
-            flex-direction: column; /* Afficher les éléments en colonne */
+            background-color: #f9f9f9; /* Couleur de fond */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre */
         }
 
-        /* Style pour les cadres à l'intérieur du formulaire */
-        .fieldset-container {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px; /* Espacement entre les cadres */
-        }
-
-        /* Style pour le titre des cadres */
-        .fieldset-title {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 20px; /* Espacement entre le titre et les champs */
-        }
-
-        /* Style pour les groupes de champs */
-        .form-group {
-            margin-bottom: 20px; /* Espacement entre les groupes de champs */
-        }
-
-        /* Style pour les étiquettes des champs */
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        /* Style pour le titre du formulaire */
+        .form-title {
+            font-size: 1.5em; /* Taille de la police */
+            font-weight: bold; /* Gras */
+            margin-bottom: 20px; /* Espacement en bas */
+            text-align: center; /* Centrer le texte */
+            color: #333; /* Couleur du texte */
         }
 
         /* Style pour les champs de saisie */
         input[type="text"],
         input[type="email"],
         textarea {
-            width: calc(100% - 20px); 
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
+            width: 100%; /* Largeur pleine */
+            padding: 10px; /* Espacement intérieur */
+            border: 1px solid #ccc; /* Bordure */
+            border-radius: 4px; /* Coins arrondis */
+            box-sizing: border-box; /* Inclure la bordure et le rembourrage dans la largeur */
+            margin-bottom: 10px; /* Espacement en bas */
+        }
+
+        /* Style pour le bouton */
+        .btn {
+            display: block; /* Afficher en tant que bloc */
+            width: 40%; /* Largeur pleine */
+            padding: 10px; /* Espacement intérieur */
+            border: none; /* Pas de bordure */
+            border-radius: 4px; /* Coins arrondis */
+            background-color: #007bff; /* Couleur de fond */
+            color: #fff; /* Couleur du texte */
+            font-size: 1em; /* Taille de la police */
+            cursor: pointer; /* Curseur pointer */
+            transition: background-color 0.3s; /* Transition fluide */
+        }
+
+        /* Style pour le bouton au survol */
+        .btn:hover {
+            background-color: #0056b3; /* Couleur de fond au survol */
+        }
+
+        /* Style pour le lien vers la liste des codes promo */
+        .btn-list {
+            text-align: center; /* Centrer le texte */
+            margin-top: 20px; /* Espacement en haut */
+        }
+
+        /* Style pour le lien */
+        .btn-list a {
+            color: #007bff; /* Couleur du texte */
+            text-decoration: none; /* Pas de soulignement */
+            font-size: 1.1em; /* Taille de la police */
+        }
+
+        /* Style pour le lien au survol */
+        .btn-list a:hover {
+            text-decoration: underline; /* Soulignement au survol */
+        }
+        /* Style pour aligner les boutons à droite */
+        .align-right {
+            display: block; /* Afficher en tant que bloc */
+            width: 40%; /* Largeur pleine */
+            padding: 10px; /* Espacement intérieur */
+            border: none; /* Pas de bordure */
+            border-radius: 4px; /* Coins arrondis */
+            background-color: #007bff; /* Couleur de fond */
+            color: #fff; /* Couleur du texte */
+            font-size: 1em; /* Taille de la police */
+            cursor: pointer; /* Curseur pointer */
+            transition: background-color 0.3s; /* Transition fluide */
+            text-align: center; /* Aligner à droite */
+            float: right ;
+            
+        }
+        .form-title{
+            color: red;
         }
     </style>
 {% endblock %}
 
+
 {% block body %}
     <div class="form-container">
-        <h1>AJOUTER CODE PROMO</h1>
-        <a href="{{ path('afficher_codepromo') }}" class="btn btn-primary btn-livraison">liste des codes promo</a>
+        <h1 class="form-title">Ajouter un Code Promo</h1>
+        <a href="{{ path('afficher_codepromo') }}" class=" align-right">Liste des Codes Promo</a>
+        <br>
+        <br>
+        <br>
+        <br>
         {{ form(formulaireCodepromo) }}
     </div>
 {% endblock %}
+
