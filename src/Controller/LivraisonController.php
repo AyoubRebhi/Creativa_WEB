@@ -12,28 +12,11 @@ use App\Form\LivraisonType;
 use App\Repository\LivraisonRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Twilio\Rest\Client as TwilioClient;
-use Twilio\Rest\Api\V2010\Account\MessageInstance;
-use Twilio\Rest\Client;
+
 
 class LivraisonController extends AbstractController
 {
-    private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAuthToken, $twilioPhoneNumber)
-    {
-        $sid = $twilioAccountSid;
-        $token = $twilioAuthToken;
-        $twilioPhoneNumber = $twilioPhoneNumber;
-    
-        $cleanedPhoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-        $cleanedPhoneNumber = '+216' . $cleanedPhoneNumber;
-    
-        $twilio = new Client($sid, $token);
-        $twilio->messages->create(
-            $cleanedPhoneNumber,
-            ['from' => $twilioPhoneNumber, 'body' => $message]
-        );
-    }
-    
+
     
 
 /**
@@ -71,16 +54,7 @@ class LivraisonController extends AbstractController
     
             
 
-            $twilioAccountSid = $_ENV['twilio_account_sid'];
-            $twilioAuthToken = $_ENV['twilio_auth_token'];
-            $twilioPhoneNumber = $_ENV['twilio_phone_number'];
-            $myPhoneNumber = "44812849";
             
-            
-            // Envoyer un SMS à votre numéro personnel
-            $this->envoyerSms($myPhoneNumber,"Nous sommes heureux de vous informer que votre commande est actuellement en cours de traitement. Notre équipe s'affaire à préparer vos articles avec le plus grand soin afin de vous garantir une satisfaction totale.",$twilioAccountSid,$twilioAuthToken,$twilioPhoneNumber);
-    
-
             return $this->redirectToRoute('afficher_livraison');
         }
     
@@ -135,6 +109,7 @@ class LivraisonController extends AbstractController
      * @Route("/afficherLivraison", name="afficher_livraison")
      */
     function affiche(Request $request, LivraisonRepository $repo){
+        
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Number of items per page
     $offset = ($currentPage - 1) * $limit;
@@ -384,13 +359,17 @@ class LivraisonController extends AbstractController
 }
 
 /**
-     * @Route("/afficher-carte", name="afficher_carte_livraison")
-     */
-    public function afficherCarte(): Response
-    {
-        // Redirection vers la route d'affichage des livraisons
-        return $this->render('livraison/map.html.twig');
+ * @Route("/afficher-carte/{id}", name="afficher_carte_livraison", methods={"GET"}, defaults={"id"=null})
+ */
+public function afficherCarte(Request $request, $id): Response
+{
+    // Utiliser directement l'ID passé en paramètre de la route
+    $idCmd = $id;
 
-    }
+    // Rendre la vue avec la carte et l'ID de la commande
+    return $this->render('livraison/map.html.twig', [
+        'idCmd' => $idCmd,
+    ]);
+}
    
 }

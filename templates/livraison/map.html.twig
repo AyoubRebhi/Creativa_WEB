@@ -26,13 +26,18 @@
     <div id="map"></div>
   </div>
 
-<script>
-    // Fonction pour rediriger vers la page d'ajout de livraison avec le lieu sélectionné et remplir le champ d'adresse
-    function redirectToAjouterLivraison(lieu) {
-      // Rediriger vers la page d'ajout de livraison avec le lieu sélectionné
-      window.location.href = '/ajouterLivraison?lieu=' + encodeURIComponent(lieu);
+
+    <script>
+    // Récupérer l'ID de la commande depuis la session
+    var commandeId = {{ app.session.get('idCmd')|default(0) }};
+
+    // Fonction pour rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+    function redirectToPasserLivraison(lieu, id) {
+        // Rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+        window.location.href = '/passerLivraison/' + id + '?lieu=' + encodeURIComponent(lieu);
     }
 </script>
+
 
 
  <script>
@@ -74,19 +79,19 @@
 
 
       // Boucler à travers chaque emplacement et ajouter un marqueur à la carte
-      for (var city in cities) {
-        var marker = new google.maps.Marker({
-          position: cities[city],
-          map: map,
-          title: city // Nom de la ville comme titre du marqueur
-        });
+        for (var city in cities) {
+            var marker = new google.maps.Marker({
+                position: cities[city],
+                map: map,
+                title: city // Nom de la ville comme titre du marqueur
+            });
 
-        // Ajouter un écouteur d'événements de clic au marqueur
-        marker.addListener('click', function() {
-          // Appeler la fonction pour rediriger vers la page d'ajout de livraison avec le lieu sélectionné
-          redirectToAjouterLivraison(this.getTitle());
-        });
-      }
+           // Ajouter un écouteur d'événements de clic au marqueur
+marker.addListener('click', function () {
+    // Appeler la fonction pour rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+    redirectToPasserLivraison(this.getTitle() , commandeId);
+});
+        }
     }
 </script>
   <!-- Inclure le script JavaScript de l'API Google Maps avec votre clé API -->

@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Security;
 use Twilio\Rest\Client as TwilioClient;
 use Twilio\Rest\Api\V2010\Account\MessageInstance;
 use Twilio\Rest\Client;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CommandeController extends AbstractController
 {
@@ -417,8 +418,8 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
     ');
 }
 
-
-/*private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAuthToken, $twilioPhoneNumber)
+/*
+private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAuthToken, $twilioPhoneNumber)
 {
     $sid = $twilioAccountSid;
     $token = $twilioAuthToken;
@@ -432,23 +433,30 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
         $cleanedPhoneNumber,
         ['from' => $twilioPhoneNumber, 'body' => $message]
     );
-}*/
-
+}
+*/
 
 
 
 /**
      * @Route("/passerLivraison/{id}", name="passer_livraison")
      */
-    public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id): Response
+    public function passerLivraison(Request $request, CommandeRepository $commandeRepository, $id, SessionInterface $session): Response
 {
+
+    $id = intval($id);
+
     // Récupérer la commande
     $commande = $commandeRepository->find($id);
+    // Stocker l'ID de la commande dans la session
+    $session->set('idCmd', $id);
+
 
     // Créer le formulaire de livraison en utilisant LivraisonType
     $livraison = new Livraison();
     $livraison->setStatus('en cours');
     $livraison->setIdCmd($id); // Pré-remplir l'ID de la commande dans le formulaire
+    $livraison->setCommande($commande);
     $form = $this->createForm(LivraisonType::class, $livraison);
 
     // Ajouter un bouton de soumission au formulaire
@@ -466,18 +474,19 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
         $entityManager->persist($livraison);
         $entityManager->flush();
 
-            /*$twilioAccountSid = $_ENV['twilio_account_sid'];
+
+           /* $twilioAccountSid = $_ENV['twilio_account_sid'];
             $twilioAuthToken = $_ENV['twilio_auth_token'];
             $twilioPhoneNumber = $_ENV['twilio_phone_number'];
-            $myPhoneNumber = "53125536";
+            $myPhoneNumber = "44812849";
             
             
             // Envoyer un SMS à votre numéro personnel
             $this->envoyerSms($myPhoneNumber,"Nous sommes heureux de vous informer que votre commande est actuellement en cours de traitement. Notre équipe s'affaire à préparer vos articles avec le plus grand soin afin de vous garantir une satisfaction totale.",$twilioAccountSid,$twilioAuthToken,$twilioPhoneNumber);
-    
-       */
+    */
+       
 
-        return $this->redirectToRoute('afficher_livraison');
+       return $this->redirectToRoute('afficher_livraison');
     }
 
     // Afficher la vue du formulaire de livraison
@@ -486,4 +495,6 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
         'commande' => $commande,
     ]);
 }
+
+
 }

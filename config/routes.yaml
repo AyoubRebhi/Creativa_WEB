@@ -4,3 +4,8 @@
 
 # config/routes.yaml
 
+passer_livraison:
+    path: /passerLivraison/{id}
+    controller: App\Controller\CommandeController::passerLivraison
+    methods: ['GET', 'POST']
+
