@@ -4,24 +4,64 @@
 	Projet
 {% endblock %}
 
-{% block body %}
-	<div class="row">
-		{% for projet in projets %}
-			<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-				<div class="property-item rounded overflow-hidden">
-					<div class="position-relative overflow-hidden">
-						<a href=""><img class="img-fluid" src="{{ asset('path_to_your_project_image/' ~ projet.media) }}" alt=""></a>
-						<div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">{{ projet.categorie }}</div>
-					</div>
-					<div class="p-4 pb-0">
-						<h5 class="text-primary mb-3">{{ projet.prix }}</h5>
-						<a class="d-block h5 mb-2" href="">{{ projet.titre }}</a>
-					</div>
-					<div class="d-flex border-top">
-						<small class="flex-fill text-center border-end py-2">
-							<i class="fa fa-ruler-combined text-primary me-2"></i>
+{% block stylesheetProject %}
+	<style>
+		.project-card {
+			position: relative;
+			height: auto;
+			margin-bottom: 20px; /* Add margin between each row */
+		}
+		.project-card .img-container {
+			height: 200px; /* Set a fixed height for the image container */
+			overflow: hidden;
+		}
+		.project-card img {
+			width: 100%;
+			height: auto;
+			object-fit: cover; /* This ensures the image covers the entire container */
+		}
+		.project-card .service-item {
+			border: 5px solid #dee2e6;
+			border-top: 0;
+			text-align: center;
+		}
+		.project-card .service-item .p-4 {
+			padding: 20px;
+		}
+		.project-card .service-item h4 {
+			display: -webkit-box;
+			-webkit-line-clamp: 2; /* Limit to 2 lines */
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis; /* Show ellipsis for overflow */
+			margin-bottom: 0; /* Remove default margin bottom */
+		}
+		.project-card .service-item p {
+			display: -webkit-box;
+			-webkit-line-clamp: 2; /* Limit to 2 lines */
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis; /* Show ellipsis for overflow */
+			margin-bottom: 0; /* Remove default margin bottom */
+		}
+	</style>
+{% endblock %}
 
-							10 likes</small>
+{% block body %}
+	<div class="row g-4">
+		{% for projet in projets %}
+			<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+				<div class="property-item rounded overflow-hidden project-card">
+					<div class="service-item">
+						<div class="overflow-hidden img-container">
+							<a href="#"><img class="img-fluid" src="{{ asset('uploads/images/projet/' ~ projet.media) }}" alt=""></a>
+						</div>
+						<div class="p-4 text-center border border-5 border-light border-top-0">
+							<h4 class="mb-3">{{ projet.titre }}</h4>
+							<p>{{ projet.description }}</p>
+							<a class="fw-medium" href="#">Read More<i class="fa fa-arrow-right ms-2"></i>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>

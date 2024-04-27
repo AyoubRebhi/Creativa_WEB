@@ -25,7 +25,17 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
+    #[Route('/client', name: 'app_projet_indexClient', methods: ['GET'])]
+    public function indexClient(EntityManagerInterface $entityManager): Response
+    {
+        $projets = $entityManager
+            ->getRepository(Projet::class)
+            ->findAll();
 
+        return $this->render('projet/indexClient.html.twig', [
+            'projets' => $projets,
+        ]);
+    }
 
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -69,6 +79,13 @@ class ProjetController extends AbstractController
         ]);
     }
 
+    #[Route('/{idProjet}', name: 'app_projet_show_client', methods: ['GET'])]
+    public function showClient(Projet $projet): Response
+    {
+        return $this->render('projet/showClient.html.twig', [
+            'projet' => $projet,
+        ]);
+    }
     #[Route('/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response
     {

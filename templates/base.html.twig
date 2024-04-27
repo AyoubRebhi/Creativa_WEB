@@ -37,6 +37,7 @@
 			<!-- Template Stylesheet -->
 			<link href="{{asset('/css/style.css')}}" rel="stylesheet">
 		{% endblock %}
+		{% block stylesheetProject  %}{% endblock %}
 
 		{% block javascripts %}
 			<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -50,39 +51,40 @@
 			<script src="{{asset('/js/main.js')}}"></script>
 		{% endblock %}
 	</head>
-	<div
-		class="container-xxl bg-white p-0">
-		<!-- Spinner Start -->
-		<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-			<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-				<span class="sr-only">Loading...</span>
-			</div>
-		</div>
-		<!-- Spinner End -->
-
-
-		<!-- Navbar Start -->
-		<div class="container-fluid nav-bar bg-transparent">
-			<nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-				<a href="#" class="navbar-brand d-flex align-items-center text-center">
-
-					<h1 class="m-0 text-primary">Creativa</h1>
-				</a>
-				<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-
-					<div class="navbar-nav ms-auto">
-						<a href="index.html" class="nav-item nav-link active">Home</a>
-						<a href="about.html" class="nav-item nav-link">Sign In</a>
-					</div>
-					<a href="" class="btn btn-primary px-3 d-none d-lg-flex">Sign Up</a>
+	<body>
+		<div
+			class="container-xxl bg-white p-0">
+			<!-- Spinner Start -->
+			<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+				<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+					<span class="sr-only">Loading...</span>
 				</div>
-			</nav>
-		</div>
-		<!-- Navbar End -->
-		<body>
+			</div>
+			<!-- Spinner End -->
+
+
+			<!-- Navbar Start -->
+			<div class="container-fluid nav-bar bg-transparent">
+				<nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+					<a href="#" class="navbar-brand d-flex align-items-center text-center">
+
+						<h1 class="m-0 text-primary">Creativa</h1>
+					</a>
+					<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarCollapse">
+
+						<div class="navbar-nav ms-auto">
+							<a href="index.html" class="nav-item nav-link active">Home</a>
+							<a href="about.html" class="nav-item nav-link">Sign In</a>
+						</div>
+						<a href="" class="btn btn-primary px-3 d-none d-lg-flex">Sign Up</a>
+					</div>
+				</nav>
+			</div>
+			<!-- Navbar End -->
+
 			{% block body %}{% endblock %}
 			<div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
 				<div class="container py-5">
@@ -181,6 +183,7 @@
 			<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
 				<i class="bi bi-arrow-up"></i>
 			</a>
-		</body>
-	</div>
-</html></body></html>
+
+		</div>
+	</body>
+</html>

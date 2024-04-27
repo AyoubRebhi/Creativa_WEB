@@ -1,37 +1,38 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}Jaime index{% endblock %}
+{% block title %}Jaime index
+{% endblock %}
 
 {% block body %}
-    <h1>Jaime index</h1>
+	<h1>Jaime index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdUser</th>
-                <th>IdProjet</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for jaime in jaimes %}
-            <tr>
-                <td>{{ jaime.idUser }}</td>
-                <td>{{ jaime.idProjet }}</td>
-                <td>{{ jaime.date ? jaime.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_jaime_show', {'idUser': jaime.idUser}) }}">show</a>
-                    <a href="{{ path('app_jaime_edit', {'idUser': jaime.idUser}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>IdUser</th>
+				<th>IdProjet</th>
+				<th>Date</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for jaime in jaimes %}
+				<tr>
+					<td>{{ jaime.idUser }}</td>
+					<td>{{ jaime.idProjet }}</td>
+					<td>{{ jaime.date ? jaime.date|date('Y-m-d H:i:s') : '' }}</td>
+					<td>
+						<a href="#">show</a>
+						<a href="#">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('app_jaime_new') }}">Create new</a>
+
 {% endblock %}
