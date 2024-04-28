@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Projet;
+use App\Entity\Jaime;
 use App\Form\Projet1Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 
 #[Route('/projet')]
 class ProjetController extends AbstractController
@@ -79,7 +81,7 @@ class ProjetController extends AbstractController
         ]);
     }
 
-    #[Route('/{idProjet}', name: 'app_projet_show_client', methods: ['GET'])]
+    #[Route('/client/{idProjet}', name: 'app_projet_show_client', methods: ['GET'])]
     public function showClient(Projet $projet): Response
     {
         return $this->render('projet/showClient.html.twig', [

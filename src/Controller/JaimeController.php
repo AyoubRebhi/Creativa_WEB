@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Controller;
+namespace App\Twig;
 
-use App\Entity\Jaime;
-use App\Form\JaimeType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\JaimeRepository;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-#[Route('/jaime')]
-class JaimeController extends AbstractController
+class JaimeExtension extends AbstractExtension
 {
-    #[Route('/', name: 'app_jaime_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $jaimes = $entityManager
-            ->getRepository(Jaime::class)
-            ->findAll();
+    private $jaimeRepository;
 
-        return $this->render('jaime/index.html.twig', [
-            'jaimes' => $jaimes,
-        ]);
+    public function __construct(JaimeRepository $jaimeRepository)
+    {
+        $this->jaimeRepository = $jaimeRepository;
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('getJaimeCountForProject', [$this, 'getJaimeCountForProject']),
+        ];
+    }
+
+    public function getJaimeCountForProject($projectId)
+    {
+        return $this->jaimeRepository->count(['idProjet' => $projectId]);
     }
 }

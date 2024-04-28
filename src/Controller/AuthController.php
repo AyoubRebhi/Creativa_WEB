@@ -44,7 +44,7 @@ class AuthController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function login(Request $request, SessionInterface $session, EntityManagerInterface $entityManager): Response
+    /*public function login(Request $request, SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AuthFormType::class);
         $form->handleRequest($request);
@@ -103,7 +103,7 @@ class AuthController extends AbstractController
         return $this->render('auth/login.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
+    }*/
 
 
 
