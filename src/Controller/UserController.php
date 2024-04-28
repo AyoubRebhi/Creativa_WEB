@@ -22,6 +22,14 @@ use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Maile;
+use Symfony\Component\Mailer\Transport; 
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -219,7 +227,7 @@ class UserController extends AbstractController
             switch ($role) {
                 case 'CLIENT':
                     return $this->redirectToRoute('userpage');
-                case 'ARTISTE':
+                case 'ARTIST':
                     return $this->redirectToRoute('Artistpage');
                 case 'ADMIN':
                     return $this->redirectToRoute('Adminpage');
@@ -248,7 +256,7 @@ class UserController extends AbstractController
 /**
      * @Route("/saisir-duree/{id}", name="saisir_duree")
      */
-    public function saisirDuree(Request $request, $id): Response
+    public function saisirDuree(MailerInterface $mailer,Request $request, $id): Response
     {
         // Récupérer l'utilisateur en fonction de l'ID
         $entityManager = $this->getDoctrine()->getManager();
@@ -290,6 +298,19 @@ class UserController extends AbstractController
             $utilisateur->setBlockEndDate($dateFinBlocage);
 
             $entityManager->flush();
+            $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+            $mailer = new Mailer($transport);
+            $email = (new TemplatedEmail())
+            ->from('hhajer09@gmail.com')
+            ->to("$utilisateur->getEmail()")
+            ->subject('votre compte est Bloqué')
+            ->html('
+        <h1 style="color: red;">Compte Bloqué</h1>
+        <p>Votre compte a été bloqué pour une durée de ' . $duree . ' minutes.</p>
+    ');
+
+        
+        $mailer->send($email);
 
             // Rediriger vers une autre page ou afficher un message de confirmation
             return $this->redirectToRoute('app_user_index');
@@ -323,6 +344,27 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index');
     }
 
+
+    // /**
+    //  * @Route("/roles", name="statistiques_roles")
+    //  */
+    // public function roles(UserRepository $userRepository): Response
+    // {
+    //     $rolesData = $userRepository->countUsersByRole();
+
+    //     $roleLabels = [];
+    //     $roleData = [];
+
+    //     foreach ($rolesData as $role => $count) {
+    //         $roleLabels[] = $role;
+    //         $roleData[] = $count;
+    //     }
+
+    //     return $this->render('user/roles.html.twig', [
+    //         'roleLabels' => $roleLabels,
+    //         'roleData' => $roleData,
+    //     ]);
+    // }
 
 
 }

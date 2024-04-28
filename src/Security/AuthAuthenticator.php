@@ -16,6 +16,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class AuthAuthenticator extends AbstractLoginFormAuthenticator
 {    private AuthorizationCheckerInterface $authorizationChecker;
@@ -26,8 +28,10 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator,SessionInterface $session,AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(private UrlGeneratorInterface $urlGenerator,SessionInterface $session,AuthorizationCheckerInterface $authorizationChecker,TokenStorageInterface $tokenStorage // Injection de dépendance du TokenStorageInterface
+    ) {
+        $this->tokenStorage = $tokenStorage; // Assigner le tokenStorage)
+    
         $this->session = $session;
         $this->authorizationChecker = $authorizationChecker;
 
@@ -49,7 +53,27 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
+    { $user = $token->getUser();
+
+        // Vérifier si l'utilisateur est bloqué
+        if ($user->isBlocked()) {
+
+            if ($user->getBlockEndDate() < new \DateTime()) {
+                // Débloquer l'utilisateur et continuer l'authentification
+                $user->setBlocked(false);
+                $user->setBlockEndDate(null);
+
+            } else{
+            // Si l'utilisateur est bloqué, déconnectez-le et redirigez-le vers une page d'erreur ou de connexion
+            $this->session->invalidate();
+            $this->logoutUser($request);
+            $DUREE=$user->getBlockEndDate();
+
+            // Redirection vers une page d'erreur ou de connexion avec un message approprié
+            return new RedirectResponse($this->urlGenerator->generate('app_login', ['blocked' => true,'duree'=>$DUREE]));
+        }
+    }
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
@@ -92,4 +116,14 @@ if ( $user->getRole()=='ARTIST') {
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+
+    private function logoutUser(Request $request)
+{
+    $request->getSession()->invalidate();
+    $this->session->clear();
+    $this->session->invalidate();
+    $this->tokenStorage->setToken(null);
+}
+
 }

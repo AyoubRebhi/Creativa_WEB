@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
+use App\Repository\UserRepository;
 
 
 class AuthController extends AbstractController
@@ -50,6 +51,7 @@ class AuthController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted()) {
+            
             $user = $form->getData(); // Récupérer l'objet User du formulaire
             $email = $user->getEmail(); // Accéder à l'email de l'utilisateur
             $password = $user->getPassword();
@@ -167,7 +169,7 @@ class AuthController extends AbstractController
                  $entityManager->flush();
  
                  // Redirection vers une page de confirmation ou une autre page après l'enregistrement
-                 return $this->redirectToRoute('registration_success');
+                 return $this->redirectToRoute('app_login');
              }
          }
  
@@ -184,7 +186,7 @@ class AuthController extends AbstractController
      */
     public function registrationSuccess(): Response
     {
-        return $this->forward('App\Controller\AuthController::login');
+        return $this->forward('App\Controller\SecurityController::login');
     }
 
 
@@ -227,13 +229,6 @@ class AuthController extends AbstractController
         return $this->render('backOffice.html.twig');    }
 
 
-/**
-     * @Route("/app_login", name="app_login")
-     */
-    public function loginpage(): response
-    {
-        return $this->forward('App\Controller\AuthController::login');
-    }
 
 
     /**
@@ -245,6 +240,30 @@ class AuthController extends AbstractController
     }
 
     
+    /**
+    * @Route("/roles", name="statistiques_roles")
+    */
+   public function roles(UserRepository $userRepository): Response
+   {
+       // Récupérer les données de statistiques sur les utilisateurs par rôle
+       $stats = $userRepository->countUsersByRole();
 
-}
+       // Préparer les données pour l'affichage dans la vue
+       $roleLabels = [];
+       $userCounts = [];
+
+       foreach ($stats as $stat) {
+           $roleLabels[] = $stat['role'];
+           $userCounts[] = $stat['userCount'];
+       }
+
+       // Rendre la vue avec les données de statistiques
+       return $this->render('user/roles.html.twig', [
+           'roleLabels' => $roleLabels,
+           'userCounts' => $userCounts,
+       ]);
+
+
+
+}}
 

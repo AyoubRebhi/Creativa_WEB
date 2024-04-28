@@ -28,6 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $idUser;
 
+
+    
     /**
      * @var string|null
      *
