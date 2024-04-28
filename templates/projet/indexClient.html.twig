@@ -59,7 +59,7 @@
 						<div class="p-4 text-center border border-5 border-light border-top-0">
 							<h4 class="mb-3">{{ projet.titre }}</h4>
 							<p>{{ projet.description }}</p>
-							<a class="fw-medium" href="href=" {{ path('app_projet_show_client', {'idProjet': projet.idProjet} ) }}"">Read More<i class="fa fa-arrow-right ms-2"></i>
+							<a class="fw-medium" href="{{ path('app_projet_show_client', {'idProjet': projet.idProjet}) }}">Read More<i class="fa fa-arrow-right ms-2"></i>
 							</a>
 						</div>
 					</div>
