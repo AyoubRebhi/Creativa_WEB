@@ -71,7 +71,13 @@
 					</div>
 					<div class="text-center">
 						<a href="" class="btn btn-primary py-3 px-5">
-							<i class="bi bi-cart-plus-fill me-2"></i>Commander</a>
+							<i class="bi bi-cart-plus-fill me-2"></i>Commander
+						</a>
+						<form action="{{ path('app_jaime_add', {'idProjet': projet.idProjet}) }}" method="post">
+							<button type="submit" class="btn btn-primary py-3 px-5">
+								<i class="bi bi-heart me-2"></i>Jaime
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>

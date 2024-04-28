@@ -1,29 +1,31 @@
 <?php
 
-namespace App\Twig;
+namespace App\Controller;
 
-use App\Repository\JaimeRepository;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use App\Entity\Jaime;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class JaimeExtension extends AbstractExtension
+class JaimeController extends AbstractController
 {
-    private $jaimeRepository;
-
-    public function __construct(JaimeRepository $jaimeRepository)
+    #[Route('/jaime/add/{idProjet}', name: 'app_jaime_add', methods: ['POST'])]
+    public function addJaime(int $idProjet, EntityManagerInterface $entityManager): Response
     {
-        $this->jaimeRepository = $jaimeRepository;
-    }
+        // Set the userId to 28
+        $userId = 28;
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('getJaimeCountForProject', [$this, 'getJaimeCountForProject']),
-        ];
-    }
+        // Create a new Jaime object
+        $jaime = new Jaime();
+        $jaime->setIdUser($userId);
+        $jaime->setIdProjet($idProjet);
 
-    public function getJaimeCountForProject($projectId)
-    {
-        return $this->jaimeRepository->count(['idProjet' => $projectId]);
+        // Persist and flush the Jaime object to the database
+        $entityManager->persist($jaime);
+        $entityManager->flush();
+
+        // Redirect back to the project page
+        return $this->redirectToRoute('app_projet_show_client', ['idProjet' => $idProjet]);
     }
 }
