@@ -55,7 +55,7 @@ class CommandeType extends AbstractType
                 'label' => 'Valider',
                 'attr' => [
                     'class' => 'btn btn-primary',
-                    'style' => 'font-size: 20px; background-color: #E9967A; color: #ffffff; padding: 15px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;' // Ajoutez des styles CSS directement au bouton
+                    'style' => 'font-size: 20px; background-color: #E9BB79; color: #ffffff; padding: 15px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;' // Ajoutez des styles CSS directement au bouton
                 ]
             ]);
     }

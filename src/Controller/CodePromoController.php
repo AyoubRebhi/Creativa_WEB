@@ -41,12 +41,8 @@ class CodePromoController extends AbstractController
             $entityManager->persist($codepromo);
             $entityManager->flush();
 
-            // Déclencher un événement pour indiquer l'ajout d'un nouveau code promo
-            $this->triggerNewPromoEvent();
-
             $this->addFlash('success', 'Votre code promo a été ajouté avec succès.');
 
-            $this->addFlash('successMessage', 'Votre code promo a été ajouté avec succès.');
             return $this->redirectToRoute('afficher_codepromo');
 
         }
@@ -73,7 +69,7 @@ class CodePromoController extends AbstractController
     if($form->isSubmitted() && $form->isValid()){
         $em=$managerRegistry->getManager();
         $em->flush();
-        return $this->redirectToRoute("afficher_code$codepromo");
+        return $this->redirectToRoute("afficher_codepromo");
     }
 
     // Ajoutez un bouton de soumission au formulaire

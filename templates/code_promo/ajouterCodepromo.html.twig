@@ -88,8 +88,17 @@
             
         }
         .form-title{
-            color: red;
+          color: #473516; /* Couleur du texte */
+    font-size: 2em; /* Taille de la police */
+    font-weight: bold; /* Gras */
+    font-family: Arial, sans-serif; /* Police de caractères */
+    margin-top: 20px; /* Marge en haut */
+    margin-bottom: 20px; /* Marge en bas */
+    text-align: center; /* Alignement du texte */
+    text-transform: uppercase; /* Transformation du texte en majuscules */
+    text-shadow: 2px 2px 4px #888888;
         }
+        
     </style>
 {% endblock %}
 
@@ -104,5 +113,12 @@
         <br>
         {{ form(formulaireCodepromo) }}
     </div>
+    
+   {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
 {% endblock %}
+
 

@@ -166,7 +166,7 @@ class LivraisonController extends AbstractController
     // Ajoutez un bouton de soumission au formulaire
     $form->add('submit', SubmitType::class, [
         'label' => 'Modifier',
-        'attr' => ['class' => 'btn btn-primary']
+        'attr' => ['class' => 'bouton-submit']
     ]);
 
     return $this->render("livraison/updateLivraison.html.twig",["formulaireLivraison"=>$form->createView()]);

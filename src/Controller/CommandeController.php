@@ -33,11 +33,6 @@ class CommandeController extends AbstractController
 public function ajouterCommande(Request $request, CodePromoRepository $codePromoRepository): Response
 {
     $commande = new Commande();
-    $user = $this->getUser();
-
-    if ($user) {
-        $commande->setUser($user);
-    }
 
     $commande->setDate(new \DateTime());
     // Pré-remplit le champ de date estimée avec la date actuelle + 5 jours
@@ -233,7 +228,7 @@ public function ajouterCommande(Request $request, CodePromoRepository $codePromo
     // Ajoutez un bouton de soumission au formulaire
     $form->add('submit', SubmitType::class, [
         'label' => 'Modifier',
-        'attr' => ['class' => 'btn btn-primary']
+        'attr' => ['class' => 'bouton-submit']
     ]);
 
     return $this->render("commande/updateCommande.html.twig",["formulaireCommande"=>$form->createView()]);
@@ -462,7 +457,7 @@ private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAu
     // Ajouter un bouton de soumission au formulaire
     $form->add('submit', SubmitType::class, [
         'label' => 'submit',
-        'attr' => ['class' => 'btn btn-primary'],
+        'attr' => ['class' => 'bouton-submit'],
     ]);
 
     // Traiter la soumission du formulaire
@@ -481,7 +476,7 @@ private function envoyerSms($phoneNumber, $message, $twilioAccountSid, $twilioAu
             $myPhoneNumber = "44812849";
             
             
-            // Envoyer un SMS à votre numéro personnel
+            // Envoyer un SMS à mon numéro
             $this->envoyerSms($myPhoneNumber,"Nous sommes heureux de vous informer que votre commande est actuellement en cours de traitement. Notre équipe s'affaire à préparer vos articles avec le plus grand soin afin de vous garantir une satisfaction totale.",$twilioAccountSid,$twilioAuthToken,$twilioPhoneNumber);
     */
        
