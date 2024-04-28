@@ -135,24 +135,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Projet", inversedBy="idUser")
-     * @ORM\JoinTable(name="jaime",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="id_projet", referencedColumnName="id_projet")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="Projet", mappedBy="user")
      */
-    private $idProjet = array();
+    private $projets;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->idProjet = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->projets = new ArrayCollection();
     }
 
     public function getIdUser(): ?int
@@ -325,26 +317,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
      * @return Collection<int, Projet>
      */
-    public function getIdProjet(): Collection
+    public function getProjets(): Collection
     {
-        return $this->idProjet;
+        return $this->projets;
     }
 
-    public function addIdProjet(Projet $idProjet): static
+    public function addProjet(Projet $projet): static
     {
-        if (!$this->idProjet->contains($idProjet)) {
-            $this->idProjet->add($idProjet);
+        if (!$this->projets->contains($projet)) {
+            $this->projets->add($projet);
+            $projet->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeIdProjet(Projet $idProjet): static
+    public function removeProjet(Projet $projet): static
     {
-        $this->idProjet->removeElement($idProjet);
+        if ($this->projets->removeElement($projet)) {
+            // set the owning side to null (unless already changed)
+            if ($projet->getUser() === $this) {
+                $projet->setUser(null);
+            }
+        }
 
         return $this;
     }

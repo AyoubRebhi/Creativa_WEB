@@ -88,27 +88,10 @@ class Projet
     /**
      * @var User|null
      *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
-     * })
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="projets")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
      */
-    #private $idUser2;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="idProjet")
-     */
-    #private $idUser = array();
-
-    /**
-     * Constructor
-     */
-    /*public function __construct()
-    {
-        $this->idUser = new \Doctrine\Common\Collections\ArrayCollection();
-    }*/
+    private $user;
 
     public function getIdProjet(): ?int
     {
@@ -230,42 +213,15 @@ class Projet
         return $this;
     }
 
-    /*public function getIdUser2(): ?User
+    public function getUser(): ?User
     {
-        return $this->idUser2;
+        return $this->user;
     }
 
-    public function setIdUser2(?User $idUser2): static
+    public function setUser(?User $user): static
     {
-        $this->idUser2 = $idUser2;
-
-        return $this;
-    }*/
-
-    /**
-     * @return Collection<int, User>
-     */
-    /*public function getIdUser(): Collection
-    {
-        return $this->idUser;
-    }
-
-    public function addIdUser(User $idUser): static
-    {
-        if (!$this->idUser->contains($idUser)) {
-            $this->idUser->add($idUser);
-            $idUser->addIdProjet($this);
-        }
+        $this->user = $user;
 
         return $this;
     }
-
-    public function removeIdUser(User $idUser): static
-    {
-        if ($this->idUser->removeElement($idUser)) {
-            $idUser->removeIdProjet($this);
-        }
-
-        return $this;
-    }*/
 }

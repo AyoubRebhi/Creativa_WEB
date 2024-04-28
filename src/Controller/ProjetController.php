@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Projet;
-use App\Entity\Jaime;
+use App\Entity\User;
 use App\Form\Projet1Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,9 +40,18 @@ class ProjetController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{idUser}', name: 'app_projet_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, int $idUser): Response
     {
+        // Fetch the User entity based on the provided idUser
+        $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
+
+        // Check if the user exists
+        if (!$user) {
+            // Handle the case when the user does not exist
+            throw $this->createNotFoundException('User not found');
+        }
+
         $projet = new Projet();
         $form = $this->createForm(Projet1Type::class, $projet);
         $form->handleRequest($request);
@@ -61,6 +70,9 @@ class ProjetController extends AbstractController
 
                 $projet->setMedia($fileName);
             }
+
+            // Set the fetched user as the owner of the projet
+            $projet->setUser($user);
 
             $entityManager->persist($projet);
             $entityManager->flush();
@@ -85,8 +97,10 @@ class ProjetController extends AbstractController
     #[Route('/client/{idProjet}', name: 'app_projet_show_client', methods: ['GET'])]
     public function showClient(Projet $projet): Response
     {
+        $user = $projet->getUser();
         return $this->render('projet/showClient.html.twig', [
             'projet' => $projet,
+            'user' => $user,
         ]);
     }
     #[Route('/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]

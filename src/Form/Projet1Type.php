@@ -9,8 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Categorie;
+use App\Entity\User;
 use Symfony\Component\Validator\Constraints\Image;
-
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
@@ -26,11 +27,15 @@ class Projet1Type extends AbstractType
                 ],
             ])
 
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'constraints' => [
                     new Length([
                         'max' => 500, // Description can have a maximum of 255 characters
                     ]),
+                ],
+                'attr' => [
+                    'class' => 'form-control', // Add Bootstrap class for styling
+                    'rows' => 5, // Number of rows in the textarea
                 ],
             ])
             ->add('media', FileType::class, [
