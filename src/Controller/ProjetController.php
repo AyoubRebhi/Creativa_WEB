@@ -12,11 +12,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Core\Security;
 
 
 #[Route('/projet')]
 class ProjetController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/admin', name: 'app_projet_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -28,6 +36,18 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
+    #[Route('/artist/{idUser}', name: 'app_projet_indexArtist', methods: ['GET'])]
+    public function indexArtist(EntityManagerInterface $entityManager, int $idUser): Response
+    {
+        $projets = $entityManager
+            ->getRepository(Projet::class)
+            ->findBy(['user' => $idUser]);
+
+        return $this->render('projet/indexArtist.html.twig', [
+            'projets' => $projets,
+        ]);
+    }
+
     #[Route('/client', name: 'app_projet_indexClient', methods: ['GET'])]
     public function indexClient(EntityManagerInterface $entityManager): Response
     {
@@ -70,9 +90,11 @@ class ProjetController extends AbstractController
 
                 $projet->setMedia($fileName);
             }
-
             // Set the fetched user as the owner of the projet
             $projet->setUser($user);
+
+            // Call lifecycle callbacks to set createdAt and updatedAt
+            $projet->setTimestampsOnCreate();
 
             $entityManager->persist($projet);
             $entityManager->flush();
@@ -86,10 +108,18 @@ class ProjetController extends AbstractController
         ]);
     }
 
-    #[Route('/{idProjet}', name: 'app_projet_show', methods: ['GET'])]
+
+    #[Route('/admin/show/{idProjet}', name: 'app_projet_show', methods: ['GET'])]
     public function show(Projet $projet): Response
     {
         return $this->render('projet/show.html.twig', [
+            'projet' => $projet,
+        ]);
+    }
+    #[Route('/artist/show/{idProjet}', name: 'app_projet_showArtist', methods: ['GET'])]
+    public function showArtist(Projet $projet): Response
+    {
+        return $this->render('projet/showArtist.html.twig', [
             'projet' => $projet,
         ]);
     }
@@ -103,7 +133,7 @@ class ProjetController extends AbstractController
             'user' => $user,
         ]);
     }
-    #[Route('/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]
+    #[Route('/artist/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(Projet1Type::class, $projet);
@@ -144,6 +174,21 @@ class ProjetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_projet_indexArtist', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/{idProjet}/toggle-status', name: 'app_projet_toggle_status', methods: ['POST'])]
+    public function toggleStatus(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response
+    {
+        // Check if the CSRF token is valid
+        if ($this->isCsrfTokenValid('toggle_status' . $projet->getIdProjet(), $request->request->get('_token'))) {
+            // Toggle the visibility status
+            $projet->changeStatus();
+
+            // Persist the changes to the database
+            $entityManager->flush();
+        }
+
+        // Redirect back to the projet index page
+        return $this->redirectToRoute('app_projet_index');
     }
 }

@@ -6,7 +6,8 @@
 {% block body %}
 	<div class="card">
 		<div class="card-header">
-			<h3>Mes projets</h3>
+			<h3>Liste des projets</h3>
+
 		</div>
 		<div class="card-block table-border-style">
 			<div class="table-responsive">
@@ -36,7 +37,8 @@
 								<td>{{ projet.createdAt ? projet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 								<td>{{ projet.updatedAt ? projet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 								<td>
-									<a href="{{ path('app_projet_show', {'idProjet': projet.idProjet}) }}" class="btn btn-info">Afficher</a>
+									<a href="{{ path('app_projet_showArtist', {'idProjet': projet.idProjet}) }}" class="btn btn-info">Afficher</a>
+									<a href="{{ path('app_projet_edit', {'idProjet': projet.idProjet}) }}" class="btn btn-primary">Modifier</a>
 								</td>
 							</tr>
 						{% else %}
@@ -49,6 +51,7 @@
 			</div>
 		</div>
 	</div>
+	<a href="{{ path('app_projet_new' , {'idUser': 66 })}}" class="btn btn-primary mt-3 ajouter-categorie">Ajouter Projet</a>
 	<style>
 		.ajouter-categorie {
 			background-color: #11C613;

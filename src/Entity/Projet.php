@@ -157,6 +157,11 @@ class Projet
 
         return $this;
     }
+    public function changeStatus(): void
+    {
+        // Toggle the visibility status
+        $this->isvisible = !$this->isvisible;
+    }
 
     /**
      * @ORM\PrePersist
