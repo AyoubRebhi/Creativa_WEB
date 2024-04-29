@@ -1,0 +1,31 @@
+{# templates/pdf/inscriptions.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Inscriptions PDF</title>
+</head>
+<body>
+    <h1>Inscriptions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for inscription in inscriptions %}
+                <tr>
+                    <td>{{ inscription.nom }} {{ inscription.prenom }}</td>
+                    <td>{{ inscription.email }}</td>
+                    <td>{{ inscription.dateNow|date('Y-m-d H:i:s') }}</td>
+                    <!-- Add more columns as needed -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

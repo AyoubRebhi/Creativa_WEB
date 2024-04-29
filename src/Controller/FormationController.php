@@ -13,10 +13,36 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\InscriptionRepository;
 use App\Entity\Inscription;
+use Knp\Snappy\Pdf;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/admin/formation')]
 class FormationController extends AbstractController
 {
+
+    #[Route('/generate-pdf/{id}', name: 'generate_pdf')]
+    public function generatePdf(Formation $formation, Pdf $pdf): Response
+    {
+    // Fetch inscriptions for the given formation
+    $inscriptions = $formation->getInscriptions();
+
+    // Render the PDF content using a Twig template
+    $html = $this->renderView('pdf/inscriptions.html.twig', [
+        'formation' => $formation,
+        'inscriptions' => $inscriptions,
+    ]);
+
+    // Generate PDF
+    $pdfFile = $pdf->getOutputFromHtml($html);
+
+    // Set response headers
+    $response = new Response($pdfFile);
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="inscriptions.pdf"');
+
+    return $response;
+}
+       
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(Request $request, FormationRepository $formationRepository, PaginatorInterface $paginator): Response
     {
@@ -110,4 +136,7 @@ class FormationController extends AbstractController
             'inscriptions' => $inscriptions,
         ]);
     }
+
+
+    
 }

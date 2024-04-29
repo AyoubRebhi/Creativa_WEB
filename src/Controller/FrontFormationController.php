@@ -12,7 +12,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Inscription;
-
+use Symfony\Bridge\Twig\Mime\TemplatedEmail ; 
+use Symfony\Component\Mime\Address ; 
+use Symfony\Component\Mailer\MailerInterface;
 class FrontFormationController extends AbstractController
 {
     #[Route('/formation', name: 'app_front_formation')]

@@ -6,6 +6,12 @@
 parameters:
 
 services:
+    Knp\Snappy\Pdf:
+        class: Knp\Snappy\Pdf
+        arguments:
+            $binary: '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf"' # Chemin vers l'exécutable wkhtmltopdf
+            $options: [] # Options supplémentaires, si nécessaire
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

@@ -44,6 +44,23 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Inscription::class)]
     private Collection $inscriptions;
 
+    #[ORM\Column(type : "json", nullable  : true)]
+    private $evaluation;
+
+    // Getter and setter for evaluation attribute
+    public function getEvaluation(): ?array
+    {
+        return $this->evaluation;
+    }
+
+    public function setEvaluation(?array $evaluation): self
+    {
+        $this->evaluation = $evaluation;
+
+        return $this;
+    }
+
+
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();

@@ -37,7 +37,7 @@
                     <a href="{{ path('app_formation_show', {'id': formation.id}) }}">Afficher</a>
                     <a href="{{ path('app_formation_edit', {'id': formation.id}) }}">Modifier</a>
                     <a href="{{ path('app_inscriptions_by_formation', {'id': formation.id}) }}">Liste des inscriptions</a>
-
+                    <a href="{{ path('generate_pdf' , {'id': formation.id}) }}" >Générer PDF</a>
                 </td>
             </tr>
         {% else %}

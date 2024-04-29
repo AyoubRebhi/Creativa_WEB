@@ -2,19 +2,206 @@
 
 {% block title %}Hello AccueilController!{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    .formation-list-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .formation-list {
+      display: flex;
+      flex-direction: row; /* Change flex direction to row */
+      overflow-x: auto; /* Horizontal overflow */
+      overflow-y: hidden; /* Hide vertical overflow */
+      scrollbar-width: none; /* Hide scrollbar for Firefox */
+      -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+      transition: transform 0.3s ease; /* Smooth transition when scrolling */
+    }
+
+    .formation-item {
+      flex: 0 0 auto;
+      width: 300px; /* Set width for each formation item */
+      padding: 20px;
+      margin: 10px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .formation-item:hover {
+      transform: scale(1.05);
+    }
+
+    .title {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .description {
+      font-size: 1rem;
+    }
+
+    .places, .price {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .scroll-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .scroll-button:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .scroll-button-left {
+      left: 10px;
+    }
+
+    .scroll-button-right {
+      right: 10px;
+    }
+
+    /* CSS for star rating component */
+.star-rating {
+  display: inline-block;
+  direction: rtl; /* Set direction from right to left */
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 2em;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+  color: #f8d64e;
+}
+
+.star-rating label:before {
+  content: '\2605';
+}
+
+
+  </style>
+{% endblock %}
+
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
+
+         <div class="container-xxl py-5">
+         
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                        <div class="about-img position-relative overflow-hidden p-5 pe-0">
+                            <img class="img-fluid w-100" src="{{asset('front/img/about.jpg')}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                        <h1 class="mb-4">#1 Place To Find The Perfect Property</h1>
+                        <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>Clita duo justo magna dolore erat amet</p>
+                        <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="row g-0 gx-5 align-items-end">
+                    <div class="col-lg-6">
+                        <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                            <h1 class="mb-3">Liste des formations : </h1>
+                        </div>
+                    </div>
+  <div class="formation-list-container">
+    <button class="scroll-button scroll-button-left" onclick="scrollFormationList(-100)">&lt;</button>
+    <div class="formation-list">
+{% for f in formations_insc %}
+    <div class="formation-item">
+        <h3 class="title">{{ f.titre }}</h3>
+        <p class="description">{{ f.description }}</p>
+        <p class="places">Available Places: {{ f.getNbPlaces }}</p>
+        <p class="price">Price: {{ f.prix }}dt</p>
+        
+        {% set evaluation = f.getEvaluation() %}
+        
+        {% if evaluation is empty or evaluation[email] is not defined %}
+            <!-- Form for star rating component and evaluation -->
+            <form method="POST" action="{{ path('evaluate', {'id': f.id}) }}">
+                <!-- HTML for star rating component -->
+                <div class="star-rating">
+                    <input type="radio" id="star5_{{ f.id }}" name="rating" value="5">
+                    <label for="star5_{{ f.id }}"></label>
+                    <input type="radio" id="star4_{{ f.id }}" name="rating" value="4">
+                    <label for="star4_{{ f.id }}"></label>
+                    <input type="radio" id="star3_{{ f.id }}" name="rating" value="3">
+                    <label for="star3_{{ f.id }}"></label>
+                    <input type="radio" id="star2_{{ f.id }}" name="rating" value="2">
+                    <label for="star2_{{ f.id }}"></label>
+                    <input type="radio" id="star1_{{ f.id }}" name="rating" value="1">
+                    <label for="star1_{{ f.id }}"></label>
+                </div>
+                <button type="submit">Evaluate</button>
+            </form>
+        {% else %}
+            <!-- Calculate and display average rating -->
+            {% set totalRatings = evaluation|length %}
+            {% if totalRatings > 0 %}
+                {% set sumRatings = evaluation|reduce((acc, rating) => acc + rating, 0) %}
+                {% set averageRating = sumRatings / totalRatings %}
+                <span class="average-rating">Average Rating: {{ averageRating|round(1, 'floor') }}/5</span>
+            {% else %}
+                <span class="average-rating">No ratings yet</span>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/MayMatri/src/Controller/AccueilController.php'|file_link(0) }}">src/Controller/AccueilController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/MayMatri/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
-    </ul>
+
+
+{% for f in formations_non_insc %}
+    <div class="formation-item">
+        <h3 class="title">{{ f.titre }}</h3>
+        <p class="description">{{ f.description }}</p>
+        <p class="places">Available Places: {{ f.getNbPlaces }}</p>
+        <p class="price">Price: {{ f.prix }}dt</p>
+        <a href="{{ path('app_front_inscription_create', {'id': f.id}) }}">S'inscrire</a>
+    </div>
+{% endfor %}
+
+      <!-- Add more formation items as needed -->
+    </div>
+    <button class="scroll-button scroll-button-right" onclick="scrollFormationList(100)">&gt;</button>
+  </div>
 </div>
+<script>
+  // Function to scroll the formation list by a specified amount
+  function scrollFormationList(amount) {
+    const formationList = document.querySelector('.formation-list');
+    formationList.scrollBy({
+      left: amount,
+      behavior: 'smooth'
+    });
+  }
+</script>
 {% endblock %}
