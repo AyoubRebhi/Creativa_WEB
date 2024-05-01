@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Twig\JaimeExtension;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
 use Twig\Environment;
 
 class JaimeController extends AbstractController
@@ -24,10 +26,10 @@ class JaimeController extends AbstractController
     }
 
     #[Route('/jaime/add/{idProjet}', name: 'app_jaime_add', methods: ['POST'])]
-    public function addJaime(int $idProjet, EntityManagerInterface $entityManager, ProjetRepository $projetRepository, MailerInterface $mailer): Response
+    public function addJaime(int $idProjet, EntityManagerInterface $entityManager): Response
     {
         // Set the userId to 28
-        $userId = 66;
+        $userId = 63;
 
         // Create a new Jaime object
         $jaime = new Jaime();
@@ -42,21 +44,24 @@ class JaimeController extends AbstractController
         $jaimeCount = $this->twig->getFunction('getJaimeCountForProject')->getCallable()($idProjet);
 
         // If the count is 5, send an email
-        if ($jaimeCount == 2) {
+        if ($jaimeCount == 6) {
             // Fetch the project details to pass to the email
             $projectDetails = $entityManager->getRepository(Projet::class)->find($idProjet);
-            $this->sendJaimeEmail($projectDetails, $mailer);
+            $this->sendJaimeEmail($projectDetails);
         }
 
         // Redirect back to the project page
         return $this->redirectToRoute('app_projet_show_client', ['idProjet' => $idProjet]);
     }
 
-    private function sendJaimeEmail(Projet $project, MailerInterface $mailer)
+    private function sendJaimeEmail(Projet $project)
     {
+        $transport = Transport::fromDsn('smtp://allahommayarab@gmail.com:ugoqsvujijuszwna@smtp.gmail.com:587');
+        $mailer = new Mailer($transport);
         $email = (new Email())
-            ->from($project->getUser()->getEmail())
-            ->to('rebhi.ayoub@esprit.tn')
+            ->from('allahommayarab@gmail.com')
+            //->to($project->getUser()->getEmail())
+            ->to('ayoubrebhi1230@gmail.com')
             ->subject('Congratulations! Your project has received 5 likes.')
             ->text('Your project "' . $project->getTitre() . '" has received 5 likes.');
 

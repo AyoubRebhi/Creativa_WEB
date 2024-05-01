@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
+use App\Repository\UserRepository;
 
 
 class AuthController extends AbstractController
@@ -27,9 +28,6 @@ class AuthController extends AbstractController
         $this->security = $security;
     }
 
-
-
-
     /**
      * @Route("/auth", name="app_auth")
      */
@@ -39,73 +37,6 @@ class AuthController extends AbstractController
             'controller_name' => 'AuthController',
         ]);
     }
-
-
-    /**
-     * @Route("/login", name="login")
-     */
-    /*public function login(Request $request, SessionInterface $session, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(AuthFormType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $user = $form->getData(); // Récupérer l'objet User du formulaire
-            $email = $user->getEmail(); // Accéder à l'email de l'utilisateur
-            $password = $user->getPassword();
-
-            $userRepository = $this->getDoctrine()->getRepository(User::class);
-            $authenticatedUser = $userRepository->findUserByEmailAndPassword($email, $password);
-
-            if ($authenticatedUser) {
-                if ($authenticatedUser->isBlocked()) {
-                    // Vérifier si la date de fin de blocage est dépassée
-                    if ($authenticatedUser->getBlockEndDate() < new \DateTime()) {
-                        // Débloquer l'utilisateur et continuer l'authentification
-                        $authenticatedUser->setBlocked(false);
-                        $authenticatedUser->setBlockEndDate(null);
-                        $entityManager->flush();
-                    } else {
-                        // Si la date de fin de blocage n'est pas dépassée, afficher un message d'erreur et rester sur la page de connexion
-                        $form->get('email')->addError(new FormError('Le compte est bloqué.'));
-                        return $this->render('auth/login.html.twig', [
-                            'form' => $form->createView(),
-                        ]);
-                    }
-                }
-
-                // Authentification réussie, continuer avec le processus d'authentification
-                $userId = $authenticatedUser->getIdUser();
-                $session->set('user_id', $userId);
-
-                $role = $authenticatedUser->getRole();
-
-                switch ($role) {
-                    case 'ARTIST':
-                        return $this->redirectToRoute('Artistpage');
-                        break;
-                    case 'CLIENT':
-                        return $this->redirectToRoute('userpage');
-                        break;
-                    case 'ADMIN':
-                        return $this->redirectToRoute('Adminpage');
-                        break;
-                    default:
-                        // Si le rôle n'est pas reconnu, rediriger vers la page d'accueil
-                        return $this->redirectToRoute('homepage');
-                }
-            } else {
-                // Authentification échouée, afficher un message d'erreur à l'utilisateur
-                $form->get('email')->addError(new FormError('Les informations sont incorrectes.'));
-            }
-        }
-
-        return $this->render('auth/login.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }*/
-
-
 
     // /**
     //      * @Route("/register", name="user_register")
@@ -167,7 +98,7 @@ class AuthController extends AbstractController
                 $entityManager->flush();
 
                 // Redirection vers une page de confirmation ou une autre page après l'enregistrement
-                return $this->redirectToRoute('registration_success');
+                return $this->redirectToRoute('app_login');
             }
         }
 
@@ -184,7 +115,7 @@ class AuthController extends AbstractController
      */
     public function registrationSuccess(): Response
     {
-        return $this->forward('App\Controller\AuthController::login');
+        return $this->forward('App\Controller\SecurityController::login');
     }
 
 
@@ -228,13 +159,6 @@ class AuthController extends AbstractController
     }
 
 
-    /**
-     * @Route("/app_login", name="app_login")
-     */
-    public function loginpage(): response
-    {
-        return $this->forward('App\Controller\AuthController::login');
-    }
 
 
     /**
@@ -244,5 +168,30 @@ class AuthController extends AbstractController
     {
         $session->clear();
         return $this->forward('App\Controller\AuthController::login');
+    }
+
+
+    /**
+     * @Route("/roles", name="statistiques_roles")
+     */
+    public function roles(UserRepository $userRepository): Response
+    {
+        // Récupérer les données de statistiques sur les utilisateurs par rôle
+        $stats = $userRepository->countUsersByRole();
+
+        // Préparer les données pour l'affichage dans la vue
+        $roleLabels = [];
+        $userCounts = [];
+
+        foreach ($stats as $stat) {
+            $roleLabels[] = $stat['role'];
+            $userCounts[] = $stat['userCount'];
+        }
+
+        // Rendre la vue avec les données de statistiques
+        return $this->render('user/roles.html.twig', [
+            'roleLabels' => $roleLabels,
+            'userCounts' => $userCounts,
+        ]);
     }
 }

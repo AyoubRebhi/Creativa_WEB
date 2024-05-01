@@ -99,4 +99,14 @@ class UserRepository extends ServiceEntityRepository
     //     $this->add($user, true);
     // }
 
+
+
+    public function countUsersByRole(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.role, COUNT(u.idUser) AS userCount')
+            ->groupBy('u.role')
+            ->getQuery()
+            ->getResult();
+    }
 }

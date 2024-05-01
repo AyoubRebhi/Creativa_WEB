@@ -28,6 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $idUser;
 
+
+
     /**
      * @var string|null
      *
@@ -135,20 +137,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Projet", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="Projet", inversedBy="idUser")
+     * @ORM\JoinTable(name="jaime",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="id_projet", referencedColumnName="id_projet")
+     *   }
+     * )
      */
-    private $projets;
+    private $idProjet = array();
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->projets = new ArrayCollection();
-    }
-    public function getId(): ?int
-    {
-        return $this->idUser;
+        $this->idProjet = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getIdUser(): ?int
@@ -321,33 +327,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     /**
      * @return Collection<int, Projet>
      */
-    public function getProjets(): Collection
+    public function getIdProjet(): Collection
     {
-        return $this->projets;
+        return $this->idProjet;
     }
 
-    public function addProjet(Projet $projet): static
+    public function addIdProjet(Projet $idProjet): static
     {
-        if (!$this->projets->contains($projet)) {
-            $this->projets->add($projet);
-            $projet->setUser($this);
+        if (!$this->idProjet->contains($idProjet)) {
+            $this->idProjet->add($idProjet);
         }
 
         return $this;
     }
 
-    public function removeProjet(Projet $projet): static
+    public function removeIdProjet(Projet $idProjet): static
     {
-        if ($this->projets->removeElement($projet)) {
-            // set the owning side to null (unless already changed)
-            if ($projet->getUser() === $this) {
-                $projet->setUser(null);
-            }
-        }
+        $this->idProjet->removeElement($idProjet);
 
         return $this;
     }

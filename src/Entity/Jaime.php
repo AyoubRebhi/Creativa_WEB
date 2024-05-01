@@ -31,50 +31,11 @@ class Jaime
     private $idProjet;
 
     /**
-     * @var \DateTimeImmutable
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="date", type="datetime_immutable", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="date", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $date;
+    private $date = 'CURRENT_TIMESTAMP';
 
-    public function __construct()
-    {
-        $this->date = new \DateTimeImmutable();
-    }
 
-    public function getIdUser(): ?int
-    {
-        return $this->idUser;
-    }
-
-    public function setIdUser(int $idUser): self
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
-
-    public function getIdProjet(): ?int
-    {
-        return $this->idProjet;
-    }
-
-    public function setIdProjet(int $idProjet): self
-    {
-        $this->idProjet = $idProjet;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeImmutable
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeImmutable $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
 }

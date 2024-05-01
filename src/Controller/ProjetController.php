@@ -53,7 +53,7 @@ class ProjetController extends AbstractController
     {
         $projets = $entityManager
             ->getRepository(Projet::class)
-            ->findAll();
+            ->findBy(['isvisible' => true]);
 
         return $this->render('projet/indexClient.html.twig', [
             'projets' => $projets,

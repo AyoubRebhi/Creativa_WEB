@@ -26,28 +26,69 @@ class Topic
      *
      * @ORM\Column(name="Catego_ID", type="string", length=255, nullable=false)
      */
-    private $categoId;
+
 
     /**
      * @var string
      *
      * @ORM\Column(name="Nom", type="string", length=255, nullable=false)
      */
-    private $nom;
+    private $Nom;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Subject", type="string", length=255, nullable=false)
      */
-    private $subject;
+    private $Subject;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Image", type="string", length=255, nullable=false)
      */
-    private $image;
+    private $Image;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
+
+    public function getNom(): ?string
+    {
+        return $this->Nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->Nom = $nom;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->Subject;
+    }
+
+    public function setSubject(string $subject): static
+    {
+        $this->Subject = $subject;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->Image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->Image = $image;
+
+        return $this;
+    }
 }

@@ -6,29 +6,38 @@ use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Maile;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/reset-password')]
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
+    private $resetPasswordHelper;
+
 
     public function __construct(
-        private ResetPasswordHelperInterface $resetPasswordHelper,
+        ResetPasswordHelperInterface $resetPasswordHelper,
         private EntityManagerInterface $entityManager
     ) {
+        $this->resetPasswordHelper = $resetPasswordHelper;
     }
 
     /**
@@ -131,9 +140,47 @@ class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
     {
+
+        // $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+        // $mailer = new Mailer($transport);
+        // $email = (new Email())
+        //     ->from('hhajer09@gmail.com')
+        //     ->to('hhajer09@gmail.com')
+        //     ->subject('Action Inv Selled')
+        //     ->text('An action inv has been selled.');
+
+        // $mailer->send($email); 
+
+        // $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+        // $mailer = new Mailer($transport);
+        // $email = (new TemplatedEmail())
+
+
+        // ->from('hhajer09@gmail.com')    
+        //     ->to($user->getEmail())
+        //     ->subject('Your password reset request')
+        //     ->htmlTemplate('reset_password/email.html.twig')
+        //     ->context([
+        //         'resetToken' => $resetToken,
+        //     ])
+        // ;
+
+
+        // $mailer = new Mailer($transport);
+        // $email = (new Email())
+        //         ->from('hhajer09@gmail.com')
+        //         ->to('hhajer09@gmail.com')
+        //         ->subject('Action Inv Selled')
+        //         ->text('An action inv has been selled.');
+
+        // $mailer->send($email);
+
+
+
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
+
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
@@ -143,7 +190,19 @@ class ResetPasswordController extends AbstractController
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment
+
+
+
+            //     $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+            // $mailer = new Mailer($transport);
+            // $email = (new Email())
+            //     ->from('hhajer09@gmail.com')
+            //     ->to($user->getEmail())
+            //     ->subject('Action Inv Selled')
+            //     ->text('An action inv has been selled.');
+
+            // $mailer->send($email); 
+            //     // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
@@ -155,17 +214,51 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_check_email');
         }
-
+        $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+        $mailer = new Mailer($transport);
         $email = (new TemplatedEmail())
-            ->from(new Address('hhajer09@gmail.com', 'hajer'))
+            ->from('hhajer09@gmail.com')
             ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-            ]);
+            ->subject('Password Reset Request')
+            ->html('
+                <h1>Hi!</h1>
+
+                <p>To reset your password, please visit the following link:</p>
+
+                <a href="' . $this->generateUrl('app_reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL) . '">' . $this->generateUrl('app_reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL) . '</a>
+
+                <p>This link will expire in ' . $resetToken->getExpiresAt()->format('Y-m-d H:i:s') . '.</p>
+
+                <p>Cheers!</p>
+            ');
+
 
         $mailer->send($email);
+
+        // $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+        // // $mailer = new Mailer($transport);
+        // // $email = (new TemplatedEmail())
+
+
+        // // ->from('hhajer09@gmail.com')    
+        // //     ->to($user->getEmail())
+        // //     ->subject('Your password reset request')
+        //     ->htmlTemplate('reset_password/email.html.twig')
+        //     ->context([
+        //         'resetToken' => $resetToken,
+        //     ])
+        // ;
+
+
+        // $mailer = new Mailer($transport);
+        // $email = (new Email())
+        //         ->from('hhajer09@gmail.com')
+        //         ->to('hhajer09@gmail.com')
+        //         ->subject('Action Inv Selled')
+        //         ->text('An action inv has been selled.');
+
+        //     $mailer->send($email); 
+
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

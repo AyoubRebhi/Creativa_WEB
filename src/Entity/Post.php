@@ -26,28 +26,28 @@ class Post
      *
      * @ORM\Column(name="Editeur", type="string", length=255, nullable=false)
      */
-    private $editeur;
+    private $Editeur;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Media", type="string", length=255, nullable=false)
      */
-    private $media;
+    private $Media;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Titre", type="string", length=255, nullable=false)
      */
-    private $titre;
+    private $Titre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Description", type="string", length=255, nullable=false)
      */
-    private $description;
+    private $Description;
 
     /**
      * @var int
@@ -56,5 +56,68 @@ class Post
      */
     private $topicId;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
+    public function getEditeur(): ?string
+    {
+        return $this->Editeur;
+    }
+
+    public function setEditeur(string $editeur): static
+    {
+        $this->Editeur = $editeur;
+
+        return $this;
+    }
+
+    public function getMedia(): ?string
+    {
+        return $this->Media;
+    }
+
+    public function setMedia(string $media): static
+    {
+        $this->Media = $media;
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->Titre;
+    }
+
+    public function setTitre(string $titre): static
+    {
+        $this->Titre = $titre;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->Description = $description;
+
+        return $this;
+    }
+
+    public function getTopicId(): ?int
+    {
+        return $this->topicId;
+    }
+
+    public function setTopicId(int $topicId): static
+    {
+        $this->topicId = $topicId;
+
+        return $this;
+    }
 }
