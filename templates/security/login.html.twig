@@ -80,7 +80,11 @@
 
 					<h3>bienvenue a creativa
 					</h3>
-
+					{% if blocked %}
+						<div class="alert alert-danger" role="alert">
+							Votre compte est actuellement bloqué  Veuillez contacter l'administrateur.
+						</div>
+					{% endif %}
 
 					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="Votre adresse e-mail">
 
@@ -95,6 +99,8 @@
 					<button class="btn btn-lg btn-primary" type="submit">
 						Sign in
 					</button>
+
+
 					<div class="signup">
 						Pas encore membre ?
 						<a href="{{ path('user_register') }}">Inscrivez-vous maintenant</a>

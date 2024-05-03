@@ -226,7 +226,7 @@ class UserController extends AbstractController
             // Rediriger l'utilisateur vers la page appropriée après l'édition
             switch ($role) {
                 case 'CLIENT':
-                    return $this->redirectToRoute('userpage');
+                    return $this->redirectToRoute('userpage1');
                 case 'ARTIST':
                     return $this->redirectToRoute('Artistpage');
                 case 'ADMIN':
@@ -302,7 +302,7 @@ class UserController extends AbstractController
             $mailer = new Mailer($transport);
             $email = (new TemplatedEmail())
                 ->from('hhajer09@gmail.com')
-                ->to("$utilisateur->getEmail()")
+                ->to($utilisateur->getEmail())
                 ->subject('votre compte est Bloqué')
                 ->html('
         <h1 style="color: red;">Compte Bloqué</h1>

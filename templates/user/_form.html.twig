@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'class': 'needs-validation'}) }}
+            
+            <div class="mb-3">
+                {{ form_row(form.lastName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            
+            <div class="mb-3">
+                {{ form_row(form.firstName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            
+            <div class="mb-3">
+                {{ form_row(form.username, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+            </div>
+            
+            <div class="mb-3">
+                {{ form_row(form.address, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            
+            <div class="mb-3">
+                {{ form_row(form.email, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+            </div>
+            
+            <div class="mb-3">
+                {{ form_row(form.numtel, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                {# <a href="{{ path('change_password_route') }}" class="btn btn-secondary">Modifier le mot de passe</a> #}
+            </div>            
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

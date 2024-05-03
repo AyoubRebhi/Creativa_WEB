@@ -1,0 +1,62 @@
+{% extends 'backOfficeAdmin.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+
+    <form action="{{ path('app_user_index') }}" method="GET" class="mb-4">
+        <div class="form-row">
+            <div class="form-group col-md-9">
+                <input type="text" class="form-control" id="searchQuery" name="query" placeholder="Rechercher par Nom, Prénom, Rôle ou Numéro de téléphone">
+            </div>
+            <div class="form-group col-md-3">
+                <button type="submit" class="btn btn-dark">Rechercher</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped custom-table-center">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Phone Number</th>
+                <th>Blocked</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role | lower }}</td>
+                <td>{{ user.numtel }}</td>
+                <td>{{ user.blocked ? 'Oui' : 'No' }}</td>
+                <td>
+                    {% if user.role != 'ADMIN' %}
+                        {% if not user.blocked %}
+                            <a href="{{ path('saisir_duree', {'id': user.iduser}) }}" class="btn btn-danger">Bloquer</a>
+                        {% else %}
+                            <a href="{{ path('debloquer_utilisateur', {'id': user.iduser}) }}" class="btn btn-success">Débloquer</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        <a href="{{ path('app_user_export_pdf') }}" class="btn btn-primary">Exporter en PDF</a>
+        <a href="{{ path('app_user_export_excel') }}" class="btn btn-info">Exporter en Excel</a>
+    </div>
+{% endblock %}

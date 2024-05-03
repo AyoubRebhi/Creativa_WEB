@@ -41,21 +41,16 @@
 	</head>
 
 	<body>
-		<div class="fixed-button">
-			<a href="https://codedthemes.com/item/gradient-able-admin-template" target="_blank" class="btn btn-md btn-primary">
-				<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-				Upgrade To Pro
-			</a>
-		</div>
+		{# <div class="fixed-button">
+					<a href="https://codedthemes.com/item/gradient-able-admin-template" target="_blank" class="btn btn-md btn-primary">
+						<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+						Upgrade To Pro
+					</a>
+				</div> #}
 		<!-- Pre-loader start -->
-		<div class="theme-loader">
-			<div class="loader-track">
-				<div class="loader-bar"></div>
-			</div>
-		</div>
+
 		<!-- Pre-loader end -->
-		<div id="pcoded" class="pcoded">
-			<div class="pcoded-overlay-box"></div>
+			<div id="pcoded" class="pcoded"> <div class="pcoded-overlay-box"></div>
 			<div class="pcoded-container navbar-wrapper">
 
 				<nav class="navbar header-navbar pcoded-header">
@@ -213,6 +208,30 @@
 								<div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Menu</div>
 								<ul class="pcoded-item pcoded-left-item">
 									<li class="pcoded-item pcoded-left-item">
+										<a href="{{ path('app_user_index') }}">
+											<span class="pcoded-micon">
+												<i class="ti-user"></i>
+												<!-- Utiliser l'icône utilisateur (user) de votre choix -->
+											</span>
+											<span class="pcoded-mtext" data-i18n="nav.dash.main">utulisateurs</span>
+											<span class="pcoded-mcaret"></span>
+										</a>
+									</li>
+									<li class="pcoded-item pcoded-left-item">
+										<a
+											href="{{ path('statistiques_roles') }}">
+											<!-- Assurez-vous que 'user_stats' correspond à la route de votre page de statistiques -->
+											<span class="pcoded-micon">
+												<i class="ti-pie-chart"></i>
+												<!-- Utiliser l'icône de statistiques (pie chart) de votre choix -->
+											</span>
+											<span class="pcoded-mtext" data-i18n="nav.dash.main">Statistiques</span>
+											<span class="pcoded-mcaret"></span>
+										</a>
+									</li>
+
+
+									<li class="pcoded-item pcoded-left-item">
 										<a href="">
 											<span class="pcoded-micon">
 												<i class="ti-home"></i>
@@ -232,6 +251,7 @@
 										</a>
 
 									</li>
+
 								</ul>
 
 							</div>
