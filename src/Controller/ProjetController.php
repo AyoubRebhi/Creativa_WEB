@@ -14,16 +14,20 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 #[Route('/projet')]
 class ProjetController extends AbstractController
 {
     private $security;
+    private $session;
 
-    public function __construct(Security $security)
+
+    public function __construct(SessionInterface $session, Security $security)
     {
         $this->security = $security;
+        $this->session = $session;
     }
 
     #[Route('/admin', name: 'app_projet_index', methods: ['GET'])]
@@ -37,9 +41,10 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
-    #[Route('/artist/{idUser}', name: 'app_projet_indexArtist', methods: ['GET'])]
-    public function indexArtist(EntityManagerInterface $entityManager, int $idUser): Response
+    #[Route('/artist', name: 'app_projet_indexArtist', methods: ['GET'])]
+    public function indexArtist(EntityManagerInterface $entityManager): Response
     {
+        $idUser = $this->session->get('user_id');
         $projets = $entityManager
             ->getRepository(Projet::class)
             ->findBy(['user' => $idUser]);
@@ -61,9 +66,10 @@ class ProjetController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{idUser}', name: 'app_projet_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, int $idUser): Response
+    #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $idUser = $this->session->get('user_id');
         // Fetch the User entity based on the provided idUser
         $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
 
@@ -100,7 +106,7 @@ class ProjetController extends AbstractController
             $entityManager->persist($projet);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_projet_indexArtist', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('projet/new.html.twig', [
