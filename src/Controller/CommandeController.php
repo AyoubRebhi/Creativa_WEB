@@ -27,11 +27,18 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CommandeController extends AbstractController
 {
+    private $session;
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
     /**
      * @Route("/ajouterCommande", name="ajouter_commande")
      */
     public function ajouterCommande(Request $request, CodePromoRepository $codePromoRepository): Response
     {
+        $idUser = $this->session->get('user_id');
+
         $commande = new Commande();
 
         $commande->setDate(new \DateTime());
@@ -287,7 +294,7 @@ class CommandeController extends AbstractController
 
         // Affichage de la page de confirmation
         return new Response('
-    <html>
+        <html>
         <head>
             <style>
                 .confirmation-container {
@@ -364,7 +371,7 @@ class CommandeController extends AbstractController
 
         // Affichage de la page de confirmation
         return new Response('
-    <html>
+        <html>
         <head>
             <style>
                 .confirmation-container {

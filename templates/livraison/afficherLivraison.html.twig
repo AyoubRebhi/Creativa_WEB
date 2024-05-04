@@ -1,139 +1,143 @@
 {% extends 'base.html.twig' %}
-{% block stylesheet %}
-    {{ parent() }}
-    <style>
-    table {
-    width: 100%;
-    border-collapse: collapse;
-}
+{% block stylesheetProject %}
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-th, td {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    text-align: left;
-}
+		th,
+		td {
+			border: 1px solid #dddddd;
+			padding: 8px;
+			text-align: left;
+		}
 
-th {
-    background-color: #f2f2f2;
-}
+		th {
+			background-color: #f2f2f2;
+		}
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
 
-tr:hover {
-    background-color: #dddddd;
-}
-.total-livraisons {
-            display: inline-block;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-            font-weight: bold;
-            color: #007bff;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-        }
+		tr:hover {
+			background-color: #dddddd;
+		}
+		.total-livraisons {
+			display: inline-block;
+			padding: 10px;
+			background-color: #f0f0f0;
+			border: 2px solid #007bff;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #007bff;
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+		}
 
-.btn-modifier {
-    background-color: #007bff;
-    color: white; 
-}
+		.btn-modifier {
+			background-color: #007bff;
+			color: white;
+		}
 
-/* Pagination Box */
-        .pagination-box {
-            border-radius: 5px;
-            display: inline-block;
-            padding: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        /* Pagination Styles */
-        .pagination {
-            display: inline-block;
-        }
-        
-        .pagination a {
-            color:#405165;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-        }
-        
-        .pagination a:hover {
-            background-color: #f2f2f2; /* Light background color on hover */
-        }
-        
-        .pagination .active {
-            background-color: #E9BB79; /* Light background color for active page */
-        }
-        h1 {
-    color: #473516; /* Couleur du texte */
-    font-size: 2em; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    font-family: Arial, sans-serif; /* Police de caractères */
-    margin-top: 20px; /* Marge en haut */
-    margin-bottom: 20px; /* Marge en bas */
-    text-align: center; /* Alignement du texte */
-    text-transform: uppercase; /* Transformation du texte en majuscules */
-    text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
-    /* Autres styles CSS si nécessaire */
-}
-    </style>
+		/* Pagination Box */
+		.pagination-box {
+			border-radius: 5px;
+			display: inline-block;
+			padding: 10px;
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		/* Pagination Styles */
+		.pagination {
+			display: inline-block;
+		}
+
+		.pagination a {
+			color: #405165;
+			padding: 8px 16px;
+			text-decoration: none;
+			transition: background-color 0.3s;
+		}
+
+		.pagination a:hover {
+			background-color: #f2f2f2; /* Light background color on hover */
+		}
+
+		.pagination .active {
+			background-color: #E9BB79; /* Light background color for active page */
+		}
+		h1 {
+			color: #473516; /* Couleur du texte */
+			font-size: 2em; /* Taille de la police */
+			font-weight: bold; /* Gras */
+			font-family: Arial, sans-serif; /* Police de caractères */
+			margin-top: 20px; /* Marge en haut */
+			margin-bottom: 20px; /* Marge en bas */
+			text-align: center; /* Alignement du texte */
+			text-transform: uppercase; /* Transformation du texte en majuscules */
+			text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
+			/* Autres styles CSS si nécessaire */
+		}
+	</style>
 {% endblock %}
-{% block Category %}
-<h1>Liste des livraisons</h1>
+{% block body %}
+	<h1>Liste des livraisons</h1>
 
-<br>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Commande</th>
-        <th>ID Utilisateur</th>
-        <th>Status</th>
-        <th>Adresse</th>
-        <th>Frais de Livraison</th>
-        <th>Moyen de Livraison</th>
-        <th>Actions</th>
-    </tr>
-    {% set totalLivraison = o|length %}
-    <p class="total-livraisons">Nombre total de livraisons :{{ totalLivraison }}</p>
-    {% for a in o %}
-    <tr>
-        <td>{{ a.idLiv }}</td>
-        <td>{{ a.idCmd }}</td>
-        <td>{{ a.idUser }}</td>
-        <td>{{ a.status }}</td>
-        <td>{{ a.adresse }}</td>
-        <td>{{ a.fraisLiv }}</td>
-        <td>{{ a.moyenLivraison }}</td>
-        <td>
-    <form action="{{ path('cancel_livraison', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Annuler</button>
-    </form>
-    <a href="{{ path('update_livraison', { 'id': a.idLiv }) }}" class="btn btn-primary btn-modifier">Modifier</a>
-</td>
-    </tr>
-    {% endfor %}
-    
-</table>
-    <div style="text-align: center;">
+	<br>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>ID Commande</th>
+			<th>ID Utilisateur</th>
+			<th>Status</th>
+			<th>Adresse</th>
+			<th>Frais de Livraison</th>
+			<th>Moyen de Livraison</th>
+			<th>Actions</th>
+		</tr>
+		{% set totalLivraison = o|length %}
+		<p class="total-livraisons">Nombre total de livraisons :{{ totalLivraison }}</p>
+		{% for a in o %}
+			<tr>
+				<td>{{ a.idLiv }}</td>
+				<td>{{ a.idCmd }}</td>
+				<td>{{ a.idUser }}</td>
+				<td>{{ a.status }}</td>
+				<td>{{ a.adresse }}</td>
+				<td>{{ a.fraisLiv }}</td>
+				<td>{{ a.moyenLivraison }}</td>
+				<td>
+					<form action="{{ path('cancel_livraison', { 'id': a.idLiv }) }}" method="post" style="display: inline;">
+						<button type="submit" class="btn btn-danger">Annuler</button>
+					</form>
+					<a href="{{ path('update_livraison', { 'id': a.idLiv }) }}" class="btn btn-primary btn-modifier">Modifier</a>
+				</td>
+			</tr>
+		{% endfor %}
 
-<div class="pagination-box">
-        <div class="pagination">
-            {% if currentPage > 1 %}
-                <a href="{{ path('afficher_livraison', {'page': currentPage - 1}) }}"><i class="fas fa-angle-double-left"></i> Previous</a>
-            {% endif %}
-            
-            {% for page in 1..totalPages %}
-                <a href="{{ path('afficher_livraison', {'page': page}) }}" {% if page == currentPage %}class="active"{% endif %}>{{ page }}</a>
-            {% endfor %}
-            
-            {% if currentPage < totalPages %}
-                <a href="{{ path('afficher_livraison', {'page': currentPage + 1}) }}">Next <i class="fas fa-angle-double-right"></i></a>
-            {% endif %}
-        </div>
-    </div>
+	</table>
+	<div style="text-align: center;">
 
-{% endblock %}
+		<div class="pagination-box">
+			<div class="pagination">
+				{% if currentPage > 1 %}
+					<a href="{{ path('afficher_livraison', {'page': currentPage - 1}) }}">
+						<i class="fas fa-angle-double-left"></i>
+						Previous</a>
+				{% endif %}
+
+				{% for page in 1..totalPages %}
+					<a href="{{ path('afficher_livraison', {'page': page}) }}" {% if page == currentPage %} class="active" {% endif %}>{{ page }}</a>
+				{% endfor %}
+
+				{% if currentPage < totalPages %}
+					<a href="{{ path('afficher_livraison', {'page': currentPage + 1}) }}">Next
+						<i class="fas fa-angle-double-right"></i>
+					</a>
+				{% endif %}
+			</div>
+		</div>
+
+	{% endblock %}

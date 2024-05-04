@@ -1,95 +1,95 @@
 {% extends 'base.html.twig' %}
 {% block body %}
- {% block stylesheet %}
-    {{ parent() }}
-    <style>
-            width: 70%; 
-            margin: 0 auto; 
-            padding: 40px; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            display: flex; /* Aligner les cadres côte à côte */
-            flex-wrap: wrap; /* Pour passer à la ligne lorsque l'espace est insuffisant */
-        
+	{% block stylesheetProject %}
+		<style>
+			width: 70%;
+			margin: 0 auto;
+			padding: 40px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			display: flex; /* Aligner les cadres côte à côte */
+			flex-wrap: wrap; /* Pour passer à la ligne lorsque l'espace est insuffisant */
 
-        .fieldset-container {
-            flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
-            border: 3px solid #764949;
-            border-radius: 8px;
-            padding: 20px;
-            margin-right: 20px; /* Espacement entre les cadres */
-        }
 
-        .fieldset-title {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 20px; /* Espacement entre le titre et les champs */
-        }
+			.fieldset-container {
+				flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
+				border: 3px solid #764949;
+				border-radius: 8px;
+				padding: 20px;
+				margin-right: 20px; /* Espacement entre les cadres */
+			}
 
-        .form-group {
-            margin-bottom: 20px; /* Espacement entre les groupes de champs */
-            
-        }
+			.fieldset-title {
+				font-weight: bold;
+				font-size: 1.2em;
+				margin-bottom: 20px; /* Espacement entre le titre et les champs */
+			}
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
+			.form-group {
+				margin-bottom: 20px; /* Espacement entre les groupes de champs */
 
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            width: calc(100% - 10px); /* Prendre toute la largeur du champ avec une petite marge */
-            padding: 10px;
-            border: 8px solid #f4a460;
-            border-radius: 8px;
-            box-sizing: border-box;
-            margin-bottom: 5px; /* Espacement entre les champs */
-        }
+			}
 
-        input[type="submit"] {
-            width: 100%;
-            background-color: #f4a460;
-            color: #f4a460;
-            padding: 15px 20px;
-            border: 40px solid;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px; /* Espacement entre le bouton et les champs */
-        }
+			label {
+				font-weight: bold;
+				display: block;
+				margin-bottom: 5px;
+			}
 
-        .date-fields {
-            display: flex;
-            align-items: center; 
-        }
+			input[type="text"],
+			input[type="email"],
+			textarea {
+				width: calc(100% - 10px); /* Prendre toute la largeur du champ avec une petite marge */
+				padding: 10px;
+				border: 8px solid #f4a460;
+				border-radius: 8px;
+				box-sizing: border-box;
+				margin-bottom: 5px; /* Espacement entre les champs */
+			}
 
-        .date-fields > div {
-            flex: 1; 
-            margin-right: 10px; /* Espacement entre les champs de date */
-        }
-    </style>
+			input[type="submit"] {
+				width: 100%;
+				background-color: #f4a460;
+				color: #f4a460;
+				padding: 15px 20px;
+				border: 40px solid;
+				border-radius: 4px;
+				cursor: pointer;
+				margin-top: 20px; /* Espacement entre le bouton et les champs */
+			}
+
+			.date-fields {
+				display: flex;
+				align-items: center;
+			}
+
+			.date-fields > div {
+				flex: 1;
+				margin-right: 10px; /* Espacement entre les champs de date */
+			}
+		</style>
+	{% endblock %}
+	{% block  topic %}
+		<div class="form-container">
+			<h1>Update Topic</h1>
+			<form>
+				<div class="form-group">
+					{{ form_row(formulairetopic.Nom) }}
+				</div>
+				<div class="form-group">
+					{{ form_row(formulairetopic.Subject) }}
+				</div>
+				<div class="form-group">
+					{{ form_row(formulairetopic.Image) }}
+				</div>
+				<div class="form-group">
+					{{ form_row(formulairetopic.submit) }}
+				</div>
+			</form>
+
+		</div>
+	{% endblock %}
 {% endblock %}
-{% block  topic %}
-<div class="form-container">
-        <h1>Update Topic</h1>
-        <form>
-            <div class="form-group">
-               {{ form_row(formulairetopic.Nom) }}
-            </div>
-            <div class="form-group">
-             {{ form_row(formulairetopic.Subject) }}
-            </div>
-            <div class="form-group">
-               {{ form_row(formulairetopic.Image) }}
-            </div>
-             <div class="form-group">
-               {{ form_row(formulairetopic.submit) }}
-            </div>
-        </form>
-    
-    </div>
-        {% endblock %}{% endblock %}

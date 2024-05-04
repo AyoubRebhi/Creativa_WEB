@@ -1,109 +1,114 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{% block stylesheet %}
-    {{ parent() }}
-    <style>
-    table {
-    width: 100%;
-    border-collapse: collapse;
+	{% block stylesheetProject %}
+
+		<style>
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			table,
+			th,
+			td {
+
+				border-radius: 20px;
+			}
+
+			th,
+			td {
+				padding: 8px;
+				text-align: center;
+
+			}
+
+			th {
+				background-color: #764949;
+				color: white;
+			}
+
+			tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+
+			tr:hover {
+				background-color: #f4a460;
+			}
+			.left-align {
+				float: right;
+			}
+			img {
+				max-width: 200px; /* Adjust this value as needed */
+				max-height: 200px; /* Adjust this value as needed */
+			}
+		</style>
+	{% endblock %}
+	{% block  topic %}
+		<h1>Liste des topic</h1>
+		<link rel="stylesheet" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css')}}">
+
+		<button id="notification-icon">
+			<i class="fas fa-bell"></i>
+			<!-- Bell icon from Font Awesome -->
+		</button>
+
+
+		{# Notification section (initially hidden) #}
+		<section id="notifications" style="display: none;">
+			{% for flashType, flashMessages in app.session.flashbag.all() %}
+				{% for flashMessage in flashMessages %}
+					<div class="notification notification-{{ flashType }}">
+						{{ flashMessage }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</section>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+const notificationIcon = document.getElementById('notification-icon');
+const notificationSection = document.getElementById('notifications');
+
+notificationIcon.addEventListener('click', function () {
+if (notificationSection.style.display === 'none') {
+notificationSection.style.display = 'block';
+} else {
+notificationSection.style.display = 'none';
 }
+});
+});
+		</script>
+		<table>
 
-table, th, td {
-    
-    border-radius:20px;
-}
+			<tr>
+				<th>Nom</th>
+				<th>Sujet</th>
+				<th>Image</th>
+				<th>supprimer</th>
+			</tr>
+			{% for a in o %}
+				<tr class="clickable-row" data-href="{{ path('afficher_post', {'Topic_id': a.Id}) }}">
+					<td>{{ a.Nom }}</td>
+					<td>{{ a.Subject }}</td>
+					<td><img src="fayrouz.jpg"></td>
+					<td>
+						<a href="{{ path('delete_topic', {'id': a.id}) }}">Supprimer un topic</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
 
-th, td {
-    padding: 8px;
-    text-align: center;
-    
-}
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+var rows = document.querySelectorAll(".clickable-row");
 
-th {
-    background-color: #764949;
-    color: white;
-}
+rows.forEach(function (row) {
+row.addEventListener("click", function () {
+window.location.href = this.dataset.href;
+});
+});
+});
+		</script>
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-tr:hover {
-    background-color: #f4a460;
-}
-.left-align {
-    float: right;
-}
-img {
-    max-width: 200px; /* Adjust this value as needed */
-    max-height: 200px; /* Adjust this value as needed */
-  }
-    </style>
-{% endblock %}
-{% block  topic %}
-<h1>Liste des topic</h1>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<button id="notification-icon">
-    <i class="fas fa-bell"></i> <!-- Bell icon from Font Awesome -->
-</button>
-
-
-{# Notification section (initially hidden) #}
-<section id="notifications" style="display: none;">
-    {% for flashType, flashMessages in app.session.flashbag.all() %}
-        {% for flashMessage in flashMessages %}
-            <div class="notification notification-{{ flashType }}">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-</section>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const notificationIcon = document.getElementById('notification-icon');
-        const notificationSection = document.getElementById('notifications');
-
-        notificationIcon.addEventListener('click', function() {
-            if (notificationSection.style.display === 'none') {
-                notificationSection.style.display = 'block';
-            } else {
-                notificationSection.style.display = 'none';
-            }
-        });
-    });
-</script>
-<table>
- 
-    <tr> 
-        <th>Nom</th>
-        <th>Sujet</th>
-        <th>Image</th>
-        <th>supprimer</th>
-    </tr>
-    {% for a in o %}
-    <tr class="clickable-row" data-href="{{ path('afficher_post', {'Topic_id': a.Id}) }}">
-        <td>{{ a.Nom }}</td>
-        <td>{{ a.Subject }}</td>
-        <td><img src="fayrouz.jpg"></td>
-        <td><a href="{{ path('delete_topic', {'id': a.id}) }}">Supprimer un topic</a>
-</td>
-    </tr>
-    {% endfor %}
-</table>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var rows = document.querySelectorAll(".clickable-row");
-
-        rows.forEach(function(row) {
-            row.addEventListener("click", function() {
-                window.location.href = this.dataset.href;
-            });
-        });
-    });
-</script>
-
-{% endblock %}
-<a href="{{ path('ajouter_topic') }}">Ajouter un topic</a>
+	{% endblock %}
+	<a href="{{ path('ajouter_topic') }}">Ajouter un topic</a>
 {% endblock %}
