@@ -3,14 +3,8 @@
 
 	<head>
 		<title>Creativa</title>
-		<!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-										      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-										      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-										      <![endif]-->
-		<!-- Meta -->
-		<meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 		<meta name="description" content="Gradient Able Bootstrap admin template made using Bootstrap 4. The starter version of Gradient Able is completely free for personal project."/>
 		<meta name="keywords" content="free dashboard template, free admin, free bootstrap template, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive"/>
@@ -139,26 +133,6 @@
 												</div>
 											</div>
 										</li>
-										<li>
-											<div class="media">
-												<img class="d-flex align-self-center img-radius" src="assets/images/avatar-4.jpg" alt="Generic placeholder image">
-												<div class="media-body">
-													<h5 class="notification-user">Joseph William</h5>
-													<p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-													<span class="notification-time">30 minutes ago</span>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="media">
-												<img class="d-flex align-self-center img-radius" src="assets/images/avatar-3.jpg" alt="Generic placeholder image">
-												<div class="media-body">
-													<h5 class="notification-user">Sara Soudein</h5>
-													<p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-													<span class="notification-time">30 minutes ago</span>
-												</div>
-											</div>
-										</li>
 									</ul>
 								</li>
 
@@ -228,6 +202,26 @@
 												<i class="ti-layout-grid2-alt"></i>
 											</span>
 											<span class="pcoded-mtext" data-i18n="nav.dash.main">Inscription</span>
+											<span class="pcoded-mcaret"></span>
+										</a>
+
+									</li>
+									<li class="pcoded-item pcoded-left-item">
+										<a href="{{path('app_categorie_index')}}">
+											<span class="pcoded-micon">
+												<i class="ti-layout-grid2-alt"></i>
+											</span>
+											<span class="pcoded-mtext" data-i18n="nav.dash.main">Liste des categories</span>
+											<span class="pcoded-mcaret"></span>
+										</a>
+
+									</li>
+									<li class="pcoded-item pcoded-left-item">
+										<a href="{{path('app_projet_index')}}">
+											<span class="pcoded-micon">
+												<i class="ti-layout-grid2-alt"></i>
+											</span>
+											<span class="pcoded-mtext" data-i18n="nav.dash.main">Liste des projets</span>
 											<span class="pcoded-mcaret"></span>
 										</a>
 

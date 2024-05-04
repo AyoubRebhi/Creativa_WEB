@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+  {{ parent() }}
+  <style>
+    .map-container {
+      width: 800px; /* Largeur du conteneur de la carte */
+      height: 600px; /* Hauteur du conteneur de la carte */
+      margin: 0; /* Supprimer les marges */
+      padding: 0; /* Supprimer les espacements internes */
+      border: 1px solid #ccc; /* Ajouter une bordure autour du conteneur */
+      border-radius: 10px; /* Ajouter des coins arrondis à la bordure */
+      overflow: hidden; /* Masquer tout contenu dépassant du conteneur */
+    }
+
+    #map {
+      width: 100%; /* La carte occupe toute la largeur du conteneur */
+      height: 100%; /* La carte occupe toute la hauteur du conteneur */
+    }
+    h1 {
+    color: #473516; /* Couleur du texte */
+    font-size: 2em; /* Taille de la police */
+    font-weight: bold; /* Gras */
+    font-family: Arial, sans-serif; /* Police de caractères */
+    margin-top: 20px; /* Marge en haut */
+    margin-bottom: 20px; /* Marge en bas */
+    text-align: center; /* Alignement du texte */
+    text-transform: uppercase; /* Transformation du texte en majuscules */
+    text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
+    /* Autres styles CSS si nécessaire */
+}
+  </style>
+{% endblock %}
+
+{% block Category %}
+  <div class="map-container"> 
+    <h1>Carte des Marqueurs</h1>
+    <div id="map"></div>
+  </div>
+
+
+    <script>
+    // Récupérer l'ID de la commande depuis la session
+    var commandeId = {{ app.session.get('idCmd')|default(0) }};
+
+    // Fonction pour rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+    function redirectToPasserLivraison(lieu, id) {
+        // Rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+        window.location.href = '/passerLivraison/' + id + '?lieu=' + encodeURIComponent(lieu);
+    }
+</script>
+
+
+
+ <script>
+    // Fonction d'initialisation de la carte
+    function initMap() {
+      // Créer une carte Google Maps centrée sur la Tunisie
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 34.0, lng: 9.0}, // Coordonnées du centre de la Tunisie
+        zoom: 6 // Niveau de zoom par défaut
+      });
+
+      // Créer des marqueurs pour chaque emplacement
+      var cities = {
+        "Ariana": { "lat": 36.8663, "lng": 10.1647 },
+  "Béja": { "lat": 36.7264, "lng": 9.1801 },
+  "Ben Arous": { "lat": 36.7194, "lng": 10.2397 },
+  "Bizerte": { "lat": 37.2744, "lng": 9.8732 },
+  "Gabès": { "lat": 33.8813, "lng": 10.0982 },
+  "Gafsa": { "lat": 34.4302, "lng": 8.7843 },
+  "Jendouba": { "lat": 36.5041, "lng": 8.7804 },
+  "Kairouan": { "lat": 35.6745, "lng": 10.0994 },
+  "Kasserine": { "lat": 35.1673, "lng": 8.8285 },
+  "Kébili": { "lat": 33.7039, "lng": 8.9717 },
+  "Le Kef": { "lat": 36.1736, "lng": 8.7049 },
+  "Mahdia": { "lat": 35.5046, "lng": 11.0651 },
+  "La Manouba": { "lat": 36.8131, "lng": 10.1016 },
+  "Médenine": { "lat": 33.3425, "lng": 10.4946 },
+  "Monastir": { "lat": 35.7683, "lng": 10.8128 },
+  "Nabeul": { "lat": 36.4551, "lng": 10.7305 },
+  "Sfax": { "lat": 34.7406, "lng": 10.7604 },
+  "Sidi Bouzid": { "lat": 35.0394, "lng": 9.4935 },
+  "Siliana": { "lat": 35.9573, "lng": 9.3644 },
+  "Sousse": { "lat": 35.8254, "lng": 10.6367 },
+  "Tataouine": { "lat": 32.9293, "lng": 10.4518 },
+  "Tozeur": { "lat": 33.9189, "lng": 8.1339 },
+  "Tunis": { "lat": 36.8065, "lng": 10.1815 },
+  "Zaghouan": { "lat": 36.4007, "lng": 10.1433 }
+      };
+
+
+      // Boucler à travers chaque emplacement et ajouter un marqueur à la carte
+        for (var city in cities) {
+            var marker = new google.maps.Marker({
+                position: cities[city],
+                map: map,
+                title: city // Nom de la ville comme titre du marqueur
+            });
+
+           // Ajouter un écouteur d'événements de clic au marqueur
+marker.addListener('click', function () {
+    // Appeler la fonction pour rediriger vers la page passerLivraison avec le lieu sélectionné et l'ID de la commande
+    redirectToPasserLivraison(this.getTitle() , commandeId);
+});
+        }
+    }
+</script>
+  <!-- Inclure le script JavaScript de l'API Google Maps avec votre clé API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADdkFwBut98yuG23zJIsv8UR3_GTHESkc&callback=initMap" async defer></script>
+{% endblock %}

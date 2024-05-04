@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% block stylesheet %}
+    {{ parent() }}
+    <style>
+    table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    
+    border-radius:20px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    
+}
+
+th {
+    background-color: #764949;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f4a460;
+}
+.left-align {
+    float: right;
+}
+    </style>
+{% endblock %}
+{% block  posts%}
+<h1>Liste des posts</h1>
+
+<table>
+    <tr>
+        <th>editeur</th>
+        <th>titre</th>
+        <th>description</th>
+        <th>Supprimer</th>
+    </tr>
+    {% for a in o %}
+    <tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
+        <td>{{ a.Editeur }}</td>
+         <td>{{ a.Titre }}</td>
+          <td>{{ a.Description }}</td>
+          <td><a href="{{ path('delete_post', {'id': a.Id}) }}">Supprimer un post</a>
+</td>
+   
+    </tr>
+    {% endfor %}
+
+</table>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var rows = document.querySelectorAll(".clickable-row");
+
+        rows.forEach(function(row) {
+            row.addEventListener("click", function() {
+                window.location.href = this.dataset.href;
+            });
+        });
+    });
+</script>
+{% endblock %}
+<a href="{{ path('update_Topic', {'Topic_id': topicid}) }}">Modifier un topic</a>
+<a href="{{ path('ajouter_post') }}">Ajouter un post</a>
+{% endblock %}

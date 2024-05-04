@@ -1,0 +1,238 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <style>
+        .form-container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .fieldset-container {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        .fieldset-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: calc(100% - 10px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .date-fields {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-fields > div {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .form-group span {
+            color: red;
+        }
+        .invalid-feedback {
+    color: red; 
+    font-size: 0.9em;
+    margin-top: 5px; 
+    text-decoration:none;
+}
+#verificationCodePromoBtn {
+    background-color: #D4A766; 
+    color: #ffffff; 
+}
+
+#calculerSommeBtn{
+    background-color: #D4A766; 
+    }
+    
+    .bouton-submit {
+    background-color: #D4A766;
+    color: white; /* Couleur du texte */
+    border: none; /* Supprime la bordure */
+    padding: 10px 20px; /* Ajoute un espace autour du texte */
+    border-radius: 5px; /* Arrondi les coins du bouton */
+    cursor: pointer; /* Affiche un curseur au survol */
+}
+h1 {
+    color: #473516; /* Couleur du texte */
+    font-size: 2em; /* Taille de la police */
+    font-weight: bold; /* Gras */
+    font-family: Arial, sans-serif; /* Police de caractères */
+    margin-top: 20px; /* Marge en haut */
+    margin-bottom: 20px; /* Marge en bas */
+    text-align: center; /* Alignement du texte */
+    text-transform: uppercase; /* Transformation du texte en majuscules */
+    text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
+    /* Autres styles CSS si nécessaire */
+}
+
+
+    </style>
+{% endblock %}
+
+{% block Category %}
+    <h1>AJOUTER COMMANDE</h1>
+    {{ form_start(formulaireCommande, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="form-container">
+        <div class="fieldset-container">
+            <div class="fieldset-title">Informations de la commande</div>
+            <div class="form-group">
+                {{ form_label(formulaireCommande.idUser) }}
+{{ form_widget(formulaireCommande.idUser, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.idUser)|default('') ? ' is-invalid' : '')}}) }}
+
+                {% if form_errors(formulaireCommande.idUser) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.idUser) }}
+                    </div>
+                {% endif %}
+                <div>{{ form_row(formulaireCommande.idProjet) }}</div>
+                <div class="date-fields">
+                    <div>{{ form_row(formulaireCommande.date) }}</div>
+                    <div>{{ form_row(formulaireCommande.dateLivraisonEstimee) }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="fieldset-container">
+            <div class="fieldset-title">Autres détails</div>
+            <div class="form-group">
+                {{ form_label(formulaireCommande.prix) }}
+                {{ form_widget(formulaireCommande.prix, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.prix)|default('') ? ' is-invalid' : '')}}) }}
+                {% if form_errors(formulaireCommande.prix) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.prix) }}
+                    </div>
+                {% endif %}
+                <div>{{ form_row(formulaireCommande.codePromo, {'attr': {'id': 'commande_codePromo'}}) }}</div>
+                <button type="button" class="btn btn-primary" id="verificationCodePromoBtn">Vérifier le code promo</button>
+                <div>{{ form_row(formulaireCommande.status) }}</div>
+                <div>{{ form_row(formulaireCommande.fraisLiv) }}</div>
+                <div>{{ form_label(formulaireCommande.mtTotal) }}</div>
+                {{ form_widget(formulaireCommande.mtTotal, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.mtTotal)|default('') ? ' is-invalid' : '')}}) }}
+                {% if form_errors(formulaireCommande.mtTotal) %}
+                    <div class="invalid-feedback">
+                        {{ form_errors(formulaireCommande.mtTotal) }}
+                    </div>
+                {% endif %}
+                <button type="button" id="calculerSommeBtn" class="btn btn-primary">Calculer Somme</button>
+                <div style="text-align: right;">
+                    {{ form_rest(formulaireCommande) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(formulaireCommande) }}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Déclaration d'une variable pour stocker l'état du code promo
+        var codePromoValide = false;
+
+        // Ajouter un événement de clic pour calculer la somme
+        document.getElementById('calculerSommeBtn').addEventListener('click', function () {
+            // Récupérer les valeurs des champs prix et fraisLiv
+            var prix = parseFloat(document.getElementById('commande_prix').value) || 0;
+            var fraisLiv = parseFloat(document.getElementById('commande_fraisLiv').value) || 0;
+
+            // Vérifier si un code promo valide a été saisi
+            if (codePromoValide) {
+                // Appliquer une remise de 10% si un code promo valide a été saisi
+                prix *= 0.9;
+            }
+
+            // Calculer la somme
+            var somme = prix + fraisLiv;
+
+            // Mettre à jour le champ mtTotal
+            document.getElementById('commande_mtTotal').value = somme.toFixed(2);
+        });
+
+        // Ajouter un événement de clic pour vérifier le code promo
+        document.getElementById('verificationCodePromoBtn').addEventListener('click', function () {
+            // Récupérer le code promo saisi par l'utilisateur
+            var codePromo = document.getElementById('commande_codePromo').value;
+
+            // Créer un objet FormData pour envoyer les données
+            var formData = new FormData();
+            formData.append('codePromo', codePromo);
+
+            // Effectuer une requête AJAX pour vérifier le code promo
+            fetch('/verifierCodePromo', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Erreur lors de la vérification du code promo : ' + response.statusText);
+                }
+            })
+            .then(function (data) {
+                if (data.valid) {
+                    // Marquer le code promo comme valide
+                    codePromoValide = true;
+                    alert('Code promo valide ! Vous avez une remise de 10%.');
+                } else {
+                    // Marquer le code promo comme invalide
+                    codePromoValide = false;
+                    alert('Code promo invalide !');
+                }
+            })
+            .catch(function (error) {
+                alert(error.message);
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -31,11 +31,45 @@ class Jaime
     private $idProjet;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="date", type="datetime", nullable=false, options={"default": "CURRENT_TIMESTAMP"})
      */
-    private $date = 'CURRENT_TIMESTAMP';
+    private $date;
 
+    public function getIdUser(): ?int
+    {
+        return $this->idUser;
+    }
 
+    public function setIdUser(int $idUser): self
+    {
+        $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getIdProjet(): ?int
+    {
+        return $this->idProjet;
+    }
+
+    public function setIdProjet(int $idProjet): self
+    {
+        $this->idProjet = $idProjet;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
 }

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% block stylesheet %}
+    {{ parent() }}
+            <link href="{{ asset('node_modules/video.js/dist/video-js.css') }}" rel="stylesheet">
+    <style>
+    table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    
+    border-radius:20px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    
+}
+
+th {
+    background-color: #764949;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f4a460;
+}
+.left-align {
+    float: right;
+}
+.comments-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.comment-form input[type="text"],
+.comment-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.comment-form textarea {
+    height: 100px;
+}
+
+.comment-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.comment {
+    margin-bottom: 20px;
+}
+
+.comment-info {
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-time {
+    color: #999;
+    margin-left: 10px;
+}
+
+.comment-text {
+    margin: 0;
+}
+
+    </style>
+{% endblock %}
+<a href="{{ path('update_Post', {'id':20 }) }}">Modifier le post</a>
+<video id="my-video" class="video-js" controls preload="auto" width="640" height="360" data-setup="{}">
+            <source src="{{ asset('test2.mp4') }}">
+            <!-- Add other video sources if needed -->
+            Votre navigateur ne supporte pas la lecture de vidéos HTML5.
+        </video>
+         {% block javascripts %}
+        <script src="{{ asset('node_modules/video.js/dist/video.js') }}"></script>
+        <script>
+            // Initialize Video.js player
+            videojs('my-video', {}, function() {
+                // Player is initialized
+            });
+        </script>
+       
+    {% endblock %}
+    <div class="comments-container">
+    <h2>Commentaires</h2>
+    
+    <!-- Comment Form -->
+    <form class="comment-form">
+        <textarea name="comment" placeholder="Ecrire votre commentaire" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <!-- List of Comments -->
+    <div class="comments-list">
+        
+ <table>
+    <tr>
+        <th>Tous les commentaires</th>
+    </tr>
+    {% for a in o1 %}
+    <tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
+        
+         <td>{{ a.Content }}</td>
+          
+       
+</td>
+   
+    </tr>
+    {% endfor %}
+
+</table>  </div>
+        
+    </div>
+</div>
+{% endblock %}

@@ -96,7 +96,7 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
             // Redirection pour l'utilisateur ayant le rôle admin
             return new RedirectResponse('/Artistpage');
         } elseif ($user->getRole() == 'CLIENT') {
-            return new RedirectResponse('/userpage');
+            return new RedirectResponse('/userpage1');
         } elseif ($user->getRole() == 'ADMIN') {
             return new RedirectResponse('/Adminpage');
         } else {
