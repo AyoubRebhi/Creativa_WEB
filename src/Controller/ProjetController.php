@@ -134,10 +134,12 @@ class ProjetController extends AbstractController
     #[Route('/client/{idProjet}', name: 'app_projet_show_client', methods: ['GET'])]
     public function showClient(Projet $projet): Response
     {
+        $idUser = $this->session->get('user_id');
         $user = $projet->getUser();
         return $this->render('projet/showClient.html.twig', [
             'projet' => $projet,
             'user' => $user,
+            'idUser' => $idUser,
         ]);
     }
     #[Route('/artist/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]

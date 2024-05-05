@@ -26,7 +26,7 @@ class Commande
     private $idCmd;
 
     /**
-     * @var int|null
+     * @var int
      *
      * @ORM\Column(name="id_user", type="integer", nullable=true)
      * @Assert\NotBlank(message="id user ne peut pas être vide.")
@@ -129,8 +129,10 @@ class Commande
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="commandes")
-     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=false)
+     * @var User|null
+     * 
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="commandes")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
      */
     private $user;
 
@@ -140,20 +142,12 @@ class Commande
         return $this->user;
     }
 
-    /*public function setUser(?User $user): self
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
-        // Définir la relation inverse si nécessaire
-        if ($user !== null && !$user->getCommandes()->contains($this)) {
-            $user->addCommande($this);
-        }
-
         return $this;
-    }*/
-
-
-
+    }
 
     public function getIdCmd(): ?int
     {

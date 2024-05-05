@@ -12,7 +12,7 @@ use App\Repository\CommandeRepository;
 use App\Repository\CodepromoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\Projet;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\CodePromo;
 use App\Controller\CodePromoController;
@@ -24,6 +24,7 @@ use Twilio\Rest\Client as TwilioClient;
 use Twilio\Rest\Api\V2010\Account\MessageInstance;
 use Twilio\Rest\Client;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class CommandeController extends AbstractController
 {
@@ -38,8 +39,18 @@ class CommandeController extends AbstractController
     public function ajouterCommande(Request $request, CodePromoRepository $codePromoRepository): Response
     {
         $idUser = $this->session->get('user_id');
+        $idProjet = $request->query->get('idProjet');
+        $prix = $request->query->get('prix');
+
+        $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
+        if (!$user) {
+            // Handle the case when the user does not exist
+            throw $this->createNotFoundException('User not found');
+        }
 
         $commande = new Commande();
+        $commande->setUser($user);
+        // Set the user ID directly
 
         $commande->setDate(new \DateTime());
         // Pré-remplit le champ de date estimée avec la date actuelle + 5 jours
@@ -48,6 +59,8 @@ class CommandeController extends AbstractController
         $commande->setDateLivraisonEstimee($dateEstimee);
         $commande->setStatus('en cours');
         $commande->setFraisLiv(8);
+        $commande->setIdProjet($idProjet);
+        $commande->setPrix($prix);
 
         $form = $this->createForm(CommandeType::class, $commande);
         $form->handleRequest($request);
@@ -73,6 +86,8 @@ class CommandeController extends AbstractController
 
         return $this->render('commande/ajouterCommande.html.twig', [
             'formulaireCommande' => $form->createView(),
+            'projet' => ['idProjet' => $idProjet, 'prix' => $prix],
+            'idUser' => $idUser,
         ]);
     }
 
@@ -180,13 +195,16 @@ class CommandeController extends AbstractController
      */
     function afficheCommande(Request $request, CommandeRepository $repo)
     {
+        $idUser = $this->session->get('user_id');
+
+
         $currentPage = $request->query->getInt('page', 1);
         $limit = 10; // Number of items per page
         $offset = ($currentPage - 1) * $limit;
 
-        $obj = $repo->findBy([], [], $limit, $offset); // Fetch paginated data
+        $obj = $repo->findBy(['idUser' => $idUser], [], $limit, $offset); // Fetch paginated data
 
-        $totalItems = $repo->count([]); // Total number of items
+        $totalItems = $repo->count(['idUser' => $idUser]); // Total number of items
         $totalPages = ceil($totalItems / $limit); // Calculate total pages
 
         return $this->render('commande/afficherCommande.html.twig', [

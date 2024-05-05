@@ -20,6 +20,7 @@ class CommandeType extends AbstractType
 {
     private $projetRepository;
 
+
     public function __construct(ProjetRepository $projetRepository)
     {
         $this->projetRepository = $projetRepository;
@@ -35,10 +36,14 @@ class CommandeType extends AbstractType
         }
 
         $builder
-            ->add('idUser')
-            ->add('idProjet', ChoiceType::class, [
-                'choices' => $projectChoices,
-                'placeholder' => 'Sélectionnez un projet',
+            ->add('idUser', null, [
+                'disabled' => true,
+            ])
+            ->add('idProjet', null, [
+                'disabled' => true,
+            ])
+            ->add('prix', null, [
+                'disabled' => true,
             ])
             ->add('date', DateType::class)
             ->add('dateLivraisonEstimee', DateType::class)
@@ -46,7 +51,7 @@ class CommandeType extends AbstractType
             ->add('status', null, [
                 'disabled' => true, //read only
             ])
-            ->add('prix')
+
             ->add('fraisLiv', null, [
                 'disabled' => true, //read only
             ])

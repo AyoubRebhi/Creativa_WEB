@@ -125,15 +125,14 @@
 		<div class="fieldset-container">
 			<div class="fieldset-title">Informations de la commande</div>
 			<div class="form-group">
-				{{ form_label(formulaireCommande.idUser) }}
-				{{ form_widget(formulaireCommande.idUser, {'attr': {'class': 'form-control' ~ (form_errors(formulaireCommande.idUser)|default('') ? ' is-invalid' : '')}}) }}
-
-				{% if form_errors(formulaireCommande.idUser) %}
-					<div class="invalid-feedback">
-						{{ form_errors(formulaireCommande.idUser) }}
-					</div>
-				{% endif %}
-				<div>{{ form_row(formulaireCommande.idProjet) }}</div>
+				<div class="form-group">
+					<label for="idUser">ID User</label>
+					<input type="text" id="idUser" name="idUser" class="form-control" value="{{ idUser }}" readonly>
+				</div>
+				<div class="form-group">
+					<label for="idProjet">ID Projet</label>
+					<input type="text" id="idProjet" name="idProjet" class="form-control" value="{{ projet.idProjet }}" readonly>
+				</div>
 				<div class="date-fields">
 					<div>{{ form_row(formulaireCommande.date) }}</div>
 					<div>{{ form_row(formulaireCommande.dateLivraisonEstimee) }}</div>
