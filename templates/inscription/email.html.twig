@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription à la formation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Inscription à la formation</h2>
+        <p>Merci, vous avez bien été inscrit à la formation <span class="highlight">{{titre}}</span>.</p>
+        <p>Voici les détails de votre inscription :</p>
+        <ul>
+            <li><span class="highlight">Titre de la formation:</span>{{titre}}</li>
+            <li><span class="highlight">Description:</span> {{description}}</li>
+            <li><span class="highlight">Nombre de places:</span> {{nb_places}}</li>
+            <li><span class="highlight">Prix:</span> {{prix}}dt</li>
+            <li><span class="highlight">Nom:</span> {{nom}}</li>
+            <li><span class="highlight">Prénom:</span> {{prenom}}</li>
+            <li><span class="highlight">Email:</span>{{user_email}}</li>
+        </ul>
+        <p>Nous vous contacterons bientôt avec plus d'informations.</p>
+    </div>
+</body>
+</html>

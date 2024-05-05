@@ -114,8 +114,9 @@
 		{{ form_row(formulaireLivraison.idCmd) }}
 	</div>
 
-	<div class="form-group left">
-		{{ form_row(formulaireLivraison.idUser) }}
+	<div class="form-group">
+		<label for="idUser">ID User</label>
+		<input type="text" id="idUser" name="idUser" class="form-control" value="{{ idUser }}" readonly>
 	</div>
 
 	<div class="form-group left">

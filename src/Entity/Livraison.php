@@ -104,7 +104,26 @@ class Livraison
 
         return $this;
     }
+    /**
+     * @var User|null
+     * 
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="livraisons")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
+     */
+    private $user;
 
+    // Getter et setter pour la relation ManyToOne avec User
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
     public function getIdUser(): ?int
     {
         return $this->idUser;

@@ -15,8 +15,12 @@ class LivraisonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('idCmd')
-            ->add('idUser')
+            ->add('idCmd', null, [
+                'disabled' => true, //read only
+            ])
+            ->add('idUser', null, [
+                'disabled' => true, //read only
+            ])
             ->add('status', null, [
                 'disabled' => true, //read only
             ])

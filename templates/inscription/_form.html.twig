@@ -1,0 +1,11 @@
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.email) }}
+    {# Ne pas inclure le champ dateNow #}
+    {# {{ form_row(form.dateNow) }} #}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

@@ -125,9 +125,6 @@ class Commande
         return $this;
     }
 
-
-
-
     /**
      * @var User|null
      * 

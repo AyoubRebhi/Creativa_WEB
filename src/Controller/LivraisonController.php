@@ -16,9 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LivraisonController extends AbstractController
 {
-
-
-
     /**
      * @Route("/ajouterLivraison", name="ajouter_livraison")
      */
