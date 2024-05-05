@@ -49,5 +49,56 @@ class Comments
      */
     private $seen;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
+    public function getPostId(): ?int
+    {
+        return $this->postId;
+    }
+
+    public function setPostId(int $postId): static
+    {
+        $this->postId = $postId;
+
+        return $this;
+    }
+
+    public function getEditeur(): ?int
+    {
+        return $this->editeur;
+    }
+
+    public function setEditeur(int $editeur): static
+    {
+        $this->editeur = $editeur;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): static
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getSeen(): ?int
+    {
+        return $this->seen;
+    }
+
+    public function setSeen(int $seen): static
+    {
+        $this->seen = $seen;
+
+        return $this;
+    }
 }

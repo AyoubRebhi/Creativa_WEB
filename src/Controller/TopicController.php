@@ -11,6 +11,9 @@ use App\Entity\Topic;
 use App\Repository\TopicRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\SubmitType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class TopicController extends AbstractController
 {
@@ -21,51 +24,86 @@ class TopicController extends AbstractController
             'controller_name' => 'TopicController',
         ]);
     }
-    #[Route('/afficherTopic', name: 'afficher_topic')]
+    #[Route('/affichertopic', name: 'afficher_topic')]
     function affiche(TopicRepository $repo)
     {
-        $obj = $repo->findAll();
-        return $this->render('topic/affichertopic.html.twig', ['o' => $obj]);
+        $topics = $repo->findAll();
+        return $this->render('topic/affichertopic.html.twig', ['topics' => $topics]);
     }
-    #[Route('/ajouterTopic', name: 'ajouter_topic')]
+    #[Route('/ajoutertopic', name: 'ajouter_topic')]
     public function ajouterTopic(Request $request): Response
     {
-        $topic = new Topic(); // Correct variable name from $top to $topic
+        $topic = new Topic();
 
-        $form = $this->createForm(TopicType::class, $topic); // Pass $topic object to the form
-
+        $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $image */
+            $image = $form['Image']->getData();
+            if ($image) {
+                $imageName = uniqid() . '.' . $image->guessExtension();
+
+                try {
+                    $image->move($this->getParameter('topic_dir'), $imageName);
+                } catch (FileException $e) {
+                    return new Response('Failed to upload the image.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                $topic->setImage($imageName);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($topic);
             $entityManager->flush();
-            $this->addFlash('success', '');
-        }
 
+            return $this->redirectToRoute('afficher_topic'); // Redirect to a different route after successful form submission
+        }
 
         return $this->render('topic/ajoutertopic.html.twig', [
             'formulairetopic' => $form->createView(),
         ]);
     }
-    #[Route('/UpdateTopic/{Topic_id}', name: 'update_Topic')]
-    public function UpdateTopic(Request $request, TopicRepository $repo, $Topic_id, ManagerRegistry $managerRegistry)
+
+    #[Route('/Updatetopic/{Topic_id}', name: 'update_Topic')]
+    public function UpdateTopic(Request $request, TopicRepository $repo, $Topic_id, EntityManagerInterface $entityManager): Response
     {
         $topic = $repo->find($Topic_id);
         $form = $this->createForm(TopicType::class, $topic);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $managerRegistry->getManager();
-            $em->flush();
-            return $this->redirectToRoute("afficher_post");
+            // Handle uploaded image
+            $imageFile = $form['Image']->getData();
+            if ($imageFile) {
+                $fileName = uniqid() . '.' . $imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('topic_dir'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    // Handle file exception
+                    return new Response('Failed to upload the image.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                // Set the image file name in the entity
+                $topic->setImage($fileName);
+            }
+
+            // Flush changes to the database
+            $entityManager->flush();
+
+            // Add flash message
+            $this->addFlash('success', 'Topic updated successfully.');
+
+            // Redirect to the appropriate route, passing any necessary parameters
+            return $this->redirectToRoute("afficher_topic");
         }
 
-        // Ajoutez un bouton de soumission au formulaire
         return $this->render('topic/Updatetopic.html.twig', [
             'formulairetopic' => $form->createView(),
         ]);
     }
+
     #[Route('/deletetopic/{id}', name: 'delete_topic')]
     function delete(ManagerRegistry $manager, TopicRepository $repo, $id, Request $request)
     {

@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheetProject %}
-	{{ parent() }}
 	<style>
 		/* Style pour le formulaire */
 		form {
@@ -110,11 +109,11 @@
 
 	{{ form_start(formulaireLivraison,{'attr': {'novalidate': 'novalidate'}})}}
 
-	<div class="form-group left">
+	<div class="form-group left" hidden>
 		{{ form_row(formulaireLivraison.idCmd) }}
 	</div>
 
-	<div class="form-group">
+	<div class="form-group" hidden>
 		<label for="idUser">ID User</label>
 		<input type="text" id="idUser" name="idUser" class="form-control" value="{{ idUser }}" readonly>
 	</div>

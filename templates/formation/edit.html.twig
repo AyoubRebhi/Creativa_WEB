@@ -1,17 +1,18 @@
-{% extends 'baseBack.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}Edit Formation{% endblock %}
+{% block title %}Edit Formation
+{% endblock %}
 
 {% block body %}
-    <h1>Modifier Formation</h1>
+	<h1>Modifier Formation</h1>
 
- {{ include('formation/_form.html.twig', {'button_label': 'Update'}) }}
-<div style="margin-top: 10px;"></div> <!-- Adding space with a margin -->
+	{{ include('formation/_form.html.twig', {'button_label': 'Update'}) }}
+	<div style="margin-top: 10px;"></div>
+	<!-- Adding space with a margin -->
 
-<a href="{{ path('app_formation_index') }}" class="btn btn-secondary mr-2">Retourner</a>
+	<a href="{{ path('app_formation_indexArtist') }}" class="btn btn-secondary mr-2">Retourner</a>
 
-{{ include('formation/_delete_form.html.twig') }}
-
+	{{ include('formation/_delete_form.html.twig') }}
 
 
 {% endblock %}

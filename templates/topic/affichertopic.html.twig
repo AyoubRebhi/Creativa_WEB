@@ -1,114 +1,103 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
+
+{% block title %}Liste des topics
+{% endblock %}
+
+{% block stylesheetProject %}
+	<style>
+		.card {
+			margin-top: 20px;
+		}
+
+		.card-header {
+			background-color: #764949;
+			color: white;
+			font-weight: bold;
+		}
+
+		.card-body {
+			padding: 0;
+		}
+
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.table th,
+		.table td {
+			padding: 8px;
+			text-align: center;
+		}
+
+		.table th {
+			background-color: #764949;
+			color: white;
+			border-radius: 10px;
+		}
+
+		.table tbody tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		.table tbody tr:hover {
+			background-color: #f4a460;
+		}
+
+		.topic-image {
+			max-width: 100px;
+			max-height: 100px;
+		}
+
+		.delete-topic-link {
+			color: red;
+		}
+	</style>
+{% endblock %}
+
 {% block body %}
-	{% block stylesheetProject %}
+	<div class="card">
+		<div class="card-header">
+			<h3>Liste des topics</h3>
+		</div>
+		<div class="card-body table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Sujet</th>
+						<th>Image</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for topic in topics %}
+						<tr>
+							<td>{{ topic.Nom }}</td>
+							<td>{{ topic.Subject }}</td>
+							<td>
+								{% if topic.Image %}
+									{{topic.Image}}
+								{% else %}
+									No Image
+								{% endif %}
+							</td>
+							<td>
+								<a href="{{ path('delete_topic', {'id': topic.id}) }}" class="btn btn-danger">Supprimer</a>
+								<a href="{{ path('update_Topic', {'Topic_id': topic.id}) }}" class="btn btn-primary">Modifier</a>
+								<a href="{{ path('afficher_post', {'Topic_id': topic.id}) }}" class="btn btn-secondary">Afficher Les postes reliés</a>
 
-		<style>
-			table {
-				width: 100%;
-				border-collapse: collapse;
-			}
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">No topics found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-			table,
-			th,
-			td {
-
-				border-radius: 20px;
-			}
-
-			th,
-			td {
-				padding: 8px;
-				text-align: center;
-
-			}
-
-			th {
-				background-color: #764949;
-				color: white;
-			}
-
-			tr:nth-child(even) {
-				background-color: #f2f2f2;
-			}
-
-			tr:hover {
-				background-color: #f4a460;
-			}
-			.left-align {
-				float: right;
-			}
-			img {
-				max-width: 200px; /* Adjust this value as needed */
-				max-height: 200px; /* Adjust this value as needed */
-			}
-		</style>
-	{% endblock %}
-	{% block  topic %}
-		<h1>Liste des topic</h1>
-		<link rel="stylesheet" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css')}}">
-
-		<button id="notification-icon">
-			<i class="fas fa-bell"></i>
-			<!-- Bell icon from Font Awesome -->
-		</button>
-
-
-		{# Notification section (initially hidden) #}
-		<section id="notifications" style="display: none;">
-			{% for flashType, flashMessages in app.session.flashbag.all() %}
-				{% for flashMessage in flashMessages %}
-					<div class="notification notification-{{ flashType }}">
-						{{ flashMessage }}
-					</div>
-				{% endfor %}
-			{% endfor %}
-		</section>
-		<script>
-			document.addEventListener('DOMContentLoaded', function () {
-const notificationIcon = document.getElementById('notification-icon');
-const notificationSection = document.getElementById('notifications');
-
-notificationIcon.addEventListener('click', function () {
-if (notificationSection.style.display === 'none') {
-notificationSection.style.display = 'block';
-} else {
-notificationSection.style.display = 'none';
-}
-});
-});
-		</script>
-		<table>
-
-			<tr>
-				<th>Nom</th>
-				<th>Sujet</th>
-				<th>Image</th>
-				<th>supprimer</th>
-			</tr>
-			{% for a in o %}
-				<tr class="clickable-row" data-href="{{ path('afficher_post', {'Topic_id': a.Id}) }}">
-					<td>{{ a.Nom }}</td>
-					<td>{{ a.Subject }}</td>
-					<td><img src="fayrouz.jpg"></td>
-					<td>
-						<a href="{{ path('delete_topic', {'id': a.id}) }}">Supprimer un topic</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</table>
-
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-var rows = document.querySelectorAll(".clickable-row");
-
-rows.forEach(function (row) {
-row.addEventListener("click", function () {
-window.location.href = this.dataset.href;
-});
-});
-});
-		</script>
-
-	{% endblock %}
-	<a href="{{ path('ajouter_topic') }}">Ajouter un topic</a>
+	<a href="{{ path('ajouter_topic') }}" class="btn btn-primary mt-3">Ajouter un topic</a>
 {% endblock %}

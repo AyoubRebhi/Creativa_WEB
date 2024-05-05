@@ -43,7 +43,7 @@ class FormationController extends AbstractController
         return $response;
     }
 
-    #[Route('/', name: 'app_formation_index', methods: ['GET'])]
+    #[Route('/', name: 'app_formation_indexArtist', methods: ['GET'])]
     public function index(Request $request, FormationRepository $formationRepository, PaginatorInterface $paginator): Response
     {
 

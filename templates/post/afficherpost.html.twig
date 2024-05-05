@@ -1,78 +1,94 @@
-{% extends 'base.html.twig' %}
+{% extends 'backOffice.html.twig' %}
+
+{% block stylesheetProject %}
+	<style>
+		.card {
+			margin-top: 20px;
+		}
+
+		.card-header {
+			background-color: #764949;
+			color: white;
+			font-weight: bold;
+		}
+
+		.card-body {
+			padding: 0;
+		}
+
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.table th,
+		.table td {
+			padding: 8px;
+			text-align: center;
+		}
+
+		.table th {
+			background-color: #764949;
+			color: white;
+			border-radius: 10px;
+		}
+
+		.table tbody tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		.table tbody tr:hover {
+			background-color: #f4a460;
+		}
+
+		.topic-image {
+			max-width: 100px;
+			max-height: 100px;
+		}
+
+		.delete-topic-link {
+			color: red;
+		}
+	</style>
+{% endblock %}
+
 {% block body %}
-	{% block stylesheetProject %}
-		<style>
-			table {
-				width: 100%;
-				border-collapse: collapse;
-			}
+	<div class="card">
+		<div class="card-header">
+			<h3>Liste des posts pour le sujet "{{ topicName }}"
+			</h3>
+		</div>
+		<div class="card-body table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Editeur</th>
+						<th>Titre</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for post in posts %}
+						<tr>
+							<td>{{ post.Editeur }}</td>
+							<td>{{ post.Titre }}</td>
+							<td>{{ post.Description }}</td>
+							<td>
+								<a href="{{ path('delete_post', {'id': post.Id}) }}" class="btn btn-danger">Supprimer</a>
+								<a href="{{ path('update_Post', {'id': post.Id}) }}" class="btn btn-primary">Modifier</a>
 
-			table,
-			th,
-			td {
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">No posts found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-				border-radius: 20px;
-			}
-
-			th,
-			td {
-				padding: 8px;
-				text-align: center;
-
-			}
-
-			th {
-				background-color: #764949;
-				color: white;
-			}
-
-			tr:nth-child(even) {
-				background-color: #f2f2f2;
-			}
-
-			tr:hover {
-				background-color: #f4a460;
-			}
-			.left-align {
-				float: right;
-			}
-		</style>
-	{% endblock %}
-	{% block  posts%}
-		<h1>Liste des posts</h1>
-
-		<table>
-			<tr>
-				<th>editeur</th>
-				<th>titre</th>
-				<th>description</th>
-				<th>Supprimer</th>
-			</tr>
-			{% for a in o %}
-				<tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
-					<td>{{ a.Editeur }}</td>
-					<td>{{ a.Titre }}</td>
-					<td>{{ a.Description }}</td>
-					<td>
-						<a href="{{ path('delete_post', {'id': a.Id}) }}">Supprimer un post</a>
-					</td>
-
-				</tr>
-			{% endfor %}
-
-		</table>
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-var rows = document.querySelectorAll(".clickable-row");
-
-rows.forEach(function (row) {
-row.addEventListener("click", function () {
-window.location.href = this.dataset.href;
-});
-});
-});
-		</script>
-	{% endblock %}
-	<a href="{{ path('update_Topic', {'Topic_id': topicid}) }}">Modifier un topic</a>
-	<a href="{{ path('ajouter_post') }}">Ajouter un post</a>
+	<a href="{{ path('ajouter_post') }}" class="btn btn-primary mt-3">Ajouter un post</a>
 {% endblock %}

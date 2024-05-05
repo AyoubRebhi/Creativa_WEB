@@ -1,11 +1,12 @@
-{% extends 'baseBack.html.twig' %}
+{% extends 'backOffice.html.twig' %}
 
-{% block title %}New Inscription{% endblock %}
+{% block title %}New Inscription
+{% endblock %}
 
 {% block body %}
-    <h1>Ajouter Inscription</h1>
+	<h1>Ajouter Inscription</h1>
 
-    {{ include('inscription/_form.html.twig') }}
+	{{ include('inscription/_form.html.twig') }}
 
-    <a href="{{ path('app_inscription_index') }}">Retourner</a>
+	<a href="{{ path('app_inscription_index') }}">Retourner</a>
 {% endblock %}

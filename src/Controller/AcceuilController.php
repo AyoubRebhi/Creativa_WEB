@@ -17,7 +17,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\MailerInterface;
 
-#[Route('/acceuil', name: 'app_accueil')]
+#[Route('/acceuil')]
 class AccueilController extends AbstractController
 {
     private $mailer;
@@ -26,7 +26,7 @@ class AccueilController extends AbstractController
         $this->mailer = $mailer;
     }
 
-    #[Route('/', name: 'app_accueil')]
+    #[Route('/hh', name: 'app_accueil')]
     public function index(Request $request, FormationRepository $formationRepository): Response
     {
         $email = "MayMatri@esprit.tn";

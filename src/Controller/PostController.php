@@ -12,6 +12,7 @@ use App\Entity\Post;
 use App\Repository\TopicRepository;
 use App\Repository\PostRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class PostController extends AbstractController
 {
@@ -23,10 +24,16 @@ class PostController extends AbstractController
         ]);
     }
     #[Route('/afficherPost/{Topic_id}', name: 'afficher_post')]
-    function affiche(PostRepository $repo, int $Topic_id)
+    function affiche(PostRepository $repo, TopicRepository $topicRepo, int $Topic_id)
     {
         $posts = $repo->findBy(['topicId' => $Topic_id]);
-        return $this->render('post/afficherpost.html.twig', ['o' => $posts, 'topicid' => $Topic_id]);
+        $topicName = $topicRepo->find($Topic_id)->getNom();
+
+        return $this->render('post/afficherpost.html.twig', [
+            'posts' => $posts,
+            'topicName' => $topicName,
+            'topicid' => $Topic_id
+        ]);
     }
     #[Route('/lire', name: 'lire')]
     public function showMedia(): Response
@@ -71,15 +78,29 @@ class PostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $managerRegistry->getManager();
-            $em->flush();
-            return $this->redirectToRoute("afficher_post");
-        }
 
+            // Handle file upload for media
+            $mediaFile = $form['media']->getData();
+            if ($mediaFile) {
+                $fileName = uniqid() . '.' . $mediaFile->guessExtension();
+                try {
+                    $mediaFile->move($this->getParameter('media_directory'), $fileName);
+                    $post->setMedia($fileName);
+                } catch (FileException $e) {
+                    // Handle file exception
+                    return new Response('Failed to upload media.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            $em->flush();
+            return $this->redirectToRoute("afficher_post", ['Topic_id' => $post->getTopicId()]);
+        }
 
         return $this->render('post/updatepost.html.twig', [
             'formulairepost' => $form->createView(),
         ]);
     }
+
     #[Route('/deletepost/{id}', name: 'delete_post')]
     function delete(ManagerRegistry $manager, PostRepository $repo, $id, Request $request)
     {

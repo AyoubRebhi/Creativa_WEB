@@ -16,10 +16,15 @@ class LivraisonType extends AbstractType
     {
         $builder
             ->add('idCmd', null, [
-                'disabled' => true, //read only
+                'disabled' => true,
+                'attr' => ['style' => 'display: none;'],
+                'label_attr' => ['style' => 'display: none;']
+
             ])
             ->add('idUser', null, [
                 'disabled' => true, //read only
+                'attr' => ['style' => 'display: none;'],
+                'label_attr' => ['style' => 'display: none;']
             ])
             ->add('status', null, [
                 'disabled' => true, //read only

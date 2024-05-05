@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LivraisonController extends AbstractController
 {
+
     /**
      * @Route("/ajouterLivraison", name="ajouter_livraison")
      */
@@ -48,9 +49,6 @@ class LivraisonController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($livraison);
             $entityManager->flush();
-
-
-
 
             return $this->redirectToRoute('afficher_livraison');
         }
@@ -106,14 +104,15 @@ class LivraisonController extends AbstractController
      */
     function affiche(Request $request, LivraisonRepository $repo)
     {
-
+        $user = $this->getUser();
+        $idUser = $user->getIdUser();
         $currentPage = $request->query->getInt('page', 1);
         $limit = 10; // Number of items per page
         $offset = ($currentPage - 1) * $limit;
 
-        $obj = $repo->findBy([], [], $limit, $offset); // Fetch paginated data
+        $obj = $repo->findBy(['idUser' => $idUser], [], $limit, $offset); // Fetch paginated data
 
-        $totalItems = $repo->count([]); // Total number of items
+        $totalItems = $repo->count(['idUser' => $idUser]); // Total number of items
         $totalPages = ceil($totalItems / $limit); // Calculate total pages
 
         return $this->render('livraison/afficherLivraison.html.twig', [

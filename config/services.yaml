@@ -6,6 +6,8 @@
 parameters:
   image_dir: "%kernel.project_dir%/public/uploads/images/categorie"
   media_dir: "%kernel.project_dir%/public/uploads/images/projet"
+  topic_dir: "%kernel.project_dir%/public/uploads/images/topic"
+
   locale: "fr"
 
 services:

@@ -38,10 +38,16 @@ class CommandeType extends AbstractType
         $builder
             ->add('idUser', null, [
                 'disabled' => true,
+                'attr' => ['style' => 'display: none;'],
+                'label_attr' => ['style' => 'display: none;']
             ])
+
             ->add('idProjet', null, [
                 'disabled' => true,
+                'attr' => ['style' => 'display: none;'],
+                'label_attr' => ['style' => 'display: none;']
             ])
+
             ->add('prix', null, [
                 'disabled' => true,
             ])

@@ -1,19 +1,15 @@
 <table>
-    <tr>
-        <th>editeur</th>
-        <th>titre</th>
-        <th>description</th>
-        <th>Supprimer</th>
-    </tr>
-    {% for a in o1 %}
-    <tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
-        <td>{{ a.Editeur }}</td>
-         <td>{{ a.Content }}</td>
-          
-       
-</td>
-   
-    </tr>
-    {% endfor %}
+	<tr>
+		<th>editeur</th>
+		<th>titre</th>
+		<th>description</th>
+		<th>Supprimer</th>
+	</tr>
+	{% for a in o1 %}
+		<tr class="clickable-row" data-href="{{ path('lire_post', {'post_id': a.Id}) }}">
+			<td>{{ a.Editeur }}</td>
+			<td>{{ a.Content }}</td>
+		</tr>
+	</td>
 
-</table>
+</tr>{% endfor %}</table>
