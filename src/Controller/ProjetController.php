@@ -65,6 +65,14 @@ class ProjetController extends AbstractController
             'projets' => $projets,
         ]);
     }
+    #[Route('/home1', name: 'app_projet_home', methods: ['GET'])]
+    public function acceuil(): Response
+    {
+
+
+        return $this->render('projet/home.html.twig');
+    }
+
 
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -87,16 +95,18 @@ class ProjetController extends AbstractController
             /** @var UploadedFile $media */
             $media = $form['media']->getData();
             if ($media) {
-                $fileName = uniqid() . '.' . $media->guessExtension();
+                // Call the upload function to handle file upload
+                $fileName = $this->upload($media);
 
-                try {
-                    $media->move($this->getParameter('media_dir'), $fileName);
-                } catch (FileException $e) {
+                // Check if file upload was successful
+                if (!$fileName) {
                     return new Response('Failed to upload the media.', Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
+                // Set the media path in the projet entity
                 $projet->setMedia($fileName);
             }
+
             // Set the fetched user as the owner of the projet
             $projet->setUser($user);
 
@@ -113,6 +123,24 @@ class ProjetController extends AbstractController
             'projet' => $projet,
             'form' => $form,
         ]);
+    }
+
+    private function upload($media): ?string
+    {
+        $fileName = null;
+
+        try {
+            // Generate a unique file name
+            $fileName = uniqid() . '.' . $media->guessExtension();
+
+            // Move the uploaded file to the designated directory
+            $media->move($this->getParameter('media_dir'), $fileName);
+        } catch (FileException $e) {
+            // Log the error or handle it as needed
+            return null;
+        }
+
+        return $fileName;
     }
 
 

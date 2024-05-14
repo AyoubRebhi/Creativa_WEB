@@ -226,11 +226,11 @@ class UserController extends AbstractController
             // Rediriger l'utilisateur vers la page appropriée après l'édition
             switch ($role) {
                 case 'CLIENT':
-                    return $this->redirectToRoute('userpage1');
+                    return $this->redirectToRoute('app_projet_home');
                 case 'ARTIST':
                     return $this->redirectToRoute('Artistpage');
                 case 'ADMIN':
-                    return $this->redirectToRoute('Adminpage');
+                    return $this->redirectToRoute('statistiques_roles');
                 default:
                     // Rediriger vers une page d'erreur ou la page d'accueil si le rôle n'est pas reconnu
                     return $this->redirectToRoute('homepage');
@@ -298,10 +298,10 @@ class UserController extends AbstractController
             $utilisateur->setBlockEndDate($dateFinBlocage);
 
             $entityManager->flush();
-            $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+            $transport = Transport::fromDsn('smtp://allahommayarab@gmail.com:ugoqsvujijuszwna@smtp.gmail.com:587');
             $mailer = new Mailer($transport);
             $email = (new TemplatedEmail())
-                ->from('hhajer09@gmail.com')
+                ->from('allahommayarab@gmail.com')
                 ->to($utilisateur->getEmail())
                 ->subject('votre compte est Bloqué')
                 ->html('

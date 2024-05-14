@@ -1,160 +1,167 @@
-{% extends 'backOffice.html.twig' %}
+{% extends 'backOfficeAdmin.html.twig' %}
 {% block stylesheets %}
-  {{ parent() }}
-    <style>
-    table {
-    width: 100%;
-    border-collapse: collapse;
-}
+	{{ parent() }}
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-table, th, td {
-    border: 1px solid black;
-}
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
 
-th, td {
-    padding: 8px;
-    text-align: left;
-}
+		th,
+		td {
+			padding: 8px;
+			text-align: left;
+		}
 
-th {
-    background-color: #f2f2f2;
-}
+		th {
+			background-color: #f2f2f2;
+		}
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
 
-tr:hover {
-    background-color: #ddd;
-}
-.left-align {
-    float: right;
-}
-.total-commandes {
-            display: inline-block;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-            font-weight: bold;
-            color: #007bff;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-        }
+		tr:hover {
+			background-color: #ddd;
+		}
+		.left-align {
+			float: right;
+		}
+		.total-commandes {
+			display: inline-block;
+			padding: 10px;
+			background-color: #f0f0f0;
+			border: 2px solid #007bff;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #007bff;
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+		}
 
-        /* Pagination Box */
-        .pagination-box {
-            border-radius: 5px;
-            display: inline-block;
-            padding: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        /* Pagination Styles */
-        .pagination {
-            display: inline-block;
-        }
-        
-        .pagination a {
-            color:#405165;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-        }
-        
-        .pagination a:hover {
-            background-color: #f2f2f2; /* Light background color on hover */
-        }
-        
-        .pagination .active {
-            background-color: #E9BB79; /* Light background color for active page */
-        }
-        .liste{
-            display: block; /* Afficher en tant que bloc */
-            padding: 10px; /* Espacement intérieur */
-            border: none; /* Pas de bordure */
-            border-radius: 4px; /* Coins arrondis */
-            background-color: #007bff; /* Couleur de fond */
-            color: #fff; /* Couleur du texte */
-            font-size: 1em; /* Taille de la police */
-            cursor: pointer; /* Curseur pointer */
-            transition: background-color 0.3s; /* Transition fluide */
-            text-align: center; /* Aligner à droite */
-            float: right ;
-        }
-        h1 {
-    color: #473516; /* Couleur du texte */
-    font-size: 2em; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    font-family: Arial, sans-serif; /* Police de caractères */
-    margin-top: 20px; /* Marge en haut */
-    margin-bottom: 20px; /* Marge en bas */
-    text-align: center; /* Alignement du texte */
-    text-transform: uppercase; /* Transformation du texte en majuscules */
-    text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
-    /* Autres styles CSS si nécessaire */
-}
-    </style>
+		/* Pagination Box */
+		.pagination-box {
+			border-radius: 5px;
+			display: inline-block;
+			padding: 10px;
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		/* Pagination Styles */
+		.pagination {
+			display: inline-block;
+		}
+
+		.pagination a {
+			color: #405165;
+			padding: 8px 16px;
+			text-decoration: none;
+			transition: background-color 0.3s;
+		}
+
+		.pagination a:hover {
+			background-color: #f2f2f2; /* Light background color on hover */
+		}
+
+		.pagination .active {
+			background-color: #E9BB79; /* Light background color for active page */
+		}
+		.liste {
+			display: block; /* Afficher en tant que bloc */
+			padding: 10px; /* Espacement intérieur */
+			border: none; /* Pas de bordure */
+			border-radius: 4px; /* Coins arrondis */
+			background-color: #007bff; /* Couleur de fond */
+			color: #fff; /* Couleur du texte */
+			font-size: 1em; /* Taille de la police */
+			cursor: pointer; /* Curseur pointer */
+			transition: background-color 0.3s; /* Transition fluide */
+			text-align: center; /* Aligner à droite */
+			float: right;
+		}
+		h1 {
+			color: #473516; /* Couleur du texte */
+			font-size: 2em; /* Taille de la police */
+			font-weight: bold; /* Gras */
+			font-family: Arial, sans-serif; /* Police de caractères */
+			margin-top: 20px; /* Marge en haut */
+			margin-bottom: 20px; /* Marge en bas */
+			text-align: center; /* Alignement du texte */
+			text-transform: uppercase; /* Transformation du texte en majuscules */
+			text-shadow: 2px 2px 4px #888888; /* Ombre du texte */
+			/* Autres styles CSS si nécessaire */
+		}
+	</style>
 {% endblock %}
 {% block body %}
-<h1>Liste des commandes</h1>
-    <a href="{{ path('afficher_livraison_Back') }}" class="liste">Liste des livraisons</a>
+	<h1>Liste des commandes</h1>
+	<a href="{{ path('afficher_livraison_Back') }}" class="liste">Liste des livraisons</a>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Utilisateur</th>
-        <th>ID Projet</th>
-        <th>Date</th>
-        <th>Montant Total</th>
-        <th>Date de Livraison Estimée</th>
-        <th>Code Promo</th>
-        <th>Status</th>
-        <th>Prix</th>
-        <th>Frais de Livraison</th>
-        <th>Actions</th>
-    </tr>
-    <br>
-    {% set totalCommande = o|length %}
-    <p class="total-commandes">Nombre total de commandes :{{ totalCommande }}</p>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>ID Utilisateur</th>
+			<th>ID Projet</th>
+			<th>Date</th>
+			<th>Montant Total</th>
+			<th>Date de Livraison Estimée</th>
+			<th>Code Promo</th>
+			<th>Status</th>
+			<th>Prix</th>
+			<th>Frais de Livraison</th>
+			<th>Actions</th>
+		</tr>
+		<br>
+		{% set totalCommande = o|length %}
+		<p class="total-commandes">Nombre total de commandes :{{ totalCommande }}</p>
 
-    <tr>
-        {% for a in o %}
-        <td>{{ a.idCmd }}</td>
-        <td>{{ a.idUser }}</td>
-        <td>{{ a.idProjet }}</td>
-        <td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
-        <td>{{ a.mtTotal }}</td>
-        <td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
-        <td>{{ a.codePromo }}</td>
-        <td>{{ a.status }}</td>
-        <td>{{ a.prix }}</td>
-        <td>{{ a.fraisLiv }}</td>
-        <td>
-            <form action="{{ path('cancel_commande_back', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Annuler</button>
-            </form>
-            <a href="{{ path('update_Commande_back', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
+		<tr>
+			{% for a in o %}
+				<td>{{ a.idCmd }}</td>
+				<td>{{ a.idUser }}</td>
+				<td>{{ a.idProjet }}</td>
+				<td>{{ a.date ? a.date|date('Y-m-d') : '' }}</td>
+				<td>{{ a.mtTotal }}</td>
+				<td>{{ a.dateLivraisonEstimee ? a.dateLivraisonEstimee|date('Y-m-d') : '' }}</td>
+				<td>{{ a.codePromo }}</td>
+				<td>{{ a.status }}</td>
+				<td>{{ a.prix }}</td>
+				<td>{{ a.fraisLiv }}</td>
+				<td>
+					<form action="{{ path('cancel_commande_back', { 'id': a.idCmd }) }}" method="post" style="display: inline;">
+						<button type="submit" class="btn btn-danger">Annuler</button>
+					</form>
+					<a href="{{ path('update_Commande_back', { 'id': a.idCmd }) }}" class="btn btn-primary">Modifier</a>
 
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
 
-<div style="text-align: center;">
-<div class="pagination-box">
-        <div class="pagination">
-            {% if currentPage > 1 %}
-                <a href="{{ path('afficher_commande_back', {'page': currentPage - 1}) }}"><i class="fas fa-angle-double-left"></i> Previous</a>
-            {% endif %}
-            
-            {% for page in 1..totalPages %}
-                <a href="{{ path('afficher_commande_back', {'page': page}) }}" {% if page == currentPage %}class="active"{% endif %}>{{ page }}</a>
-            {% endfor %}
-            
-            {% if currentPage < totalPages %}
-                <a href="{{ path('afficher_commande_back', {'page': currentPage + 1}) }}">Next <i class="fas fa-angle-double-right"></i></a>
-            {% endif %}
-        </div>
-    </div>
-{% endblock %}
+	<div style="text-align: center;">
+		<div class="pagination-box">
+			<div class="pagination">
+				{% if currentPage > 1 %}
+					<a href="{{ path('afficher_commande_back', {'page': currentPage - 1}) }}">
+						<i class="fas fa-angle-double-left"></i>
+						Previous</a>
+				{% endif %}
+
+				{% for page in 1..totalPages %}
+					<a href="{{ path('afficher_commande_back', {'page': page}) }}" {% if page == currentPage %} class="active" {% endif %}>{{ page }}</a>
+				{% endfor %}
+
+				{% if currentPage < totalPages %}
+					<a href="{{ path('afficher_commande_back', {'page': currentPage + 1}) }}">Next
+						<i class="fas fa-angle-double-right"></i>
+					</a>
+				{% endif %}
+			</div>
+		</div>
+	{% endblock %}

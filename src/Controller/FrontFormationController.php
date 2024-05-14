@@ -15,26 +15,56 @@ use App\Entity\Inscription;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\MailerInterface;
+use App\Entity\Formation;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class FrontFormationController extends AbstractController
 {
-    #[Route('/formation', name: 'app_front_formation')]
-    public function index(Request $request, FormationRepository $formationRepository, PaginatorInterface $paginator): Response
+
+
+    private $mailer;
+    public function __construct(MailerInterface $mailer)
     {
+        $this->mailer = $mailer;
+    }
 
+    #[Route('/formation', name: 'app_front_formation')]
+    public function index(Request $request, FormationRepository $formationRepository): Response
+    {
+        $email = "MayMatri@esprit.tn";
         $formations = $formationRepository->findAll();
+        $formations_inscrit = []; // Initialize the array
+        $formations_non_inscrit = []; // Initialize the array
 
-        $formations = $paginator->paginate(
-            $formations, /* query NOT result */
-            $request->query->getInt('page', 1),
-            2
-        );
+        foreach ($formations as $formation) {
+            $inscriptions = $formation->getInscriptions();
+            $is_inscrit = false;
+
+            foreach ($inscriptions as $inscription) {
+                if ($inscription->getEmail() == $email) {
+                    $is_inscrit = true;
+                    break;
+                }
+            }
+
+            if ($is_inscrit) {
+                $formations_inscrit[] = $formation; // Append to the array
+            } else {
+                $formations_non_inscrit[] = $formation; // Append to the array
+            }
+        }
+        $email = "MayMatri@esprit.tn";
+
         return $this->render('front_formation/index.html.twig', [
-            'formations' => $formations,
+            'formations_insc' => $formations_inscrit,
+            'formations_non_insc' => $formations_non_inscrit,
+            'email' => $email,
         ]);
     }
 
-    #[Route('/front/inscription/create/{id}', name: 'app_front_inscription_create')]
+
+
+    #[Route('/front/inscription/create/{id}', name: 'app_front_inscription_acc')]
     public function createInscription(int $id, FormationRepository $formationRepository, EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator): RedirectResponse
     {
         // Retrieve the Formation object based on the provided ID
@@ -63,8 +93,51 @@ class FrontFormationController extends AbstractController
         // Persist and flush the Inscription object
         $entityManager->persist($inscription);
         $entityManager->flush();
+        $email = (new TemplatedEmail())
+            ->from(new Address('no-reply@creativa.tn'))
+            ->to('may@esprit.tn')
+            ->subject('Inscription à la formation')
+            ->htmlTemplate('inscription/email.html.twig')
+            ->context([
+                'titre' => $formation->getTitre(),
+                'description' => $formation->getTitre(),
+                'nb_places' => $formation->getNbPlaces(),
+                'prix' => $formation->getPrix(),
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'user_email' => $email
+            ]);
 
+
+        $this->mailer->send($email);
         // Redirect the user back to the index page
+        return new RedirectResponse($urlGenerator->generate('app_front_formation'));
+    }
+
+
+
+
+    #[Route('/evaluate/{id}', name: 'evaluate')]
+    public function evaluate(Request $request, int $id, UrlGeneratorInterface $urlGenerator): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $formation = $entityManager->getRepository(Formation::class)->find($id);
+
+        if (!$formation) {
+            throw $this->createNotFoundException('Formation not found');
+        }
+
+        // Assuming the rating is sent as a form parameter named 'rating'
+        $rating = $request->request->get('rating'); // Use request->request to access form parameters
+        $email = "MayMatri@esprit.tn";
+
+        // Update the evaluation attribute with the user's rating
+        $evaluation = $formation->getEvaluation() ?? []; // Retrieve existing evaluation or initialize to empty array
+        $evaluation[$email] = $rating;
+        $formation->setEvaluation($evaluation);
+        $entityManager->persist($formation);
+        $entityManager->flush();
+
         return new RedirectResponse($urlGenerator->generate('app_front_formation'));
     }
 }

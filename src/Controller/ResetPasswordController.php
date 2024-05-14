@@ -214,10 +214,10 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_check_email');
         }
-        $transport = Transport::fromDsn('smtp://hhajer09@gmail.com:ixysoqoqqfylbgoa@smtp.gmail.com:587');
+        $transport = Transport::fromDsn('smtp://allahommayarab@gmail.com:ugoqsvujijuszwna@smtp.gmail.com:587');
         $mailer = new Mailer($transport);
         $email = (new TemplatedEmail())
-            ->from('hhajer09@gmail.com')
+            ->from('allahommayarab@gmail.com')
             ->to($user->getEmail())
             ->subject('Password Reset Request')
             ->html('

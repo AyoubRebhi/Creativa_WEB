@@ -94,11 +94,11 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
         // Vérifiez le rôle de l'utilisateur
         if ($user->getRole() == 'ARTIST') {
             // Redirection pour l'utilisateur ayant le rôle admin
-            return new RedirectResponse('/Artistpage');
+            return new RedirectResponse('/projet/artist');
         } elseif ($user->getRole() == 'CLIENT') {
-            return new RedirectResponse('/userpage1');
+            return new RedirectResponse('/projet/home1');
         } elseif ($user->getRole() == 'ADMIN') {
-            return new RedirectResponse('/Adminpage');
+            return new RedirectResponse('/roles');
         } else {
             // Gérer d'autres rôles ou cas par défaut
         }
